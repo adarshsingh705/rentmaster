@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #E8EAF0;
+  color: #0F1623;
+  padding: 40px 20px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+:root {
+  --bg:       #E8EAF0;
+  --card:     #FFFFFF;
+  --card2:    #F7F8FB;
+  --border:   #E0E3EC;
+  --shadow:   0 1px 3px rgba(15,22,35,.06), 0 4px 16px rgba(15,22,35,.06);
+  --shadow-sm:0 1px 2px rgba(15,22,35,.05), 0 2px 6px rgba(15,22,35,.04);
+
+  --navy:     #1B2D4F;
+  --navy2:    #243A63;
+  --saffron:  #F97316;
+
+  --t1:       #0F1623;
+  --t2:       #5A6473;
+  --t3:       #9CA3AE;
+
+  --paid:     #0E9F6E;
+  --paid-bg:  rgba(14,159,110,.09);
+  --pend:     #D97706;
+  --pend-bg:  rgba(217,119,6,.09);
+  --late:     #E02020;
+  --late-bg:  rgba(224,32,32,.08);
+}
+
+.page-meta {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--t3);
+  text-align: center; margin-bottom: 36px;
+}
+.screen-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 10px;
+}
+.wrap { max-width: 375px; margin: 0 auto 72px; }
+
+/* PHONE SHELL */
+.shell {
+  background: var(--bg);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(15,22,35,.15), 0 4px 20px rgba(15,22,35,.08);
+  border: 1px solid rgba(255,255,255,.8);
+}
+.body { padding: 24px 18px 0; }
+
+/* HEADER */
+.hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.hdr-left {}
+.greeting  { font-size: 13px; font-weight: 400; color: var(--t2); margin-bottom: 2px; }
+.greeting strong { font-weight: 600; color: var(--t1); }
+.page-title{ font-size: 18px; font-weight: 800; color: var(--t1); letter-spacing: -.02em; }
+.page-title span { color: var(--saffron); }
+
+.hdr-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--t2); cursor: pointer;
+}
+.avi {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+/* HERO CARD */
+.hero {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; top: -30px; right: -30px;
+  width: 100px; height: 100px;
+  background: rgba(255,255,255,.05);
+  border-radius: 50%;
+}
+.hero-eye   { font-size: 10px; font-weight: 600; letter-spacing: .10em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+.hero-fig   { display: flex; align-items: baseline; gap: 2px; margin-bottom: 18px; }
+.hero-sym   { font-size: 16px; font-weight: 600; color: rgba(255,255,255,.6); align-self: flex-start; margin-top: 2px; }
+.hero-num   { font-size: 32px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+
+/* 3-segment bar */
+.seg-bar { display: flex; height: 3px; border-radius: 99px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
+.seg { border-radius: 99px; transition: flex .55s ease; }
+.seg.g { background: #3DD68C; }
+.seg.a { background: var(--saffron); }
+.seg.r { background: #F87171; }
+
+.seg-row { display: flex; gap: 16px; }
+.seg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.55); }
+.sdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.seg-item em { font-style: normal; font-weight: 700; color: #fff; }
+
+/* SECTION LABEL */
+.sec { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sec-ttl  { font-size: 14px; font-weight: 700; color: var(--t1); }
+.sec-link { font-size: 12px; color: var(--navy2); font-weight: 600; }
+
+/* TENANT CARDS (list style) */
+.tenant-card {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.tenant-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.tenant-row:last-child { border-bottom: none; }
+.tenant-row:hover { background: #FAFBFD; }
+
+.ava {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.ti { flex: 1; min-width: 0; }
+.ti-name { font-size: 13px; font-weight: 600; color: var(--t1); }
+.ti-sub  { font-size: 11px; color: var(--t3); margin-top: 1px; }
+
+.tr { text-align: right; flex-shrink: 0; }
+.tr-amt  { font-size: 13px; font-weight: 700; color: var(--t1); font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+
+/* CHIPS */
+.chip {
+  display: inline-block; border-radius: 5px;
+  padding: 2px 7px; font-size: 10px; font-weight: 600;
+  letter-spacing: .02em; line-height: 16px;
+}
+.c-paid { background: var(--paid-bg); color: var(--paid); }
+.c-pend { background: var(--pend-bg); color: var(--pend); }
+.c-late { background: var(--late-bg); color: var(--late); }
+
+/* BUTTON */
+.btn {
+  display: block; width: 100%;
+  background: var(--navy);
+  color: #fff; border: none; border-radius: 14px;
+  padding: 15px 16px;
+  font-size: 14px; font-weight: 700;
+  font-family: inherit; letter-spacing: .01em;
+  cursor: pointer; margin-bottom: 20px;
+  transition: opacity .12s;
+}
+.btn:hover { opacity: .88; }
+
+/* BOTTOM NAV */
+.bnav {
+  background: var(--card);
+  display: flex; border-top: 1px solid var(--border);
+  padding: 12px 18px 20px;
+  margin: 0 -18px;
+}
+.ni {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 9px; font-weight: 500; letter-spacing: .02em; color: var(--t3);
+  padding-top: 2px;
+}
+.ni.on { color: var(--navy); }
+
+/* ── MAGIC MOMENT ── */
+.mrow { position: relative; border-radius: 8px; transition: background .3s ease; }
+.mrow.lit { background: rgba(14,159,110,.04); }
+.mglow { position: absolute; inset: 0; border-radius: 8px; pointer-events: none; border: 1.5px solid transparent; transition: border-color .35s ease; }
+.mrow.lit .mglow { border-color: rgba(14,159,110,.3); }
+.mchip { transition: all .28s ease; }
+.mchip.pop { animation: cpop .38s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes cpop { 0%{transform:scale(1);opacity:1} 35%{transform:scale(.7);opacity:0} 65%{transform:scale(1.08);opacity:0} 100%{transform:scale(1);opacity:1} }
+.mamt { transition: color .4s ease; }
+.mamt.paid { color: var(--paid) !important; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 70px; left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--navy); color: #fff;
+  border-radius: 12px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12px; font-weight: 600;
+  opacity: 0; pointer-events: none; z-index: 99;
+  transition: opacity .22s ease, transform .22s ease;
+  white-space: nowrap;
+  box-shadow: 0 8px 28px rgba(27,45,79,.3);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.tdot { width: 7px; height: 7px; border-radius: 50%; background: #3DD68C; flex-shrink: 0; }
+
+/* TRIGGER */
+.trig {
+  display: block; width: 100%;
+  background: transparent; border: 1.5px dashed var(--border);
+  border-radius: 14px; padding: 12px 16px;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  color: var(--t2); cursor: pointer; margin-bottom: 8px;
+  transition: border-color .15s, color .15s;
+}
+.trig:hover { border-color: var(--navy); color: var(--navy); }
+.hint { font-size: 10px; color: var(--t3); text-align: center; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<p class="page-meta">RentMaster · UI Direction</p>
+
+<!-- ════ SCREEN 1: DASHBOARD ════ -->
+<div class="wrap">
+  <p class="screen-tag">Dashboard</p>
+  <div class="shell">
+    <div class="body">
+
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="greeting">Hello, <strong>Priya</strong></div>
+          <div class="page-title">Rent<span>Master</span></div>
+        </div>
+        <div class="hdr-right">
+          <div class="icon-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <div class="avi">PR</div>
+        </div>
+      </div>
+
+      <!-- Hero (dark navy card) -->
+      <div class="hero">
+        <div class="hero-eye">June 2026 · Total Rent</div>
+        <div class="hero-fig">
+          <span class="hero-sym">₹</span>
+          <span class="hero-num">1,14,000</span>
+        </div>
+        <div class="seg-bar">
+          <div class="seg g" style="flex:12"></div>
+          <div class="seg a" style="flex:3"></div>
+          <div class="seg r" style="flex:1"></div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-item"><span class="sdot" style="background:#3DD68C"></span><em>12</em>&nbsp;paid</div>
+          <div class="seg-item"><span class="sdot" style="background:#F97316"></span><em>3</em>&nbsp;pending</div>
+          <div class="seg-item"><span class="sdot" style="background:#F87171"></span><em>1</em>&nbsp;late</div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <span class="sec-ttl">Tenants</span>
+        <span class="sec-link">View all</span>
+      </div>
+
+      <div class="tenant-card">
+        <div class="tenant-row">
+          <div class="ava" style="background:#EFF6FF;color:#3B82F6">R</div>
+          <div class="ti">
+            <div class="ti-name">Rahul Sharma</div>
+            <div class="ti-sub">Room 2 · Bed A</div>
+          </div>
+          <div class="tr">
+            <div class="tr-amt">₹8,500</div>
+            <span class="chip c-paid">Paid</span>
+          </div>
+        </div>
+        <div class="tenant-row">
+          <div class="ava" style="background:#F5F3FF;color:#8B5CF6">P</div>
+          <div class="ti">
+            <div class="ti-name">Priya Nair</div>
+            <div class="ti-sub">Room 3 · Bed B</div>
+          </div>
+          <div class="tr">
+            <div class="tr-amt">₹7,000</div>
+            <span class="chip c-pend">Pending</span>
+          </div>
+        </div>
+        <div class="tenant-row">
+          <div class="ava" style="background:#FFF5F5;color:#EF4444">S</div>
+          <div class="ti">
+            <div class="ti-name">Suresh Kumar</div>
+            <div class="ti-sub">Room 1 · Bed C</div>
+          </div>
+          <div class="tr">
+            <div class="tr-amt">₹6,500</div>
+            <span class="chip c-late">5d late</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn">Add Tenant</button>
+
+    </div>
+    <div class="bnav">
+      <div class="ni on">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Home
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/>
+        </svg>
+        Properties
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Tenants
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Account
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCREEN 2: MAGIC MOMENT ════ -->
+<div class="wrap">
+  <p class="screen-tag">Magic Moment — Priya pays live</p>
+  <div class="shell">
+    <div class="body">
+
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="greeting">Hello, <strong>Priya</strong></div>
+          <div class="page-title">Rent<span>Master</span></div>
+        </div>
+        <div class="hdr-right">
+          <div class="icon-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </div>
+          <div class="avi">PR</div>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-eye">June 2026 · Total Rent</div>
+        <div class="hero-fig">
+          <span class="hero-sym">₹</span>
+          <span class="hero-num" id="hnum">85,500</span>
+        </div>
+        <div class="seg-bar">
+          <div class="seg g" id="sg" style="flex:12"></div>
+          <div class="seg a" id="sa" style="flex:3"></div>
+          <div class="seg r" style="flex:1"></div>
+        </div>
+        <div class="seg-row">
+          <div class="seg-item"><span class="sdot" style="background:#3DD68C"></span><em id="cp">12</em>&nbsp;paid</div>
+          <div class="seg-item"><span class="sdot" style="background:#F97316"></span><em id="ca">3</em>&nbsp;pending</div>
+          <div class="seg-item"><span class="sdot" style="background:#F87171"></span><em>1</em>&nbsp;late</div>
+        </div>
+      </div>
+
+      <div class="sec"><span class="sec-ttl">Tenants</span></div>
+
+      <div class="tenant-card" style="margin-bottom:10px">
+        <div class="tenant-row">
+          <div class="ava" style="background:#EFF6FF;color:#3B82F6">R</div>
+          <div class="ti"><div class="ti-name">Rahul Sharma</div><div class="ti-sub">Room 2 · Bed A</div></div>
+          <div class="tr"><div class="tr-amt">₹8,500</div><span class="chip c-paid">Paid</span></div>
+        </div>
+        <div class="tenant-row mrow" id="mr" style="padding:13px 16px">
+          <div class="mglow" id="mg"></div>
+          <div class="ava" style="background:#F5F3FF;color:#8B5CF6">P</div>
+          <div class="ti"><div class="ti-name">Priya Nair</div><div class="ti-sub">Room 3 · Bed B</div></div>
+          <div class="tr">
+            <div class="tr-amt mamt" id="ma">₹7,000</div>
+            <span class="chip c-pend mchip" id="mc">Pending</span>
+          </div>
+        </div>
+        <div class="tenant-row">
+          <div class="ava" style="background:#FFF5F5;color:#EF4444">S</div>
+          <div class="ti"><div class="ti-name">Suresh Kumar</div><div class="ti-sub">Room 1 · Bed C</div></div>
+          <div class="tr"><div class="tr-amt">₹6,500</div><span class="chip c-late">5d late</span></div>
+        </div>
+      </div>
+
+      <button class="trig" id="tb" onclick="fire()">Simulate: Priya's payment arrives</button>
+      <p class="hint">Tap to see the live update</p>
+
+    </div>
+    <div class="bnav">
+      <div class="ni on">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Home
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/>
+        </svg>
+        Properties
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Tenants
+      </div>
+      <div class="ni">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Account
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><div class="tdot"></div><span>Priya Nair paid ₹7,000</span></div>
+
+<script>
+let done=false;
+function fire(){
+  if(done){reset();return;}
+  done=true;
+  document.getElementById('tb').textContent='Reset';
+  const row=document.getElementById('mr'),chip=document.getElementById('mc'),amt=document.getElementById('ma'),tst=document.getElementById('toast');
+  row.classList.add('lit');
+  setTimeout(()=>{chip.classList.add('pop');setTimeout(()=>{chip.classList.remove('c-pend');chip.classList.add('c-paid');chip.textContent='Paid';chip.classList.remove('pop');},210);},150);
+  setTimeout(()=>{amt.classList.add('paid');},260);
+  setTimeout(()=>{tst.classList.add('show');},400);
+  setTimeout(()=>{
+    document.getElementById('hnum').textContent='92,500';
+    document.getElementById('cp').textContent='13';
+    document.getElementById('ca').textContent='2';
+    document.getElementById('sg').style.flex='13';
+    document.getElementById('sa').style.flex='2';
+  },580);
+  setTimeout(()=>{row.classList.remove('lit');},2100);
+  setTimeout(()=>{tst.classList.remove('show');},3600);
+}
+function reset(){
+  done=false;
+  const row=document.getElementById('mr'),chip=document.getElementById('mc'),amt=document.getElementById('ma');
+  row.classList.remove('lit');chip.classList.remove('c-paid');chip.classList.add('c-pend');chip.textContent='Pending';amt.classList.remove('paid');
+  document.getElementById('hnum').textContent='85,500';
+  document.getElementById('cp').textContent='12';document.getElementById('ca').textContent='3';
+  document.getElementById('sg').style.flex='12';document.getElementById('sa').style.flex='3';
+  document.getElementById('toast').classList.remove('show');
+  document.getElementById('tb').textContent="Simulate: Priya's payment arrives";
+}
+</script>
+</body>
+</html>

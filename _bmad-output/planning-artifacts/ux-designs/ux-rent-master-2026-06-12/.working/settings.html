@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E6E8EF;
+      color: #0F1623;
+      display: flex;
+      justify-content: center;
+      padding: 48px 20px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* SHELL */
+    .phone {
+      width: 375px;
+      background: #EEF0F6;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(15, 22, 35, .18), 0 4px 16px rgba(15, 22, 35, .08);
+      border: 1px solid rgba(255, 255, 255, .9);
+      position: relative;
+    }
+
+    /* TOKENS */
+    :root {
+      --navy: #1B2D4F;
+      --navy2: #243A63;
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --border: #E0E4EE;
+      --bg: #EEF0F6;
+      --sh: 0 2px 8px rgba(15, 22, 35, .07), 0 1px 2px rgba(15, 22, 35, .04);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* SCROLLABLE */
+    .scroll {
+      height: 780px;
+      overflow-y: auto;
+      padding: 24px 18px 100px;
+      scrollbar-width: none;
+    }
+
+    .scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* PAGE HEADER */
+    .page-hdr {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--t1);
+      letter-spacing: -.03em;
+      margin-bottom: 24px;
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    /* SETTINGS CARD */
+    .settings-card {
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: var(--sh);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    /* ROW */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: background .15s;
+      min-height: 52px;
+    }
+
+    .setting-row:active {
+      background: rgba(15, 22, 35, .03);
+    }
+
+    /* DIVIDER within card */
+    .row-div {
+      height: 1px;
+      background: var(--border);
+      margin: 0 16px;
+    }
+
+    /* ICON circle */
+    .row-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .row-icon.navy {
+      background: rgba(27, 45, 79, .08);
+      color: var(--navy);
+    }
+
+    .row-icon.green {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .row-icon.amber {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    .row-icon.gray {
+      background: rgba(15, 22, 35, .05);
+      color: var(--t3);
+    }
+
+    .row-icon.red {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    /* AVATAR (profile row) */
+    .row-avi {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: -.01em;
+    }
+
+    /* ROW TEXT */
+    .row-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-sub {
+      font-size: 12px;
+      color: var(--t2);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* CHIP */
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 5px;
+      letter-spacing: .01em;
+      flex-shrink: 0;
+    }
+
+    .chip-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .chip-pend {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    /* CHEVRON */
+    .chevron {
+      color: var(--t3);
+      flex-shrink: 0;
+    }
+
+    /* TOGGLE */
+    .toggle-wrap {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .toggle-track {
+      width: 44px;
+      height: 26px;
+      border-radius: 99px;
+      background: var(--border);
+      transition: background .2s;
+    }
+
+    .toggle-wrap.on .toggle-track {
+      background: var(--navy);
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(15, 22, 35, .18);
+      transition: transform .2s;
+    }
+
+    .toggle-wrap.on .toggle-thumb {
+      transform: translateX(18px);
+    }
+
+    /* LOGOUT BUTTON */
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px;
+      background: var(--card);
+      border: 1.5px solid rgba(220, 32, 32, .2);
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--late);
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: var(--sh);
+      transition: background .15s;
+      font-family: inherit;
+    }
+
+    .btn-logout:active {
+      background: var(--late-bg);
+    }
+
+    /* VERSION */
+    .version-text {
+      text-align: center;
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 500;
+      letter-spacing: .04em;
+      padding-bottom: 4px;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding: 0 4px 16px;
+      border-radius: 0 0 40px 40px;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px 0;
+      cursor: pointer;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--t3);
+      letter-spacing: .04em;
+    }
+
+    .nav-item.active .nav-label {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      color: var(--t3);
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--navy);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="phone">
+    <div class="scroll">
+
+      <!-- PAGE TITLE -->
+      <div class="page-hdr">Settings</div>
+
+      <!-- ── ACCOUNT ── -->
+      <div class="section-label">Account</div>
+      <div class="settings-card">
+        <!-- Profile row -->
+        <div class="setting-row">
+          <div class="row-avi">VA</div>
+          <div class="row-info">
+            <div class="row-title">Adarsh singh</div>
+            <div class="row-sub">Vishalarya@hotmail.com</div>
+          </div>
+          <div class="row-right">
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FINANCIALS ── -->
+      <div class="section-label">Financials</div>
+      <div class="settings-card">
+        <!-- Bank Account row — Verified state -->
+        <div class="setting-row">
+          <div class="row-icon navy">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect width="22" height="16" x="1" y="4" rx="2" />
+              <line x1="1" x2="23" y1="10" y2="10" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Bank Account</div>
+            <div class="row-sub">HDFC Bank · ••••4521</div>
+          </div>
+          <div class="row-right">
+            <span class="chip chip-paid">Verified</span>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NOTIFICATIONS ── -->
+      <div class="section-label">Notifications</div>
+      <div class="settings-card">
+
+        <!-- WhatsApp Reminders toggle -->
+        <div class="setting-row">
+          <div class="row-icon navy">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Rent Reminders</div>
+            <div class="row-sub">Auto WhatsApp to tenants on due date</div>
+          </div>
+          <div class="toggle-wrap on" onclick="this.classList.toggle('on')">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+        <div class="row-div"></div>
+
+        <!-- Payment Notifications toggle -->
+        <div class="setting-row">
+          <div class="row-icon green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect width="22" height="16" x="1" y="4" rx="2" />
+              <line x1="1" x2="23" y1="10" y2="10" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Payment Alerts</div>
+            <div class="row-sub">Notify me when a tenant pays</div>
+          </div>
+          <div class="toggle-wrap on" onclick="this.classList.toggle('on')">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── MORE ── -->
+      <div class="section-label">More</div>
+      <div class="settings-card">
+
+        <!-- Help & Support -->
+        <div class="setting-row">
+          <div class="row-icon navy">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" x2="12.01" y1="17" y2="17" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Help &amp; Support</div>
+          </div>
+          <div class="row-right">
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="row-div"></div>
+
+        <!-- Privacy Policy -->
+        <div class="setting-row">
+          <div class="row-icon gray">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Privacy Policy</div>
+          </div>
+          <div class="row-right">
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="row-div"></div>
+
+        <!-- Terms of Service -->
+        <div class="setting-row">
+          <div class="row-icon gray">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <line x1="16" x2="8" y1="13" y2="13" />
+              <line x1="16" x2="8" y1="17" y2="17" />
+              <line x1="10" x2="8" y1="9" y2="9" />
+            </svg>
+          </div>
+          <div class="row-info">
+            <div class="row-title">Terms of Service</div>
+          </div>
+          <div class="row-right">
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LOGOUT -->
+      <button class="btn-logout">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" x2="9" y1="12" y2="12" />
+        </svg>
+        Log out
+      </button>
+
+      <!-- VERSION -->
+      <div class="version-text">RentMaster v1.0 · Phase 1</div>
+
+    </div><!-- /scroll -->
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <!-- Home -->
+      <div class="nav-item">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span class="nav-label">Home</span>
+      </div>
+      <!-- Properties -->
+      <div class="nav-item">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="16" height="20" x="4" y="2" rx="2" />
+          <path d="M9 22v-4h6v4" />
+          <path d="M8 6h.01" />
+          <path d="M16 6h.01" />
+          <path d="M12 6h.01" />
+          <path d="M12 10h.01" />
+          <path d="M8 10h.01" />
+          <path d="M16 10h.01" />
+          <path d="M8 14h.01" />
+          <path d="M16 14h.01" />
+          <path d="M12 14h.01" />
+        </svg>
+        <span class="nav-label">Properties</span>
+      </div>
+      <!-- Tenants -->
+      <div class="nav-item">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span class="nav-label">Tenants</span>
+      </div>
+      <!-- Settings (active) -->
+      <div class="nav-item active">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span class="nav-label">Settings</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Payments</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E8EAF0;
+      color: #0F1623;
+      min-height: 100vh;
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --navy: #1B2D4F;
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --bg: #E8EAF0;
+      --border: #DDE1EC;
+      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
+      --sh-md: 0 4px 16px rgba(15, 22, 35, .10), 0 1px 4px rgba(15, 22, 35, .05);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sb-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sb-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .sb-logo-text span {
+      color: var(--saffron);
+    }
+
+    .sb-logo-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 6px 12px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--late);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      margin: 8px 12px;
+    }
+
+    .sb-add-btn {
+      margin: 0 12px 16px;
+      background: var(--saffron);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+      width: calc(100% - 24px);
+    }
+
+    .sb-add-btn:hover {
+      opacity: .88;
+    }
+
+    .sb-user {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sb-avi {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sb-role {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .38);
+      margin-top: 1px;
+    }
+
+    .sb-logout {
+      margin-left: auto;
+      color: rgba(255, 255, 255, .28);
+      cursor: pointer;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--t1);
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--bg);
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      height: 34px;
+    }
+
+    .month-btn {
+      width: 32px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      color: var(--t2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background .12s;
+    }
+
+    .month-btn:hover {
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+    }
+
+    .month-label {
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--t1);
+      white-space: nowrap;
+    }
+
+    .topbar-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity .15s;
+    }
+
+    .btn-whatsapp:hover {
+      opacity: .88;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity .15s;
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    /* STAT ROW */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: var(--sh);
+      border: 1px solid var(--border);
+    }
+
+    .sc-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 6px;
+    }
+
+    .sc-val {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .sc-val .sym {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .sc-val.green {
+      color: var(--paid);
+    }
+
+    .sc-val.amber {
+      color: var(--pend);
+    }
+
+    .sc-val.red {
+      color: var(--late);
+    }
+
+    .sc-foot {
+      font-size: 11px;
+      color: var(--t3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sc-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* COLLECTION BAR */
+    .coll-card {
+      background: var(--navy);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      box-shadow: var(--sh-md);
+    }
+
+    .coll-pct {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.03em;
+      flex-shrink: 0;
+    }
+
+    .coll-pct span {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .coll-mid {
+      flex: 1;
+    }
+
+    .coll-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, .4);
+      font-weight: 500;
+    }
+
+    .coll-bar {
+      height: 7px;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 99px;
+      overflow: hidden;
+      display: flex;
+      gap: 2px;
+    }
+
+    .cb {
+      border-radius: 99px;
+    }
+
+    .cb.g {
+      background: #3DD68C;
+      flex: 12;
+    }
+
+    .cb.a {
+      background: var(--saffron);
+      flex: 3;
+    }
+
+    .cb.r {
+      background: #F87171;
+      flex: 1;
+    }
+
+    .coll-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 9px;
+    }
+
+    .cl-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, .5);
+    }
+
+    .cl-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cl-item em {
+      font-style: normal;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .coll-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .cr-label {
+      font-size: 9px;
+      color: rgba(255, 255, 255, .35);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 3px;
+    }
+
+    .cr-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #3DD68C;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cr-of {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      margin-top: 1px;
+    }
+
+    /* FILTER TABS + TABLE */
+    .table-card {
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: var(--sh);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .filter-tab {
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--t3);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .12s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .filter-tab:hover {
+      background: var(--bg);
+      color: var(--t1);
+    }
+
+    .filter-tab.on {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .filter-tab .fc {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 99px;
+      margin-left: 2px;
+    }
+
+    .filter-tab.on .fc {
+      background: rgba(255, 255, 255, .2);
+      color: #fff;
+    }
+
+    .filter-tab:not(.on) .fc-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .filter-tab:not(.on) .fc-pend {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    .filter-tab:not(.on) .fc-late {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    .table-search {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 5px 11px;
+    }
+
+    .table-search input {
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--t1);
+      width: 160px;
+      outline: none;
+    }
+
+    .table-search input::placeholder {
+      color: var(--t3);
+    }
+
+    /* TABLE */
+    .pay-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .pay-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--t3);
+      padding: 10px 18px;
+      background: #FAFBFD;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .pay-table td {
+      padding: 12px 18px;
+      border-bottom: 1px solid #F5F6FA;
+      vertical-align: middle;
+    }
+
+    .pay-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .pay-table tr:hover td {
+      background: #FAFBFD;
+    }
+
+    .tenant-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .t-avi {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .t-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .t-room {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 1px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .chip-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .chip-pend {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    .chip-late {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    .chip-partial {
+      background: rgba(139, 92, 246, .08);
+      color: #7C3AED;
+    }
+
+    .pay-method {
+      font-size: 11px;
+      color: var(--t2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pay-method-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .pmi-upi {
+      background: #6366F1;
+      color: #fff;
+    }
+
+    .pmi-cash {
+      background: var(--paid);
+      color: #fff;
+    }
+
+    .pmi-net {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .amt-cell {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .amt-cell.paid {
+      color: var(--paid);
+    }
+
+    .amt-cell.partial {
+      color: #7C3AED;
+    }
+
+    .action-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .act-btn {
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .12s;
+      white-space: nowrap;
+    }
+
+    .act-btn-remind {
+      background: rgba(37, 211, 102, .08);
+      color: #1A7A3C;
+    }
+
+    .act-btn-remind:hover {
+      background: rgba(37, 211, 102, .15);
+    }
+
+    .act-btn-pay {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .act-btn-pay:hover {
+      opacity: .88;
+    }
+
+    .act-btn-partial {
+      background: rgba(139, 92, 246, .08);
+      color: #7C3AED;
+    }
+
+    .act-btn-partial:hover {
+      background: rgba(139, 92, 246, .14);
+    }
+
+    .act-btn-view {
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+    }
+
+    .act-btn-view:hover {
+      background: rgba(27, 45, 79, .13);
+    }
+
+    .date-cell {
+      font-size: 12px;
+      color: var(--t2);
+      white-space: nowrap;
+    }
+
+    /* OVERLAY + SLIDEOVER */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 22, 35, .25);
+      z-index: 40;
+    }
+
+    .slideover {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 440px;
+      height: 100vh;
+      background: var(--card);
+      box-shadow: -4px 0 32px rgba(15, 22, 35, .12);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .so-hdr {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .so-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--t1);
+      margin-bottom: 2px;
+    }
+
+    .so-sub {
+      font-size: 12px;
+      color: var(--t2);
+    }
+
+    .so-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--t2);
+      flex-shrink: 0;
+    }
+
+    .so-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 22px;
+    }
+
+    .so-ftr {
+      padding: 14px 22px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .so-tenant-row {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    /* FORM */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--t1);
+      background: #fff;
+      outline: none;
+      transition: border-color .12s;
+    }
+
+    .form-input:focus {
+      border-color: var(--navy);
+    }
+
+    .input-prefix-wrap {
+      display: flex;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .input-prefix-wrap:focus-within {
+      border-color: var(--navy);
+    }
+
+    .input-prefix {
+      padding: 10px 12px;
+      background: var(--bg);
+      color: var(--t2);
+      font-size: 13px;
+      font-weight: 600;
+      border-right: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix-wrap input {
+      flex: 1;
+      border: none;
+      padding: 10px 13px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--t1);
+      background: transparent;
+      outline: none;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .method-opt {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all .12s;
+      background: #fff;
+    }
+
+    .method-opt.on {
+      border-color: var(--navy);
+      background: rgba(27, 45, 79, .04);
+    }
+
+    .method-opt:hover:not(.on) {
+      border-color: rgba(27, 45, 79, .25);
+    }
+
+    .method-opt-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 1px;
+    }
+
+    .method-opt.on .method-opt-name {
+      color: var(--navy);
+    }
+
+    .method-opt-sub {
+      font-size: 10px;
+      color: var(--t3);
+    }
+
+    .btn-save-pay {
+      flex: 1;
+      background: var(--paid);
+      color: #fff;
+      border: none;
+      border-radius: 11px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: opacity .15s;
+    }
+
+    .btn-save-pay:hover {
+      opacity: .9;
+    }
+
+    .btn-cancel {
+      background: #fff;
+      color: var(--t1);
+      border: 1.5px solid var(--border);
+      border-radius: 11px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-cancel:hover {
+      background: var(--bg);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Rent<span>Master</span></div>
+      <div class="sb-logo-sub">Property Management</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item" href="dashboard-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>Dashboard</a>
+      <a class="nav-item" href="property-setup.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
+        </svg>Properties</a>
+      <a class="nav-item" href="tenants.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>Tenants<span class="nav-badge">4</span></a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Finance</div>
+      <a class="nav-item active" href="payments.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
+        </svg>Payments</a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Settings</div>
+      <a class="nav-item" href="bank-onboarding.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>Bank Account</a>
+      <a class="nav-item" href="settings-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>Settings</a>
+    </nav>
+    <button class="sb-add-btn" onclick="location.href='add-tenant.html'"><svg width="14" height="14" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>Add Tenant</button>
+    <div class="sb-user">
+      <div class="sb-avi">VA</div>
+      <div>
+        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-role">Property Owner</div>
+      </div>
+      <div class="sb-logout"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-title">Payments</span>
+        <div class="month-nav">
+          <button class="month-btn" onclick="changeMonth(-1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <span class="month-label" id="monthLabel">June 2026</span>
+          <button class="month-btn" onclick="changeMonth(1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-whatsapp" onclick="openRemindAll()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+          Remind All Pending (4)
+        </button>
+        <button class="btn-primary" onclick="openRecord(null)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Record Payment
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- STAT ROW -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="sc-label">Total Rent</div>
+          <div class="sc-val"><span class="sym">₹</span>1,14,000</div>
+          <div class="sc-foot"><span class="sc-dot" style="background:#94A3B8"></span>16 tenants · June 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Collected</div>
+          <div class="sc-val green"><span class="sym" style="color:var(--paid)">₹</span>85,500</div>
+          <div class="sc-foot"><span class="sc-dot" style="background:var(--paid)"></span>11 paid · 1 partial</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Pending</div>
+          <div class="sc-val amber"><span class="sym" style="color:var(--pend)">₹</span>21,000</div>
+          <div class="sc-foot"><span class="sc-dot" style="background:var(--pend)"></span>3 tenants waiting</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Overdue</div>
+          <div class="sc-val red"><span class="sym" style="color:var(--late)">₹</span>7,500</div>
+          <div class="sc-foot"><span class="sc-dot" style="background:var(--late)"></span>1 tenant · 5 days late</div>
+        </div>
+      </div>
+
+      <!-- COLLECTION BAR -->
+      <div class="coll-card">
+        <div class="coll-pct">75<span>%</span></div>
+        <div class="coll-mid">
+          <div class="coll-bar-labels"><span>₹0</span><span>₹57,000</span><span>₹1,14,000</span></div>
+          <div class="coll-bar">
+            <div class="cb g"></div>
+            <div class="cb a"></div>
+            <div class="cb r"></div>
+          </div>
+          <div class="coll-legend">
+            <div class="cl-item"><span class="cl-dot" style="background:#3DD68C"></span><em>₹85,500</em>&nbsp;collected
+            </div>
+            <div class="cl-item"><span class="cl-dot"
+                style="background:var(--saffron)"></span><em>₹21,000</em>&nbsp;pending</div>
+            <div class="cl-item"><span class="cl-dot" style="background:#F87171"></span><em>₹7,500</em>&nbsp;overdue
+            </div>
+          </div>
+        </div>
+        <div class="coll-right">
+          <div class="cr-label">Collected</div>
+          <div class="cr-val">₹85,500</div>
+          <div class="cr-of">of ₹1,14,000</div>
+        </div>
+      </div>
+
+      <!-- TABLE CARD -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="filter-tabs">
+            <button class="filter-tab on" onclick="filterTab(this,'all')">All <span class="fc">16</span></button>
+            <button class="filter-tab" onclick="filterTab(this,'paid')">Paid <span class="fc fc-paid">12</span></button>
+            <button class="filter-tab" onclick="filterTab(this,'pending')">Pending <span
+                class="fc fc-pend">3</span></button>
+            <button class="filter-tab" onclick="filterTab(this,'overdue')">Overdue <span
+                class="fc fc-late">1</span></button>
+          </div>
+          <div class="table-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Search tenant…" oninput="searchRows(this.value)">
+          </div>
+        </div>
+
+        <table class="pay-table" id="payTable">
+          <thead>
+            <tr>
+              <th>Tenant</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Method / Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="payBody">
+
+            <!-- OVERDUE -->
+            <tr data-status="overdue" data-name="suresh kumar">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#FFF0F0;color:#EF4444">S</div>
+                  <div>
+                    <div class="t-name">Suresh Kumar</div>
+                    <div class="t-room">Sunshine PG · Room 101 · Bed A</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell">₹6,500</div>
+              </td>
+              <td><span class="chip chip-late"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                  </svg>5d overdue</span></td>
+              <td>
+                <div class="date-cell" style="color:var(--late)">Due 1 Jun · Not paid</div>
+              </td>
+              <td>
+                <div class="action-cell">
+                  <button class="act-btn act-btn-remind" onclick="openRemind('Suresh Kumar')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Remind
+                  </button>
+                  <button class="act-btn act-btn-pay" onclick="openRecord('Suresh Kumar', '6500')">Mark Paid</button>
+                  <button class="act-btn act-btn-partial" onclick="openPartial('Suresh Kumar', '6500')">Partial</button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- PENDING -->
+            <tr data-status="pending" data-name="priya nair">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#F5F3FF;color:#8B5CF6">P</div>
+                  <div>
+                    <div class="t-name">Priya Nair</div>
+                    <div class="t-room">Sunshine PG · Room 102 · Bed B</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell">₹7,000</div>
+              </td>
+              <td><span class="chip chip-pend">Pending</span></td>
+              <td>
+                <div class="date-cell">Due 1 Jun 2026</div>
+              </td>
+              <td>
+                <div class="action-cell">
+                  <button class="act-btn act-btn-remind" onclick="openRemind('Priya Nair')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Remind
+                  </button>
+                  <button class="act-btn act-btn-pay" onclick="openRecord('Priya Nair', '7000')">Mark Paid</button>
+                  <button class="act-btn act-btn-partial" onclick="openPartial('Priya Nair', '7000')">Partial</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="pending" data-name="anjali mehta">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#FFF7ED;color:#F97316">A</div>
+                  <div>
+                    <div class="t-name">Anjali Mehta</div>
+                    <div class="t-room">Sunshine PG · Room G02 · Bed C</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell">₹7,500</div>
+              </td>
+              <td><span class="chip chip-pend">Pending</span></td>
+              <td>
+                <div class="date-cell">Due 1 Jun 2026</div>
+              </td>
+              <td>
+                <div class="action-cell">
+                  <button class="act-btn act-btn-remind" onclick="openRemind('Anjali Mehta')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Remind
+                  </button>
+                  <button class="act-btn act-btn-pay" onclick="openRecord('Anjali Mehta', '7500')">Mark Paid</button>
+                  <button class="act-btn act-btn-partial" onclick="openPartial('Anjali Mehta', '7500')">Partial</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr data-status="pending" data-name="vijay patel">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#F0FDF4;color:#22C55E">V</div>
+                  <div>
+                    <div class="t-name">Vijay Patel</div>
+                    <div class="t-room">Krishna Residency · Room 201</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell">₹12,000</div>
+              </td>
+              <td><span class="chip chip-pend">Pending</span></td>
+              <td>
+                <div class="date-cell">Due 5 Jun 2026</div>
+              </td>
+              <td>
+                <div class="action-cell">
+                  <button class="act-btn act-btn-remind" onclick="openRemind('Vijay Patel')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Remind
+                  </button>
+                  <button class="act-btn act-btn-pay" onclick="openRecord('Vijay Patel', '12000')">Mark Paid</button>
+                  <button class="act-btn act-btn-partial" onclick="openPartial('Vijay Patel', '12000')">Partial</button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- PARTIAL -->
+            <tr data-status="paid" data-name="kiran patel">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#EDE9FE;color:#7C3AED">K</div>
+                  <div>
+                    <div class="t-name">Kiran Patel</div>
+                    <div class="t-room">Sunshine PG · Room G01 · Bed B</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell partial">₹4,000 <span style="font-size:10px;font-weight:500;color:var(--t3)">/
+                    ₹8,000</span></div>
+              </td>
+              <td><span class="chip chip-partial">Partial</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-cash">₹</span>
+                  Cash · 3 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell">
+                  <button class="act-btn act-btn-remind" onclick="openRemind('Kiran Patel')">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Remind
+                  </button>
+                  <button class="act-btn act-btn-pay" onclick="openRecord('Kiran Patel', '4000')">Collect
+                    Balance</button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- PAID -->
+            <tr data-status="paid" data-name="rahul sharma">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#EFF6FF;color:#3B82F6">R</div>
+                  <div>
+                    <div class="t-name">Rahul Sharma</div>
+                    <div class="t-room">Sunshine PG · Room G01 · Bed A</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹8,500</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-upi">U</span>
+                  UPI · 6 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+            <tr data-status="paid" data-name="neha gupta">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#FDF2F8;color:#EC4899">N</div>
+                  <div>
+                    <div class="t-name">Neha Gupta</div>
+                    <div class="t-room">Sunshine PG · Room 201 · Bed B</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹8,000</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-upi">U</span>
+                  UPI · 5 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+            <tr data-status="paid" data-name="karan singh">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#ECFDF5;color:#10B981">K</div>
+                  <div>
+                    <div class="t-name">Karan Singh</div>
+                    <div class="t-room">Krishna Residency · Room 101</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹11,000</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-net">N</span>
+                  Net Banking · 4 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+            <tr data-status="paid" data-name="meena sharma">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#F0F9FF;color:#0EA5E9">M</div>
+                  <div>
+                    <div class="t-name">Meena Sharma</div>
+                    <div class="t-room">Sunshine PG · Room 201 · Bed A</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹9,000</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-upi">U</span>
+                  UPI · 3 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+            <tr data-status="paid" data-name="arjun singh">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#FEF3C7;color:#D97706">A</div>
+                  <div>
+                    <div class="t-name">Arjun Singh</div>
+                    <div class="t-room">Sunshine PG · Room 101 · Bed B</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹7,500</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-cash">₹</span>
+                  Cash · 2 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+            <tr data-status="paid" data-name="vikram nair">
+              <td>
+                <div class="tenant-cell">
+                  <div class="t-avi" style="background:#F0FDF4;color:#16A34A">V</div>
+                  <div>
+                    <div class="t-name">Vikram Nair</div>
+                    <div class="t-room">Sunshine PG · Room 101 · Bed C</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="amt-cell paid">₹7,500</div>
+              </td>
+              <td><span class="chip chip-paid"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>Paid</span></td>
+              <td>
+                <div class="pay-method">
+                  <span class="pay-method-icon pmi-upi">U</span>
+                  UPI · 2 Jun 2026
+                </div>
+              </td>
+              <td>
+                <div class="action-cell"><button class="act-btn act-btn-view"
+                    onclick="location.href='tenant-detail.html'">View</button></div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closePanel()" style="display:none"></div>
+
+  <!-- RECORD PAYMENT PANEL -->
+  <div class="slideover" id="soRecord" style="display:none">
+    <div class="so-hdr">
+      <div>
+        <div class="so-title" id="rec-title">Record Payment</div>
+        <div class="so-sub" id="rec-sub">Mark rent as received for this tenant</div>
+      </div>
+      <button class="so-close" onclick="closePanel()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="so-body">
+      <div class="so-tenant-row" id="rec-tenant-row">
+        <div class="t-avi" style="background:#EFF6FF;color:#3B82F6;width:36px;height:36px;font-size:13px" id="rec-avi">—
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--t1)" id="rec-name">—</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px">June 2026 · Rent Due</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Amount received</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="rec-amt" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Payment method</label>
+        <div class="method-grid">
+          <div class="method-opt on" onclick="selMethod(this)">
+            <div class="method-opt-name">UPI</div>
+            <div class="method-opt-sub">PhonePe, GPay, Paytm</div>
+          </div>
+          <div class="method-opt" onclick="selMethod(this)">
+            <div class="method-opt-name">Cash</div>
+            <div class="method-opt-sub">Received in hand</div>
+          </div>
+          <div class="method-opt" onclick="selMethod(this)">
+            <div class="method-opt-name">Net Banking / NEFT</div>
+            <div class="method-opt-sub">Bank transfer</div>
+          </div>
+          <div class="method-opt" onclick="selMethod(this)">
+            <div class="method-opt-name">Cheque</div>
+            <div class="method-opt-sub">Post-dated or current</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Payment date</label>
+        <input class="form-input" type="date" value="2026-06-06" id="rec-date">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Reference / Transaction ID <span
+            style="color:var(--t3);font-weight:400">(optional)</span></label>
+        <input class="form-input" type="text" placeholder="e.g. UPI ref or cheque no.">
+      </div>
+
+      <div
+        style="background:rgba(14,159,110,.06);border-radius:10px;padding:11px 13px;font-size:11px;color:#1A7A3C;line-height:1.5">
+        A payment confirmation WhatsApp will be sent to the tenant automatically.
+      </div>
+    </div>
+    <div class="so-ftr">
+      <button class="btn-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn-save-pay" onclick="closePanel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Save Payment
+      </button>
+    </div>
+  </div>
+
+  <!-- REMIND PANEL -->
+  <div class="slideover" id="soRemind" style="display:none">
+    <div class="so-hdr">
+      <div>
+        <div class="so-title" id="rem-title">Send Reminder</div>
+        <div class="so-sub">WhatsApp message with payment link</div>
+      </div>
+      <button class="so-close" onclick="closePanel()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="so-body">
+      <div class="so-tenant-row">
+        <div class="t-avi" style="background:#EFF6FF;color:#3B82F6;width:36px;height:36px;font-size:13px" id="rem-avi">—
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--t1)" id="rem-name">—</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px" id="rem-phone">+91 98765 XXXXX</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Message preview</label>
+        <div
+          style="background:var(--bg);border-radius:10px;border:1.5px solid var(--border);padding:13px 14px;font-size:12px;color:var(--t2);line-height:1.7"
+          id="rem-preview">
+          Hi <strong id="rp-name" style="color:var(--t1)">—</strong>, your rent of <strong id="rp-amt"
+            style="color:var(--saffron)">₹—</strong> for June 2026 at <strong style="color:var(--t1)">Sunshine
+            PG</strong> is due.<br><br>
+          Please pay at your earliest: <span
+            style="color:#3B82F6;text-decoration:underline">pay.rentmaster.in/xxxx</span><br><br>
+          — Adarsh singh (RentMaster)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Add a personal note <span
+            style="color:var(--t3);font-weight:400">(optional)</span></label>
+        <textarea class="form-input" rows="2" placeholder="e.g. Please pay by Friday…"
+          style="resize:none;line-height:1.5"></textarea>
+      </div>
+    </div>
+    <div class="so-ftr">
+      <button class="btn-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn-save-pay" style="background:#25D366" onclick="closePanel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        Send WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <!-- REMIND ALL PANEL -->
+  <div class="slideover" id="soRemindAll" style="display:none">
+    <div class="so-hdr">
+      <div>
+        <div class="so-title">Remind All Pending</div>
+        <div class="so-sub">4 tenants · WhatsApp bulk send</div>
+      </div>
+      <button class="so-close" onclick="closePanel()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="so-body">
+      <div
+        style="background:var(--late-bg);border-radius:10px;padding:11px 13px;font-size:12px;color:var(--late);margin-bottom:16px;font-weight:600">
+        1 overdue tenant will also receive a reminder.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px">
+          <div class="t-avi" style="background:#FFF0F0;color:#EF4444;width:30px;height:30px;font-size:11px">S</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600">Suresh Kumar</div>
+            <div style="font-size:10px;color:var(--t3)">₹6,500 · 5d overdue</div>
+          </div>
+          <span class="chip chip-late" style="font-size:9px">Overdue</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px">
+          <div class="t-avi" style="background:#F5F3FF;color:#8B5CF6;width:30px;height:30px;font-size:11px">P</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600">Priya Nair</div>
+            <div style="font-size:10px;color:var(--t3)">₹7,000 · pending</div>
+          </div>
+          <span class="chip chip-pend" style="font-size:9px">Pending</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px">
+          <div class="t-avi" style="background:#FFF7ED;color:#F97316;width:30px;height:30px;font-size:11px">A</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600">Anjali Mehta</div>
+            <div style="font-size:10px;color:var(--t3)">₹7,500 · pending</div>
+          </div>
+          <span class="chip chip-pend" style="font-size:9px">Pending</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px">
+          <div class="t-avi" style="background:#F0FDF4;color:#22C55E;width:30px;height:30px;font-size:11px">V</div>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600">Vijay Patel</div>
+            <div style="font-size:10px;color:var(--t3)">₹12,000 · pending</div>
+          </div>
+          <span class="chip chip-pend" style="font-size:9px">Pending</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Add a note to all messages <span
+            style="color:var(--t3);font-weight:400">(optional)</span></label>
+        <textarea class="form-input" rows="2" placeholder="e.g. Please pay by 10th June…"
+          style="resize:none;line-height:1.5"></textarea>
+      </div>
+    </div>
+    <div class="so-ftr">
+      <button class="btn-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn-save-pay" style="background:#25D366" onclick="closePanel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        Send 4 Reminders
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    let curMonth = 5, curYear = 2026;
+
+    function changeMonth(d) {
+      curMonth += d;
+      if (curMonth < 0) { curMonth = 11; curYear--; }
+      if (curMonth > 11) { curMonth = 0; curYear++; }
+      document.getElementById('monthLabel').textContent = MONTHS[curMonth] + ' ' + curYear;
+    }
+
+    function filterTab(btn, status) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('on'));
+      btn.classList.add('on');
+      const rows = document.querySelectorAll('#payBody tr');
+      rows.forEach(r => {
+        const rs = r.dataset.status;
+        r.style.display = (status === 'all' || rs === status) ? '' : 'none';
+      });
+    }
+
+    function searchRows(q) {
+      const lower = q.toLowerCase();
+      document.querySelectorAll('#payBody tr').forEach(r => {
+        r.style.display = r.dataset.name.includes(lower) ? '' : 'none';
+      });
+    }
+
+    function selMethod(el) {
+      document.querySelectorAll('.method-opt').forEach(m => m.classList.remove('on'));
+      el.classList.add('on');
+    }
+
+    function openRecord(name, amt) {
+      if (name) {
+        document.getElementById('rec-title').textContent = 'Record Payment';
+        document.getElementById('rec-sub').textContent = 'Mark rent received · ' + name;
+        document.getElementById('rec-name').textContent = name;
+        document.getElementById('rec-avi').textContent = name.charAt(0);
+        if (amt) document.getElementById('rec-amt').value = amt;
+      }
+      document.getElementById('soRecord').style.display = 'flex';
+      document.getElementById('soRecord').style.flexDirection = 'column';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function openPartial(name, amt) {
+      document.getElementById('rec-title').textContent = 'Record Partial Payment';
+      document.getElementById('rec-sub').textContent = 'Enter amount received so far · ' + name;
+      document.getElementById('rec-name').textContent = name;
+      document.getElementById('rec-avi').textContent = name.charAt(0);
+      document.getElementById('rec-amt').value = '';
+      document.getElementById('soRecord').style.display = 'flex';
+      document.getElementById('soRecord').style.flexDirection = 'column';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function openRemind(name) {
+      document.getElementById('rem-title').textContent = 'Send Reminder — ' + name;
+      document.getElementById('rem-name').textContent = name;
+      document.getElementById('rem-avi').textContent = name.charAt(0);
+      document.getElementById('rp-name').textContent = name.split(' ')[0];
+      document.getElementById('soRemind').style.display = 'flex';
+      document.getElementById('soRemind').style.flexDirection = 'column';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function openRemindAll() {
+      document.getElementById('soRemindAll').style.display = 'flex';
+      document.getElementById('soRemindAll').style.flexDirection = 'column';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closePanel() {
+      ['soRecord', 'soRemind', 'soRemindAll'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
+      document.getElementById('overlay').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

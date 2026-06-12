@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Properties</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E8EAF0;
+      color: #0F1623;
+      min-height: 100vh;
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --navy: #1B2D4F;
+      --navy2: #243A63;
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --bg: #E8EAF0;
+      --border: #DDE1EC;
+      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
+      --sh-md: 0 4px 16px rgba(15, 22, 35, .09), 0 1px 4px rgba(15, 22, 35, .05);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sb-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sb-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .sb-logo-text span {
+      color: var(--saffron);
+    }
+
+    .sb-logo-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 6px 12px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--late);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      margin: 8px 12px;
+    }
+
+    .sb-add-btn {
+      margin: 0 12px 16px;
+      background: var(--saffron);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+      width: calc(100% - 24px);
+    }
+
+    .sb-add-btn:hover {
+      opacity: .88;
+    }
+
+    .sb-user {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sb-avi {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sb-role {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .38);
+      margin-top: 1px;
+    }
+
+    .sb-logout {
+      margin-left: auto;
+      color: rgba(255, 255, 255, .28);
+      cursor: pointer;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .content {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity .15s;
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--t1);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: background .15s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg);
+    }
+
+    /* PROPERTIES GRID */
+    .props-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .prop-card {
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: var(--sh);
+      padding: 20px;
+      cursor: pointer;
+      transition: box-shadow .15s, transform .1s;
+      border: 1.5px solid transparent;
+    }
+
+    .prop-card:hover {
+      box-shadow: var(--sh-md);
+      transform: translateY(-1px);
+    }
+
+    .prop-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .prop-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: rgba(27, 45, 79, .07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+    }
+
+    .prop-menu {
+      color: var(--t3);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .prop-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 4px;
+    }
+
+    .prop-address {
+      font-size: 12px;
+      color: var(--t2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .prop-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 16px;
+    }
+
+    .badge-bed {
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+    }
+
+    .badge-room {
+      background: rgba(14, 159, 110, .08);
+      color: var(--paid);
+    }
+
+    .prop-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .prop-stat {
+      text-align: center;
+    }
+
+    .prop-stat+.prop-stat {
+      border-left: 1px solid var(--border);
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--t1);
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--t3);
+      font-weight: 500;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .prop-occupancy {
+      margin-top: 14px;
+    }
+
+    .occ-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .occ-label {
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+    }
+
+    .occ-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--paid);
+    }
+
+    .occ-bar {
+      height: 5px;
+      border-radius: 3px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .occ-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--paid);
+    }
+
+    /* ADD PROPERTY CARD */
+    .prop-add-card {
+      background: transparent;
+      border-radius: 14px;
+      border: 2px dashed var(--border);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color .15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .prop-add-card:hover {
+      border-color: var(--navy);
+    }
+
+    .prop-add-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(27, 45, 79, .06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+    }
+
+    .prop-add-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t2);
+    }
+
+    .prop-add-sub {
+      font-size: 12px;
+      color: var(--t3);
+    }
+
+    /* ── SLIDE-OVER PANEL ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 22, 35, .25);
+      z-index: 40;
+    }
+
+    .slideover {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 440px;
+      height: 100vh;
+      background: var(--card);
+      box-shadow: -4px 0 32px rgba(15, 22, 35, .12);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .so-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .so-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .so-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--t2);
+    }
+
+    .so-body {
+      flex: 1;
+      padding: 24px 28px;
+      overflow-y: auto;
+    }
+
+    .so-footer {
+      padding: 16px 28px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .so-footer .btn-primary {
+      flex: 1;
+      justify-content: center;
+      padding: 11px;
+      font-size: 14px;
+      border-radius: 12px;
+    }
+
+    .so-footer .btn-secondary {
+      justify-content: center;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 7px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      color: var(--t1);
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .form-input:focus {
+      border-color: var(--navy);
+    }
+
+    .form-input::placeholder {
+      color: var(--t3);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--t3);
+      margin-top: 5px;
+    }
+
+    .form-row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* RADIO CARDS for property type */
+    .type-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .type-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .type-card:hover {
+      border-color: rgba(27, 45, 79, .3);
+    }
+
+    .type-card.selected {
+      border-color: var(--navy);
+      background: rgba(27, 45, 79, .03);
+    }
+
+    .type-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: rgba(27, 45, 79, .07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .type-card.selected .type-card-icon {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .type-card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 3px;
+    }
+
+    .type-card-desc {
+      font-size: 11.5px;
+      color: var(--t2);
+      line-height: 1.45;
+    }
+
+    .type-check {
+      float: right;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .type-card.selected .type-check {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Rent<span>Master</span></div>
+      <div class="sb-logo-sub">Property Management</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item" href="dashboard-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>Dashboard</a>
+      <a class="nav-item active" href="property-setup.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
+        </svg>Properties</a>
+      <a class="nav-item" href="tenants.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>Tenants<span class="nav-badge">4</span></a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Finance</div>
+      <a class="nav-item" href="payments.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
+        </svg>Payments</a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Settings</div>
+      <a class="nav-item" href="bank-onboarding.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>Bank Account</a>
+      <a class="nav-item" href="settings-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>Settings</a>
+    </nav>
+    <button class="sb-add-btn" onclick="location.href='add-tenant.html'"><svg width="14" height="14" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>Add Tenant</button>
+    <div class="sb-user">
+      <div class="sb-avi">VA</div>
+      <div>
+        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-role">Property Owner</div>
+      </div>
+      <div class="sb-logout"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-title">Properties</span>
+        <span style="font-size:12px;color:var(--t3);font-weight:500;margin-left:4px">2 properties</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-primary" onclick="openPanel()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add Property
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="props-grid">
+
+        <!-- Property 1 -->
+        <div class="prop-card" onclick="location.href='room-setup.html'" style="cursor:pointer">
+          <div class="prop-card-header">
+            <div class="prop-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z" />
+                <path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2" />
+                <line x1="10" y1="6" x2="14" y2="6" />
+                <line x1="10" y1="10" x2="14" y2="10" />
+                <line x1="10" y1="14" x2="14" y2="14" />
+                <line x1="10" y1="18" x2="14" y2="18" />
+              </svg>
+            </div>
+            <div class="prop-menu">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+            </div>
+          </div>
+          <div class="prop-name">Sunshine PG</div>
+          <div class="prop-address">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            Koramangala, Bengaluru
+          </div>
+          <div class="prop-type-badge badge-bed">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+            </svg>
+            Bed-based PG
+          </div>
+          <div class="prop-stats">
+            <div class="prop-stat">
+              <div class="stat-val">24</div>
+              <div class="stat-lbl">Total Beds</div>
+            </div>
+            <div class="prop-stat">
+              <div class="stat-val" style="color:var(--paid)">20</div>
+              <div class="stat-lbl">Occupied</div>
+            </div>
+            <div class="prop-stat">
+              <div class="stat-val" style="color:var(--t3)">4</div>
+              <div class="stat-lbl">Vacant</div>
+            </div>
+          </div>
+          <div class="prop-occupancy">
+            <div class="occ-row"><span class="occ-label">Occupancy</span><span class="occ-pct">83%</span></div>
+            <div class="occ-bar">
+              <div class="occ-fill" style="width:83%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Property 2 -->
+        <div class="prop-card" onclick="location.href='room-setup.html'" style="cursor:pointer">
+          <div class="prop-card-header">
+            <div class="prop-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <div class="prop-menu">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+            </div>
+          </div>
+          <div class="prop-name">Krishna Residency</div>
+          <div class="prop-address">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            HSR Layout, Bengaluru
+          </div>
+          <div class="prop-type-badge badge-room">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            </svg>
+            Room-based
+          </div>
+          <div class="prop-stats">
+            <div class="prop-stat">
+              <div class="stat-val">8</div>
+              <div class="stat-lbl">Total Rooms</div>
+            </div>
+            <div class="prop-stat">
+              <div class="stat-val" style="color:var(--paid)">6</div>
+              <div class="stat-lbl">Occupied</div>
+            </div>
+            <div class="prop-stat">
+              <div class="stat-val" style="color:var(--t3)">2</div>
+              <div class="stat-lbl">Vacant</div>
+            </div>
+          </div>
+          <div class="prop-occupancy">
+            <div class="occ-row"><span class="occ-label">Occupancy</span><span class="occ-pct">75%</span></div>
+            <div class="occ-bar">
+              <div class="occ-fill" style="width:75%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Property -->
+        <div class="prop-add-card" onclick="openPanel()">
+          <div class="prop-add-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </div>
+          <div class="prop-add-text">Add a property</div>
+          <div class="prop-add-sub">PG hostel or residential flat</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE-OVER OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closePanel()" style="display:none"></div>
+
+  <!-- SLIDE-OVER PANEL -->
+  <div class="slideover" id="slideover" style="display:none">
+    <div class="so-header">
+      <span class="so-title">New Property</span>
+      <button class="so-close" onclick="closePanel()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="so-body">
+
+      <div class="form-group">
+        <label class="form-label">Property name</label>
+        <input class="form-input" type="text" placeholder="e.g. Sunshine PG, Green Villa">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="margin-bottom:10px">Property type</label>
+        <div class="type-cards">
+          <div class="type-card selected" onclick="selectType(this)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+              <div class="type-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg>
+              </div>
+              <div class="type-check">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-linecap="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+            </div>
+            <div class="type-card-label">Bed-based PG</div>
+            <div class="type-card-desc">Rooms contain individual named beds</div>
+          </div>
+          <div class="type-card" onclick="selectType(this)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+              <div class="type-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </div>
+              <div class="type-check"></div>
+            </div>
+            <div class="type-card-label">Room-based</div>
+            <div class="type-card-desc">Flat or house with individual rooms</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address line 1</label>
+        <input class="form-input" type="text" placeholder="Street, building name or number">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address line 2 <span style="color:var(--t3);font-weight:400">(optional)</span></label>
+        <input class="form-input" type="text" placeholder="Landmark, area">
+      </div>
+
+      <div class="form-row2">
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input class="form-input" type="text" placeholder="Bengaluru">
+        </div>
+        <div class="form-group">
+          <label class="form-label">State</label>
+          <input class="form-input" type="text" placeholder="Karnataka">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description <span style="color:var(--t3);font-weight:400">(optional)</span></label>
+        <textarea class="form-input" rows="3" placeholder="Any notes about this property..."
+          style="resize:none;line-height:1.5"></textarea>
+      </div>
+
+    </div>
+    <div class="so-footer">
+      <button class="btn-secondary" onclick="closePanel()">Cancel</button>
+      <button class="btn-primary"
+        style="flex:1;justify-content:center;padding:11px;font-size:14px;border-radius:12px">Save Property</button>
+    </div>
+  </div>
+
+  <script>
+    function openPanel() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('slideover').style.display = 'flex';
+      document.getElementById('slideover').style.flexDirection = 'column';
+    }
+    function closePanel() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('slideover').style.display = 'none';
+    }
+    function selectType(card) {
+      document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    }
+    // open by default for demo
+    openPanel();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Room Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E8EAF0;
+      color: #0F1623;
+      min-height: 100vh;
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --navy: #1B2D4F;
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --bg: #E8EAF0;
+      --border: #DDE1EC;
+      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
+      --sh-md: 0 4px 16px rgba(15, 22, 35, .09), 0 1px 4px rgba(15, 22, 35, .05);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sb-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sb-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .sb-logo-text span {
+      color: var(--saffron);
+    }
+
+    .sb-logo-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 6px 12px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--late);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      margin: 8px 12px;
+    }
+
+    .sb-add-btn {
+      margin: 0 12px 16px;
+      background: var(--saffron);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+      width: calc(100% - 24px);
+    }
+
+    .sb-add-btn:hover {
+      opacity: .88;
+    }
+
+    .sb-user {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sb-avi {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sb-role {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .38);
+      margin-top: 1px;
+    }
+
+    .sb-logout {
+      margin-left: auto;
+      color: rgba(255, 255, 255, .28);
+      cursor: pointer;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .breadcrumb a {
+      color: var(--t2);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb-sep {
+      color: var(--t3);
+    }
+
+    .breadcrumb-current {
+      font-weight: 700;
+      color: var(--t1);
+      font-size: 15px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity .15s;
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--t1);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg);
+    }
+
+    .prop-type-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+      margin-left: 12px;
+    }
+
+    .pi-stat {
+      text-align: center;
+    }
+
+    .pi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--t1);
+    }
+
+    .pi-lbl {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--t3);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .pi-divider {
+      width: 1px;
+      background: var(--border);
+    }
+
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .room-card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--sh);
+      border: 1.5px solid transparent;
+      overflow: hidden;
+    }
+
+    .room-card:hover {
+      box-shadow: var(--sh-md);
+      border-color: rgba(27, 45, 79, .15);
+    }
+
+    .room-card-header {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .room-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .room-floor {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 2px;
+    }
+
+    .room-action {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--t2);
+    }
+
+    .room-beds {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bed-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--bg);
+    }
+
+    .bed-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .bed-icon.occupied {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .bed-icon.vacant {
+      background: rgba(90, 100, 115, .08);
+      color: var(--t3);
+    }
+
+    .bed-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .bed-tenant {
+      font-size: 11px;
+      color: var(--t2);
+      margin-top: 1px;
+    }
+
+    .bed-chip {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .bed-chip.occupied {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .bed-chip.vacant {
+      background: rgba(90, 100, 115, .08);
+      color: var(--t3);
+    }
+
+    .room-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .occ-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .occ-dot.filled {
+      background: var(--paid);
+    }
+
+    .occ-dot.empty {
+      background: var(--border);
+    }
+
+    .room-add-card {
+      background: transparent;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+
+    .room-add-card:hover {
+      border-color: var(--navy);
+    }
+
+    .add-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(27, 45, 79, .06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+    }
+
+    /* OVERLAY */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 22, 35, .25);
+      z-index: 40;
+    }
+
+    /* BULK PANEL */
+    .slideover {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 520px;
+      height: 100vh;
+      background: var(--card);
+      box-shadow: -4px 0 32px rgba(15, 22, 35, .12);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .so-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .so-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--t1);
+      margin-bottom: 2px;
+    }
+
+    .so-subtitle {
+      font-size: 12px;
+      color: var(--t2);
+    }
+
+    .so-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--t2);
+      flex-shrink: 0;
+    }
+
+    .so-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .so-footer {
+      padding: 14px 24px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* CONFIG SECTION */
+    .config-section {
+      padding: 18px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      margin-bottom: 7px;
+    }
+
+    /* STEPPER */
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      height: 46px;
+    }
+
+    .stepper-btn {
+      width: 44px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--t2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .12s;
+      font-family: inherit;
+    }
+
+    .stepper-btn:hover:not(:disabled) {
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+    }
+
+    .stepper-btn:disabled {
+      opacity: .25;
+      cursor: default;
+    }
+
+    .stepper-val {
+      flex: 1;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--t1);
+    }
+
+    .stepper-hint {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    /* SEGMENT TOGGLE */
+    .seg-toggle {
+      display: flex;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 46px;
+    }
+
+    .seg-opt {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t2);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+
+    .seg-opt.on {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .seg-opt:not(.on):hover {
+      background: rgba(27, 45, 79, .06);
+      color: var(--t1);
+    }
+
+    /* GRID ROWS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    /* FLOOR STRIP */
+    .floors-strip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      padding: 9px 12px;
+      background: var(--bg);
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      min-height: 38px;
+    }
+
+    .floor-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(27, 45, 79, .08);
+      color: var(--navy);
+    }
+
+    .floor-pill.ground {
+      background: rgba(249, 115, 22, .1);
+      color: #C05C00;
+    }
+
+    .floors-strip-sep {
+      color: var(--border);
+      font-size: 13px;
+    }
+
+    .floors-strip-count {
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 500;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* DEFAULT BEDS ROW with inline note */
+    .default-beds-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .default-beds-row .stepper-wrap {
+      flex: 0 0 160px;
+    }
+
+    .default-note {
+      flex: 1;
+      background: rgba(27, 45, 79, .04);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--t2);
+      line-height: 1.5;
+    }
+
+    .default-note strong {
+      color: var(--t1);
+      font-weight: 600;
+    }
+
+    /* PREVIEW SECTION */
+    .preview-section {
+      padding: 16px 24px 20px;
+    }
+
+    .preview-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .preview-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .count-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .count-chip {
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .count-chip-r {
+      background: rgba(27, 45, 79, .08);
+      color: var(--navy);
+    }
+
+    .count-chip-b {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .preview-hint {
+      font-size: 11.5px;
+      color: var(--t2);
+      margin-bottom: 14px;
+    }
+
+    .preview-hint span {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .preview-floors {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .preview-floors::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .preview-floors::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .pf-floor {}
+
+    .pf-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--t3);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pf-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .pf-rooms {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    /* ROOM CARD IN PREVIEW — editable bed count */
+    .pf-room {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      min-width: 90px;
+      transition: border-color .15s, background .15s;
+    }
+
+    .pf-room.custom {
+      border-color: rgba(27, 45, 79, .3);
+      background: rgba(27, 45, 79, .04);
+    }
+
+    .pf-room-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 7px;
+    }
+
+    /* MINI STEPPER inside room card */
+    .mini-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      background: var(--card);
+      border-radius: 7px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      height: 28px;
+    }
+
+    .mini-btn {
+      width: 28px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--t2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      transition: background .1s;
+    }
+
+    .mini-btn:hover:not(:disabled) {
+      background: rgba(27, 45, 79, .07);
+      color: var(--navy);
+    }
+
+    .mini-btn:disabled {
+      opacity: .2;
+      cursor: default;
+    }
+
+    .mini-val {
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--t1);
+      min-width: 24px;
+    }
+
+    .pf-room-beds-label {
+      font-size: 10px;
+      color: var(--t3);
+      margin-top: 5px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pf-room.custom .pf-room-beds-label {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    /* FOOTER */
+    .btn-cancel {
+      background: #fff;
+      color: var(--t1);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-cancel:hover {
+      background: var(--bg);
+    }
+
+    .btn-create {
+      flex: 1;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity .15s;
+    }
+
+    .btn-create:hover {
+      opacity: .88;
+    }
+
+    .reset-link {
+      font-size: 11px;
+      color: var(--t3);
+      cursor: pointer;
+      margin-top: 4px;
+      text-align: center;
+      display: block;
+    }
+
+    .reset-link:hover {
+      color: var(--navy);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Rent<span>Master</span></div>
+      <div class="sb-logo-sub">Property Management</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item" href="dashboard-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>Dashboard</a>
+      <a class="nav-item active" href="property-setup.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
+        </svg>Properties</a>
+      <a class="nav-item" href="tenants.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>Tenants<span class="nav-badge">4</span></a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Finance</div>
+      <a class="nav-item" href="payments.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
+        </svg>Payments</a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Settings</div>
+      <a class="nav-item" href="bank-onboarding.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>Bank Account</a>
+      <a class="nav-item" href="settings-desktop.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>Settings</a>
+    </nav>
+    <button class="sb-add-btn" onclick="location.href='add-tenant.html'"><svg width="14" height="14" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>Add Tenant</button>
+    <div class="sb-user">
+      <div class="sb-avi">VA</div>
+      <div>
+        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-role">Property Owner</div>
+      </div>
+      <div class="sb-logout"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb">
+        <a href="property-setup.html">Properties</a>
+        <span class="breadcrumb-sep"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></span>
+        <span class="breadcrumb-current">Sunshine PG</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>Edit Property</button>
+        <button class="btn-primary" onclick="openPanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>Add Rooms</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div
+        style="background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="flex:1">
+          <div style="font-size:18px;font-weight:800;color:var(--t1);margin-bottom:4px">Sunshine PG <span
+              class="prop-type-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round">
+                <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+              </svg>Bed-based</span></div>
+          <div style="font-size:13px;color:var(--t2);display:flex;align-items:center;gap:12px"><span
+              style="display:flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>Koramangala, Bengaluru</span><span style="color:var(--border)">·</span><span>6 rooms · 24
+              beds</span></div>
+        </div>
+        <div style="display:flex;gap:24px">
+          <div class="pi-stat">
+            <div class="pi-val" style="color:var(--paid)">20</div>
+            <div class="pi-lbl">Occupied</div>
+          </div>
+          <div class="pi-divider"></div>
+          <div class="pi-stat">
+            <div class="pi-val" style="color:var(--t3)">4</div>
+            <div class="pi-lbl">Vacant</div>
+          </div>
+          <div class="pi-divider"></div>
+          <div class="pi-stat">
+            <div class="pi-val">₹1.7L</div>
+            <div class="pi-lbl">Rent/mo</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px">
+        <div style="font-size:14px;font-weight:700;color:var(--t1)">Rooms</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:2px">Click a room to view tenant assignments</div>
+      </div>
+
+      <div class="rooms-grid">
+        <div class="room-card" onclick="location.href='tenant-detail.html'" style="cursor:pointer">
+          <div class="room-card-header">
+            <div>
+              <div class="room-name">Room 101</div>
+              <div class="room-floor">Ground Floor</div>
+            </div><button class="room-action"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg></button>
+          </div>
+          <div class="room-beds">
+            <div class="bed-row">
+              <div class="bed-icon occupied"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed A</div>
+                <div class="bed-tenant">Rahul Sharma</div>
+              </div><span class="bed-chip occupied">Occupied</span>
+            </div>
+            <div class="bed-row">
+              <div class="bed-icon occupied"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed B</div>
+                <div class="bed-tenant">Kiran Patel</div>
+              </div><span class="bed-chip occupied">Occupied</span>
+            </div>
+            <div class="bed-row">
+              <div class="bed-icon vacant"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed C</div>
+                <div class="bed-tenant" style="color:var(--t3)">Vacant</div>
+              </div><span class="bed-chip vacant">Vacant</span>
+            </div>
+          </div>
+          <div class="room-footer">
+            <div style="display:flex;align-items:center;gap:6px"><span class="occ-dot filled"></span><span
+                class="occ-dot filled"></span><span class="occ-dot empty"></span><span
+                style="font-size:11px;color:var(--t2);font-weight:500;margin-left:4px">2 of 3</span></div><span
+              style="font-size:11px;color:var(--navy);font-weight:600;cursor:pointer">+ Assign tenant</span>
+          </div>
+        </div>
+        <div class="room-card" onclick="location.href='tenant-detail.html'" style="cursor:pointer">
+          <div class="room-card-header">
+            <div>
+              <div class="room-name">Room 102</div>
+              <div class="room-floor">Ground Floor</div>
+            </div><button class="room-action"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg></button>
+          </div>
+          <div class="room-beds">
+            <div class="bed-row">
+              <div class="bed-icon occupied"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed A</div>
+                <div class="bed-tenant">Suresh Kumar</div>
+              </div><span class="bed-chip occupied">Occupied</span>
+            </div>
+            <div class="bed-row">
+              <div class="bed-icon occupied"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed B</div>
+                <div class="bed-tenant">Arjun Singh</div>
+              </div><span class="bed-chip occupied">Occupied</span>
+            </div>
+            <div class="bed-row">
+              <div class="bed-icon occupied"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20" />
+                </svg></div>
+              <div style="flex:1">
+                <div class="bed-name">Bed C</div>
+                <div class="bed-tenant">Vikram Nair</div>
+              </div><span class="bed-chip occupied">Occupied</span>
+            </div>
+          </div>
+          <div class="room-footer">
+            <div style="display:flex;align-items:center;gap:6px"><span class="occ-dot filled"></span><span
+                class="occ-dot filled"></span><span class="occ-dot filled"></span><span
+                style="font-size:11px;color:var(--paid);font-weight:600;margin-left:4px">Full · 3 of 3</span></div><span
+              style="font-size:11px;color:var(--t3)">No vacancies</span>
+          </div>
+        </div>
+        <div class="room-add-card" onclick="openPanel()">
+          <div class="add-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg></div>
+          <div style="font-size:13px;font-weight:600;color:var(--t2)">Add more rooms</div>
+          <div style="font-size:11px;color:var(--t3)">Bulk setup available</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closePanel()" style="display:none"></div>
+
+  <!-- BULK PANEL -->
+  <div class="slideover" id="slideover" style="display:none">
+    <div class="so-header">
+      <div>
+        <div class="so-title">Quick Room Setup</div>
+        <div class="so-subtitle">Set structure → fine-tune per room → create all at once</div>
+      </div>
+      <button class="so-close" onclick="closePanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+
+    <div class="so-body">
+      <!-- ── STEP 1: STRUCTURE ── -->
+      <div class="config-section">
+        <div
+          style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:12px">
+          Step 1 — Building structure</div>
+
+        <div class="grid-2">
+          <div>
+            <div class="field-label">Total floors</div>
+            <div class="stepper">
+              <button class="stepper-btn" id="floorMinus" onclick="adjFloors(-1)">−</button>
+              <div class="stepper-val" id="floorVal">3</div>
+              <button class="stepper-btn" onclick="adjFloors(+1)">+</button>
+            </div>
+            <div class="stepper-hint" id="floorHint">G + 2 upper floors</div>
+          </div>
+          <div>
+            <div class="field-label">Ground floor (G)</div>
+            <div class="seg-toggle">
+              <button class="seg-opt on" id="gYes" onclick="setGround(true)">Include</button>
+              <button class="seg-opt" id="gNo" onclick="setGround(false)">Skip</button>
+            </div>
+            <div class="stepper-hint">Does the building have a G floor?</div>
+          </div>
+        </div>
+
+        <!-- Generated floors strip -->
+        <div class="floors-strip" id="floorsStrip"></div>
+
+        <!-- ── STEP 2: DEFAULT BEDS ── -->
+        <div
+          style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin:18px 0 12px">
+          Step 2 — Default rooms &amp; beds</div>
+
+        <div class="grid-2" style="margin-bottom:10px">
+          <div>
+            <div class="field-label">Rooms per floor</div>
+            <div class="stepper">
+              <button class="stepper-btn" id="roomMinus" onclick="adjRooms(-1)">−</button>
+              <div class="stepper-val" id="roomVal">4</div>
+              <button class="stepper-btn" onclick="adjRooms(+1)">+</button>
+            </div>
+            <div class="stepper-hint">on every floor</div>
+          </div>
+          <div>
+            <div class="field-label">Default beds per room</div>
+            <div class="stepper">
+              <button class="stepper-btn" id="bedMinus" onclick="adjBeds(-1)">−</button>
+              <div class="stepper-val" id="bedVal">4</div>
+              <button class="stepper-btn" onclick="adjBeds(+1)">+</button>
+            </div>
+            <div class="stepper-hint">change per room below</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: PER-ROOM FINE-TUNE ── -->
+      <div class="preview-section">
+        <div class="preview-hdr">
+          <div>
+            <div class="preview-title">Step 3 — Adjust beds per room</div>
+          </div>
+          <div class="count-chips">
+            <span class="count-chip count-chip-r" id="roomCountChip">12 rooms</span>
+            <span class="count-chip count-chip-b" id="bedCountChip">48 beds</span>
+          </div>
+        </div>
+        <div class="preview-hint">
+          Tap <span>[−]</span> or <span>[+]</span> on any room to change its bed count.
+          <a class="reset-link" id="resetLink" href="#" onclick="resetAll(event)" style="display:none">Reset all rooms
+            to default</a>
+        </div>
+
+        <div class="preview-floors" id="previewFloors"></div>
+      </div>
+    </div>
+
+    <div class="so-footer">
+      <button class="btn-cancel" onclick="closePanel()">Cancel</button>
+      <button class="btn-create" id="createBtn" onclick="closePanel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span id="createLabel">Create 12 rooms &amp; 48 beds</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const BED_LETTERS = 'ABCDEFGHIJKL';
+    const isBedBased = true;
+
+    let totalFloors = 3;
+    let hasGround = true;
+    let roomsPerFloor = 4;
+    let defaultBeds = 4;
+
+    // Per-room overrides: { 'G01': 3, '102': 2, ... }
+    let roomOverrides = {};
+
+    function ordinal(n) {
+      if (n === 1) return '1st';
+      if (n === 2) return '2nd';
+      if (n === 3) return '3rd';
+      return n + 'th';
+    }
+
+    function getFloors() {
+      const floors = [];
+      if (hasGround) floors.push('G');
+      const upper = hasGround ? totalFloors - 1 : totalFloors;
+      for (let i = 1; i <= upper; i++) floors.push(String(i));
+      return floors;
+    }
+
+    function floorLabel(k) { return k === 'G' ? 'Ground Floor' : ordinal(parseInt(k)) + ' Floor'; }
+    function floorShort(k) { return k === 'G' ? 'G' : ordinal(parseInt(k)); }
+    function roomCode(fk, i) { return (fk === 'G' ? 'G' : fk) + String(i).padStart(2, '0'); }
+
+    function bedCountFor(code) {
+      return roomOverrides[code] !== undefined ? roomOverrides[code] : defaultBeds;
+    }
+
+    function adjFloors(d) {
+      totalFloors = Math.max(1, Math.min(20, totalFloors + d));
+      document.getElementById('floorVal').textContent = totalFloors;
+      document.getElementById('floorMinus').disabled = totalFloors <= 1;
+      roomOverrides = {}; // reset per-room overrides when structure changes
+      updateHint(); render();
+    }
+
+    function setGround(val) {
+      hasGround = val;
+      document.getElementById('gYes').className = 'seg-opt' + (val ? ' on' : '');
+      document.getElementById('gNo').className = 'seg-opt' + (!val ? ' on' : '');
+      roomOverrides = {};
+      updateHint(); render();
+    }
+
+    function adjRooms(d) {
+      roomsPerFloor = Math.max(1, Math.min(20, roomsPerFloor + d));
+      document.getElementById('roomVal').textContent = roomsPerFloor;
+      document.getElementById('roomMinus').disabled = roomsPerFloor <= 1;
+      roomOverrides = {};
+      render();
+    }
+
+    function adjBeds(d) {
+      defaultBeds = Math.max(1, Math.min(12, defaultBeds + d));
+      document.getElementById('bedVal').textContent = defaultBeds;
+      document.getElementById('bedMinus').disabled = defaultBeds <= 1;
+      // Reset overrides so all rooms snap to new default
+      roomOverrides = {};
+      render();
+    }
+
+    function adjRoomBeds(code, d) {
+      const cur = bedCountFor(code);
+      const nv = Math.max(1, Math.min(12, cur + d));
+      if (nv === defaultBeds) {
+        delete roomOverrides[code]; // same as default — remove override
+      } else {
+        roomOverrides[code] = nv;
+      }
+      renderCounts();
+      updateRoomCard(code);
+      updateResetLink();
+    }
+
+    function resetAll(e) {
+      e.preventDefault();
+      roomOverrides = {};
+      render();
+    }
+
+    function updateHint() {
+      const floors = getFloors();
+      const upper = floors.filter(f => f !== 'G').length;
+      const hint = hasGround
+        ? (upper === 0 ? 'Ground floor only' : `G + ${upper} upper floor${upper > 1 ? 's' : ''}`)
+        : `${totalFloors} upper floor${totalFloors > 1 ? 's' : ''}, no ground floor`;
+      document.getElementById('floorHint').textContent = hint;
+    }
+
+    function getTotals() {
+      const floors = getFloors();
+      const totalRooms = floors.length * roomsPerFloor;
+      let totalBeds = 0;
+      floors.forEach(f => {
+        for (let i = 1; i <= roomsPerFloor; i++) {
+          totalBeds += bedCountFor(roomCode(f, i));
+        }
+      });
+      return { totalRooms, totalBeds };
+    }
+
+    function renderCounts() {
+      const { totalRooms, totalBeds } = getTotals();
+      document.getElementById('roomCountChip').textContent = totalRooms + ' rooms';
+      document.getElementById('bedCountChip').textContent = totalBeds + ' beds';
+      const bedSuffix = isBedBased ? ` &amp; ${totalBeds} beds` : '';
+      document.getElementById('createLabel').innerHTML = `Create ${totalRooms} rooms${bedSuffix}`;
+    }
+
+    function updateResetLink() {
+      const hasOverrides = Object.keys(roomOverrides).length > 0;
+      document.getElementById('resetLink').style.display = hasOverrides ? 'block' : 'none';
+    }
+
+    function updateRoomCard(code) {
+      const card = document.querySelector(`[data-code="${code}"]`);
+      if (!card) return;
+      const beds = bedCountFor(code);
+      const isCustom = roomOverrides[code] !== undefined;
+      card.className = 'pf-room' + (isCustom ? ' custom' : '');
+      card.querySelector('.mini-val').textContent = beds;
+      const letters = BED_LETTERS.slice(0, Math.min(beds, 4)) + (beds > 4 ? '…' : '');
+      card.querySelector('.pf-room-beds-label').textContent = isCustom ? `★ ${beds} beds` : `${beds} beds`;
+      card.querySelector('[data-minus]').disabled = beds <= 1;
+      card.querySelector('[data-plus]').disabled = beds >= 12;
+    }
+
+    function renderFloorStrip() {
+      const floors = getFloors();
+      const strip = document.getElementById('floorsStrip');
+      strip.innerHTML = '';
+      floors.forEach((f, i) => {
+        if (i > 0) { const s = document.createElement('span'); s.className = 'floors-strip-sep'; s.textContent = '›'; strip.appendChild(s); }
+        const pill = document.createElement('span');
+        pill.className = 'floor-pill' + (f === 'G' ? ' ground' : '');
+        pill.textContent = floorShort(f);
+        strip.appendChild(pill);
+      });
+      const cnt = document.createElement('span');
+      cnt.className = 'floors-strip-count';
+      cnt.textContent = floors.length + (floors.length === 1 ? ' floor' : ' floors');
+      strip.appendChild(cnt);
+    }
+
+    function render() {
+      updateHint();
+      renderFloorStrip();
+      renderCounts();
+      updateResetLink();
+
+      const floors = getFloors();
+      const preview = document.getElementById('previewFloors');
+      preview.innerHTML = '';
+
+      floors.forEach(floorKey => {
+        const fDiv = document.createElement('div');
+        fDiv.className = 'pf-floor';
+
+        const lbl = document.createElement('div');
+        lbl.className = 'pf-label';
+        lbl.textContent = floorLabel(floorKey);
+        fDiv.appendChild(lbl);
+
+        const row = document.createElement('div');
+        row.className = 'pf-rooms';
+
+        for (let i = 1; i <= roomsPerFloor; i++) {
+          const code = roomCode(floorKey, i);
+          const beds = bedCountFor(code);
+          const isCustom = roomOverrides[code] !== undefined;
+
+          const card = document.createElement('div');
+          card.className = 'pf-room' + (isCustom ? ' custom' : '');
+          card.dataset.code = code;
+
+          card.innerHTML = `
+        <div class="pf-room-name">Room ${code}</div>
+        <div class="mini-stepper">
+          <button class="mini-btn" data-minus onclick="adjRoomBeds('${code}',-1)" ${beds <= 1 ? 'disabled' : ''}>−</button>
+          <div class="mini-val">${beds}</div>
+          <button class="mini-btn" data-plus onclick="adjRoomBeds('${code}',+1)" ${beds >= 12 ? 'disabled' : ''}>+</button>
+        </div>
+        <div class="pf-room-beds-label">${isCustom ? '★ ' : ''}${beds} beds</div>
+      `;
+          row.appendChild(card);
+        }
+
+        fDiv.appendChild(row);
+        preview.appendChild(fDiv);
+      });
+    }
+
+    function openPanel() {
+      document.getElementById('overlay').style.display = 'block';
+      const so = document.getElementById('slideover');
+      so.style.display = 'flex';
+      so.style.flexDirection = 'column';
+      roomOverrides = {};
+      render();
+    }
+
+    function closePanel() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('slideover').style.display = 'none';
+    }
+
+    openPanel();
+  </script>
+</body>
+
+</html>

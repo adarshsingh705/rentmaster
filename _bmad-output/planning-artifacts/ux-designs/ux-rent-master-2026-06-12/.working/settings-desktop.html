@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E8EAF0;
+      color: #0F1623;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+    }
+
+    :root {
+      --navy: #1B2D4F;
+      --navy2: #243A63;
+      --navy-lt: rgba(27, 45, 79, .07);
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --bg: #E8EAF0;
+      --border: #DDE1EC;
+      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
+      --sh-md: 0 4px 16px rgba(15, 22, 35, .08), 0 1px 4px rgba(15, 22, 35, .05);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* ══ SIDEBAR ══ */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sb-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sb-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .sb-logo-text span {
+      color: var(--saffron);
+    }
+
+    .sb-logo-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .35);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      opacity: .6;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--late);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      margin: 8px 12px;
+    }
+
+    .sb-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 6px 12px 4px;
+    }
+
+    .sb-add-btn {
+      margin: 16px 12px;
+      background: var(--saffron);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+      width: calc(100% - 24px);
+    }
+
+    .sb-add-btn:hover {
+      opacity: .88;
+    }
+
+    .sb-user {
+      padding: 16px 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sb-avi {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sb-role {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .4);
+      margin-top: 1px;
+    }
+
+    .sb-logout {
+      margin-left: auto;
+      color: rgba(255, 255, 255, .3);
+      cursor: pointer;
+    }
+
+    /* ══ MAIN ══ */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(15, 22, 35, .04);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar-greeting {
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 500;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--t1);
+      letter-spacing: -.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-date {
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+      background: #F4F5F8;
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: #F4F5F8;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t2);
+      cursor: pointer;
+    }
+
+    .topbar-btn {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity .15s;
+    }
+
+    .topbar-btn:hover {
+      opacity: .88;
+    }
+
+    /* ══ CONTENT ══ */
+    .content {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+    }
+
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 20px;
+      max-width: 960px;
+    }
+
+    /* LEFT: Settings sub-nav */
+    .snav-panel {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      padding: 8px;
+      height: fit-content;
+      position: sticky;
+      top: 28px;
+    }
+
+    .snav-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 8px 12px 4px;
+    }
+
+    .snav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .snav-item:hover {
+      background: var(--bg);
+      color: var(--t1);
+    }
+
+    .snav-item.active {
+      background: var(--navy-lt);
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .snav-item svg {
+      flex-shrink: 0;
+      opacity: .6;
+    }
+
+    .snav-item.active svg {
+      opacity: 1;
+    }
+
+    .snav-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 6px 0;
+    }
+
+    .snav-logout {
+      color: var(--late) !important;
+    }
+
+    .snav-logout svg {
+      opacity: 1 !important;
+      color: var(--late);
+    }
+
+    /* ══ RIGHT PANELS ══ */
+    .panel {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel.active {
+      display: flex;
+    }
+
+    /* SHARED CARD */
+    .fcard {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      padding: 24px 28px;
+    }
+
+    .fcard-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--t1);
+      letter-spacing: -.01em;
+      margin-bottom: 20px;
+    }
+
+    .fcard-sub {
+      font-size: 12px;
+      color: var(--t2);
+      margin-top: -14px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* PROFILE HEADER */
+    .profile-hdr {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-avi {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 12px rgba(27, 45, 79, .2);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-avi-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--sh);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t3);
+    }
+
+    .profile-meta {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--t1);
+      letter-spacing: -.02em;
+    }
+
+    .profile-email {
+      font-size: 13px;
+      color: var(--t2);
+      margin-top: 3px;
+    }
+
+    .profile-tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ptag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 5px;
+    }
+
+    .ptag-navy {
+      background: var(--navy-lt);
+      color: var(--navy);
+    }
+
+    .ptag-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    /* FORM FIELDS */
+    .fgrid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .fgroup {
+      margin-bottom: 18px;
+    }
+
+    .fgroup:last-child {
+      margin-bottom: 0;
+    }
+
+    .flabel {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fopt {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--t3);
+    }
+
+    .finput {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      font-size: 14px;
+      color: var(--t1);
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .finput:focus {
+      border-color: var(--navy);
+    }
+
+    .finput::placeholder {
+      color: var(--t3);
+    }
+
+    .finput.readonly {
+      background: #F4F5F8;
+      color: var(--t2);
+      cursor: default;
+      border-color: transparent;
+    }
+
+    .finput.gstin {
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .fhint {
+      font-size: 12px;
+      color: var(--t3);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .fhint code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: rgba(15, 22, 35, .06);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--t2);
+      letter-spacing: .04em;
+    }
+
+    .finput-prefix {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      overflow: hidden;
+      transition: border-color .15s;
+    }
+
+    .finput-prefix:focus-within {
+      border-color: var(--navy);
+    }
+
+    .fprefix {
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t2);
+      background: #F4F5F8;
+      border-right: 1.5px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .finput-prefix input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--t1);
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .finput-prefix input::placeholder {
+      color: var(--t3);
+    }
+
+    /* UNSAVED BANNER */
+    .unsaved-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: rgba(217, 119, 6, .07);
+      border: 1px solid rgba(217, 119, 6, .2);
+    }
+
+    .unsaved-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #7a4a00;
+    }
+
+    /* FORM FOOTER */
+    .fcard-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--t1);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg);
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--navy);
+      border: 1.5px solid var(--navy);
+      border-radius: 9px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background .15s;
+      text-decoration: none;
+    }
+
+    .btn-outline:hover {
+      background: var(--navy-lt);
+    }
+
+    /* ACCOUNT INFO */
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+    }
+
+    .info-row+.info-row {
+      border-top: 1px solid #F0F2F8;
+    }
+
+    .info-label {
+      font-size: 13px;
+      color: var(--t2);
+    }
+
+    .info-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    /* CHIPS */
+    .chip {
+      display: inline-block;
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .c-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .c-pend {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    .c-late {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    .c-navy {
+      background: var(--navy-lt);
+      color: var(--navy);
+    }
+
+    /* BANK STATUS CARD */
+    .bank-status-card {
+      background: var(--paid-bg);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .bank-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+      border: 1px solid rgba(14, 159, 110, .15);
+    }
+
+    .bank-info {
+      flex: 1;
+    }
+
+    .bank-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--paid);
+    }
+
+    .bank-sub {
+      font-size: 12px;
+      color: rgba(14, 159, 110, .75);
+      margin-top: 2px;
+    }
+
+    .bank-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* NOTIF ROWS */
+    .notif-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .notif-row+.notif-row {
+      border-top: 1px solid var(--border);
+    }
+
+    .notif-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ni-navy {
+      background: var(--navy-lt);
+      color: var(--navy);
+    }
+
+    .ni-green {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .notif-info {
+      flex: 1;
+      padding-top: 2px;
+    }
+
+    .notif-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .notif-sub {
+      font-size: 12px;
+      color: var(--t2);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .notif-story {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* TOGGLE */
+    .toggle-wrap {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      flex-shrink: 0;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .toggle-track {
+      width: 44px;
+      height: 26px;
+      border-radius: 99px;
+      background: var(--border);
+      transition: background .2s;
+    }
+
+    .toggle-wrap.on .toggle-track {
+      background: var(--navy);
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(15, 22, 35, .18);
+      transition: transform .2s;
+    }
+
+    .toggle-wrap.on .toggle-thumb {
+      transform: translateX(18px);
+    }
+
+    /* INFO NOTICE */
+    .info-notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: rgba(27, 45, 79, .04);
+      border: 1px solid var(--border);
+    }
+
+    .info-notice-icon {
+      flex-shrink: 0;
+      color: var(--t3);
+      margin-top: 1px;
+    }
+
+    .info-notice-text {
+      font-size: 12px;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+
+    .info-notice-text strong {
+      color: var(--t1);
+      font-weight: 600;
+    }
+
+    /* ══ OTP MODAL ══ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(15, 22, 35, .45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-dialog {
+      background: var(--card);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(15, 22, 35, .18), 0 4px 16px rgba(15, 22, 35, .08);
+      padding: 32px 36px;
+      width: 460px;
+      max-width: calc(100vw - 40px);
+      transform: translateY(10px) scale(.98);
+      transition: transform .2s;
+      position: relative;
+    }
+
+    .modal-overlay.open .modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #F4F5F8;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t2);
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      background: var(--border);
+    }
+
+    .modal-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #e8f6ee;
+      color: #22A356;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--t1);
+      letter-spacing: -.02em;
+      margin-bottom: 6px;
+    }
+
+    .modal-desc {
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .modal-desc strong {
+      color: var(--t1);
+      font-weight: 600;
+    }
+
+    .otp-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: .02em;
+    }
+
+    .otp-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .otp-box {
+      width: 52px;
+      height: 58px;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 11px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--t1);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      outline: none;
+      background: #fff;
+      transition: border-color .15s, background .15s;
+      caret-color: var(--navy);
+    }
+
+    .otp-box:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(27, 45, 79, .08);
+    }
+
+    .otp-box.filled {
+      border-color: var(--navy);
+      background: rgba(27, 45, 79, .03);
+    }
+
+    .otp-box.otp-err-box {
+      border-color: var(--late);
+      background: rgba(220, 32, 32, .04);
+    }
+
+    .otp-error-msg {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--late);
+      margin-top: 4px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .otp-error-msg.show {
+      display: block;
+    }
+
+    .otp-timer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--t3);
+      margin-bottom: 22px;
+    }
+
+    .otp-timer a {
+      color: var(--navy);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .otp-timer a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-actions .btn-primary {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .otp-success-wrap {
+      text-align: center;
+      display: none;
+      padding: 8px 0 4px;
+    }
+
+    .otp-success-wrap.show {
+      display: block;
+    }
+
+    .otp-success-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--paid-bg);
+      color: var(--paid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .otp-success-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--t1);
+      margin-bottom: 8px;
+    }
+
+    .otp-success-sub {
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Rent<span>Master</span></div>
+      <div class="sb-logo-sub">Property Management</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item" href="dashboard-desktop.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="property-setup.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
+        </svg>
+        Properties
+      </a>
+      <a class="nav-item" href="tenants.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>
+        Tenants<span class="nav-badge">4</span>
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Finance</div>
+      <a class="nav-item" href="payments.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
+        </svg>
+        Payments
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Settings</div>
+      <a class="nav-item" href="bank-onboarding.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>
+        Bank Account
+      </a>
+      <a class="nav-item active" href="settings-desktop.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>
+        Settings
+      </a>
+    </nav>
+    <button class="sb-add-btn" onclick="location.href='add-tenant.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Add Tenant
+    </button>
+    <div class="sb-user">
+      <div class="sb-avi">VA</div>
+      <div>
+        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-role">Property Owner</div>
+      </div>
+      <div class="sb-logout">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-greeting">Manage your account</div>
+        <div class="topbar-title" id="topbar-section-title">Settings — Profile</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date">June 2026</div>
+        <div class="icon-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </div>
+        <button class="topbar-btn" onclick="location.href='add-tenant.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add Tenant
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <div class="settings-layout">
+
+        <!-- ── LEFT: Settings sub-nav ── -->
+        <div class="snav-panel">
+          <div class="snav-section">Account</div>
+          <a class="snav-item active" onclick="switchPanel('profile', this, 'Settings — Profile')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M20 21a8 8 0 1 0-16 0" />
+            </svg>
+            Profile
+          </a>
+          <div class="snav-divider"></div>
+          <div class="snav-section">Financials</div>
+          <a class="snav-item" onclick="switchPanel('bank', this, 'Settings — Bank Account')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+            Bank Account
+          </a>
+          <div class="snav-divider"></div>
+          <div class="snav-section">Preferences</div>
+          <a class="snav-item" onclick="switchPanel('notifications', this, 'Settings — Notifications')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+            </svg>
+            Notifications
+          </a>
+          <div class="snav-divider"></div>
+          <div class="snav-section">More</div>
+          <a class="snav-item" href="subscription.html">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            Plan &amp; Billing
+          </a>
+          <a class="snav-item" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" x2="12.01" y1="17" y2="17" />
+            </svg>
+            Help &amp; Support
+          </a>
+          <a class="snav-item" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Privacy Policy
+          </a>
+          <a class="snav-item" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <line x1="16" x2="8" y1="13" y2="13" />
+              <line x1="16" x2="8" y1="17" y2="17" />
+            </svg>
+            Terms of Service
+          </a>
+          <div class="snav-divider"></div>
+          <a class="snav-item snav-logout" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Log out
+          </a>
+        </div>
+
+        <!-- ──────────────────────────────────────────── -->
+        <!-- PANEL 1: PROFILE                            -->
+        <!-- Fields: full_name, email, phone, gstin      -->
+        <!-- Story 1.8 (FR-7) + Story 4.5 owner.phone   -->
+        <!-- ──────────────────────────────────────────── -->
+        <div class="panel active" id="panel-profile">
+
+          <!-- Profile header -->
+          <div class="profile-hdr">
+            <div class="profile-avi">
+              VA
+              <div class="profile-avi-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+              </div>
+            </div>
+            <div class="profile-meta">
+              <div class="profile-name">Adarsh singh</div>
+              <div class="profile-email">Vishalarya@hotmail.com</div>
+              <div class="profile-tags">
+                <span class="ptag ptag-navy">Property Owner</span>
+                <span class="ptag ptag-paid">Bank Verified</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unsaved banner -->
+          <div class="unsaved-banner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" x2="12" y1="8" y2="12" />
+              <line x1="12" x2="12.01" y1="16" y2="16" />
+            </svg>
+            <span class="unsaved-text">You have unsaved changes</span>
+          </div>
+
+          <!-- Personal Info -->
+          <div class="fcard">
+            <div class="fcard-title">Personal Information</div>
+            <div class="fgrid2">
+              <!-- Full Name — required, PATCH /api/owner/profile (Story 1.8) -->
+              <div class="fgroup">
+                <label class="flabel">Full Name</label>
+                <input class="finput" type="text" value="Adarsh singh" placeholder="Your full name">
+              </div>
+              <!-- Email — read-only, from Supabase Auth (Story 1.8) -->
+              <div class="fgroup">
+                <label class="flabel">Email <span class="fopt">From your account</span></label>
+                <input class="finput readonly" type="email" value="Vishalarya@hotmail.com" readonly>
+              </div>
+            </div>
+            <!-- Phone — for owner WhatsApp payment alerts (Story 4.5, FR-23) -->
+            <div class="fgroup">
+              <label class="flabel">WhatsApp Number <span class="fopt">For payment alerts</span></label>
+              <div class="finput-prefix" id="wa-input-wrap">
+                <span class="fprefix">+91</span>
+                <input type="tel" id="wa-input" placeholder="98765 43210" maxlength="10" value="9876543210"
+                  data-saved="9876543210">
+              </div>
+              <div class="fhint">10-digit Indian mobile number. Changing this number requires OTP verification sent to
+                the new number and your registered email.</div>
+            </div>
+            <div class="fcard-footer">
+              <button class="btn-secondary" onclick="discardProfile()">Discard</button>
+              <button class="btn-primary" onclick="handleProfileSave()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 12 9 17 20 6" />
+                </svg>
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Business Info -->
+          <div class="fcard">
+            <div class="fcard-title">Business Information</div>
+            <div class="fcard-sub">Required for Cashfree KYC and GST invoicing. GSTIN is optional in Phase 1.</div>
+            <!-- GSTIN — optional, 15-char Indian format (Story 1.8, FR-7) -->
+            <div class="fgroup" style="margin-bottom:0">
+              <label class="flabel">GSTIN <span class="fopt">Optional</span></label>
+              <input class="finput gstin" type="text" placeholder="29AABCU9603R1ZX" maxlength="15">
+              <div class="fhint">15-character GST Identification Number. Format: <code>29AABCU9603R1ZX</code>. Must
+                match <code>^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$</code></div>
+            </div>
+            <div class="fcard-footer">
+              <button class="btn-secondary">Discard</button>
+              <button class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 12 9 17 20 6" />
+                </svg>
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Account Details (read-only summary) -->
+          <div class="fcard">
+            <div class="fcard-title">Account Details</div>
+            <div class="info-row"><span class="info-label">Account type</span><span class="info-value">Property
+                Owner</span></div>
+            <div class="info-row"><span class="info-label">Member since</span><span class="info-value">June 2026</span>
+            </div>
+            <div class="info-row"><span class="info-label">Properties</span><span class="info-value">1</span></div>
+            <div class="info-row"><span class="info-label">Active tenants</span><span class="info-value">16</span></div>
+            <div class="info-row"><span class="info-label">Bank account</span><span class="chip c-paid">Verified</span>
+            </div>
+          </div>
+
+        </div><!-- /panel-profile -->
+
+
+        <!-- ──────────────────────────────────────────── -->
+        <!-- PANEL 2: BANK ACCOUNT                       -->
+        <!-- Status view: Story 3.4 (FR-9)               -->
+        <!-- Shows current state, links to full form     -->
+        <!-- ──────────────────────────────────────────── -->
+        <div class="panel" id="panel-bank">
+
+          <div class="fcard">
+            <div class="fcard-title">Bank Account</div>
+            <div class="fcard-sub">Your bank account is used to receive rent payments directly from tenants via
+              Cashfree.</div>
+
+            <!-- VERIFIED state (Story 3.4: bank_status = VERIFIED) -->
+            <div class="bank-status-card">
+              <div class="bank-icon">HDFC</div>
+              <div class="bank-info">
+                <div class="bank-name">HDFC Bank · Verified</div>
+                <div class="bank-sub">Account holder: Adarsh singh &nbsp;·&nbsp; ••••4521 &nbsp;·&nbsp; Savings</div>
+              </div>
+              <div class="bank-actions">
+                <span class="chip c-paid">Verified</span>
+              </div>
+            </div>
+
+            <!-- Details table (GET /api/owner/bank/status — Story 3.4) -->
+            <div class="info-row"><span class="info-label">Account holder name</span><span class="info-value">Adarsh
+                singh</span></div>
+            <div class="info-row"><span class="info-label">Account number</span><span class="info-value">•••• ••••
+                4521</span></div>
+            <div class="info-row"><span class="info-label">Account type</span><span class="info-value">Savings</span>
+            </div>
+            <div class="info-row"><span class="info-label">Bank</span><span class="info-value">HDFC Bank</span></div>
+            <div class="info-row"><span class="info-label">IFSC code</span><span class="info-value">HDFC0001234</span>
+            </div>
+            <div class="info-row"><span class="info-label">Verification status</span><span class="chip c-paid">Verified
+                via penny-drop</span></div>
+            <div class="info-row"><span class="info-label">Cashfree Beneficiary</span><span
+                class="chip c-navy">Active</span></div>
+
+            <div class="fcard-footer">
+              <a class="btn-outline" href="bank-onboarding.html">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Update Bank Details
+              </a>
+            </div>
+          </div>
+
+          <div class="info-notice">
+            <div class="info-notice-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="info-notice-text">
+              <strong>Your full account number is never shown.</strong> Only the last 4 digits are stored in plaintext —
+              the rest is AES-256 encrypted (NFR-5). Updating bank details requires a new email OTP verification (Story
+              3.2).
+            </div>
+          </div>
+
+        </div><!-- /panel-bank -->
+
+
+        <!-- ──────────────────────────────────────────── -->
+        <!-- PANEL 3: NOTIFICATIONS                      -->
+        <!-- Toggles: reminders_enabled, owner_alerts    -->
+        <!-- Tied to owner_payment_settings table        -->
+        <!-- ──────────────────────────────────────────── -->
+        <div class="panel" id="panel-notifications">
+
+          <div class="fcard">
+            <div class="fcard-title">Notification Preferences</div>
+            <div class="fcard-sub">Control which automated messages are sent. Changes apply from the next scheduled
+              reminder cycle.</div>
+
+            <!-- Toggle 1: Rent Reminders to tenants (FR-17, FR-21, Story 5A.3) -->
+            <div class="notif-row">
+              <div class="notif-icon ni-navy">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                </svg>
+              </div>
+              <div class="notif-info">
+                <div class="notif-title">Rent Reminders</div>
+                <div class="notif-sub">Automatically send WhatsApp reminders to tenants — 3 days before due, on due
+                  date, and if overdue by 5+ days.</div>
+                <div class="notif-story">Controls <code
+                    style="font-family:monospace;font-size:11px;background:rgba(15,22,35,.06);padding:1px 5px;border-radius:4px">owner_payment_settings.reminders_enabled</code>
+                  · Story 5A.3</div>
+              </div>
+              <div class="toggle-wrap on" onclick="this.classList.toggle('on')">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </div>
+            </div>
+
+            <!-- Toggle 2: Payment alerts to owner (FR-23, Story 4.5) -->
+            <div class="notif-row">
+              <div class="notif-icon ni-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="22" height="16" x="1" y="4" rx="2" />
+                  <line x1="1" x2="23" y1="10" y2="10" />
+                </svg>
+              </div>
+              <div class="notif-info">
+                <div class="notif-title">Payment Alerts</div>
+                <div class="notif-sub">Receive a WhatsApp message on your registered number whenever a tenant pays.
+                  Requires a WhatsApp number in your Profile.</div>
+                <div class="notif-story">Controls <code
+                    style="font-family:monospace;font-size:11px;background:rgba(15,22,35,.06);padding:1px 5px;border-radius:4px">owner_payment_settings.owner_alerts_enabled</code>
+                  · Story 4.5 (FR-23)</div>
+              </div>
+              <div class="toggle-wrap on" onclick="this.classList.toggle('on')">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="info-notice">
+            <div class="info-notice-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" x2="12" y1="8" y2="12" />
+                <line x1="12" x2="12.01" y1="16" y2="16" />
+              </svg>
+            </div>
+            <div class="info-notice-text">
+              <strong>Tenant receipts are always sent</strong> — the WhatsApp payment receipt to the tenant (Story 4.4)
+              cannot be disabled. Only the owner-facing alerts above are user-controlled.
+            </div>
+          </div>
+
+        </div><!-- /panel-notifications -->
+
+      </div><!-- /settings-layout -->
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <!-- ══ OTP VERIFICATION MODAL ══ -->
+  <div class="modal-overlay" id="otp-modal">
+    <div class="modal-dialog">
+      <div class="modal-close" onclick="closeOtpModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </div>
+
+      <!-- OTP entry state -->
+      <div id="otp-entry-state">
+        <div class="modal-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <div class="modal-title">Verify your new WhatsApp number</div>
+        <div class="modal-desc">
+          We've sent a 6-digit code to <strong id="otp-dest-number">+91 98765 43210</strong> via WhatsApp and to
+          <strong>Vishalarya@hotmail.com</strong>. Enter it below to confirm the change.
+        </div>
+
+        <div class="otp-label">Enter 6-digit OTP</div>
+        <div class="otp-row" id="otp-boxes">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]"
+            autocomplete="one-time-code">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+        </div>
+        <div class="otp-error-msg" id="otp-error-msg">Incorrect code. Please try again.</div>
+        <div class="otp-timer" id="otp-timer-row">Didn't receive it? <a onclick="resendOtp()">Resend code</a></div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeOtpModal()">Cancel</button>
+          <button class="btn-primary" onclick="verifyOtp()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 12 9 17 20 6" />
+            </svg>
+            Verify &amp; Save
+          </button>
+        </div>
+      </div>
+
+      <!-- Success state -->
+      <div class="otp-success-wrap" id="otp-success-state">
+        <div class="otp-success-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 12 9 17 20 6" />
+          </svg>
+        </div>
+        <div class="otp-success-title">WhatsApp number updated!</div>
+        <div class="otp-success-sub">Your new number <strong id="otp-success-num"></strong> has been verified and saved.
+          Payment alerts will now go to this number.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Panel switching ── */
+    function switchPanel(id, el, title) {
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
+      document.querySelectorAll('.snav-item').forEach(function (i) { i.classList.remove('active'); });
+      document.getElementById('panel-' + id).classList.add('active');
+      el.classList.add('active');
+      document.getElementById('topbar-section-title').textContent = title;
+    }
+
+    /* ── OTP state ── */
+    var _pendingNumber = '';
+    var _resendInterval = null;
+
+    function handleProfileSave() {
+      var waInput = document.getElementById('wa-input');
+      var newVal = waInput.value.replace(/\D/g, '');
+      var savedVal = waInput.dataset.saved || '';
+      if (newVal.length === 10 && newVal !== savedVal) {
+        _pendingNumber = newVal;
+        openOtpModal(newVal);
+      } else {
+        document.querySelector('.unsaved-banner').style.display = 'none';
+      }
+    }
+
+    function discardProfile() {
+      var waInput = document.getElementById('wa-input');
+      waInput.value = waInput.dataset.saved || '';
+      document.querySelector('.unsaved-banner').style.display = 'none';
+    }
+
+    function openOtpModal(number) {
+      var fmt = number.replace(/(\d{5})(\d{5})/, '$1 $2');
+      document.getElementById('otp-dest-number').textContent = '+91 ' + fmt;
+      document.getElementById('otp-success-num').textContent = '+91 ' + fmt;
+
+      document.getElementById('otp-entry-state').style.display = '';
+      document.getElementById('otp-success-state').classList.remove('show');
+      document.getElementById('otp-error-msg').classList.remove('show');
+      document.querySelectorAll('.otp-box').forEach(function (b) {
+        b.value = '';
+        b.classList.remove('filled', 'otp-err-box');
+      });
+
+      startResendTimer(30);
+      document.getElementById('otp-modal').classList.add('open');
+      setTimeout(function () { document.querySelectorAll('.otp-box')[0].focus(); }, 220);
+    }
+
+    function closeOtpModal() {
+      document.getElementById('otp-modal').classList.remove('open');
+      clearInterval(_resendInterval);
+    }
+
+    function verifyOtp() {
+      var boxes = document.querySelectorAll('.otp-box');
+      var code = Array.from(boxes).map(function (b) { return b.value; }).join('');
+      var errEl = document.getElementById('otp-error-msg');
+
+      if (code.length < 6) {
+        errEl.textContent = 'Please enter all 6 digits.';
+        errEl.classList.add('show');
+        return;
+      }
+      /* Demo: correct OTP is 123456 */
+      if (code === '123456') {
+        var waInput = document.getElementById('wa-input');
+        waInput.dataset.saved = _pendingNumber;
+        document.getElementById('otp-entry-state').style.display = 'none';
+        document.getElementById('otp-success-state').classList.add('show');
+        clearInterval(_resendInterval);
+        setTimeout(function () {
+          closeOtpModal();
+          document.querySelector('.unsaved-banner').style.display = 'none';
+        }, 2600);
+      } else {
+        boxes.forEach(function (b) { b.classList.add('otp-err-box'); });
+        errEl.textContent = 'Incorrect code. Please try again.';
+        errEl.classList.add('show');
+      }
+    }
+
+    function resendOtp() {
+      document.querySelectorAll('.otp-box').forEach(function (b) {
+        b.value = '';
+        b.classList.remove('filled', 'otp-err-box');
+      });
+      document.getElementById('otp-error-msg').classList.remove('show');
+      document.querySelectorAll('.otp-box')[0].focus();
+      startResendTimer(30);
+    }
+
+    function startResendTimer(secs) {
+      clearInterval(_resendInterval);
+      var remaining = secs;
+      var row = document.getElementById('otp-timer-row');
+      function tick() {
+        if (remaining > 0) {
+          row.innerHTML = 'Resend code in <strong style="color:var(--t1)">' + remaining + 's</strong>';
+          remaining--;
+        } else {
+          clearInterval(_resendInterval);
+          row.innerHTML = 'Didn\'t receive it? <a onclick="resendOtp()">Resend code</a>';
+        }
+      }
+      tick();
+      _resendInterval = setInterval(tick, 1000);
+    }
+
+    /* ── OTP input: auto-advance, backspace, paste ── */
+    document.addEventListener('DOMContentLoaded', function () {
+      var boxes = document.querySelectorAll('.otp-box');
+      boxes.forEach(function (box, i) {
+        box.addEventListener('input', function () {
+          var val = this.value.replace(/[^0-9]/g, '');
+          this.value = val ? val[val.length - 1] : '';
+          document.getElementById('otp-error-msg').classList.remove('show');
+          if (this.value) {
+            this.classList.add('filled');
+            this.classList.remove('otp-err-box');
+            if (i < boxes.length - 1) boxes[i + 1].focus();
+          } else {
+            this.classList.remove('filled');
+          }
+        });
+        box.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && !this.value && i > 0) {
+            boxes[i - 1].focus();
+            boxes[i - 1].value = '';
+            boxes[i - 1].classList.remove('filled');
+          }
+          if (e.key === 'Enter') verifyOtp();
+        });
+        box.addEventListener('paste', function (e) {
+          e.preventDefault();
+          var pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+          pasted.split('').forEach(function (ch, j) {
+            if (boxes[i + j]) {
+              boxes[i + j].value = ch;
+              boxes[i + j].classList.add('filled');
+              boxes[i + j].classList.remove('otp-err-box');
+            }
+          });
+          var next = Math.min(i + pasted.length, boxes.length - 1);
+          boxes[next].focus();
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>

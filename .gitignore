@@ -1,0 +1,26 @@
+# ── BMad Caches & Local Environments ──
+# BMad downloads skills locally; these can be re-installed by BMad installer and shouldn't be pushed.
+.agent/
+.agents/
+.claude/skills/
+.claude/*.local.*
+.claude/*local*
+
+# Personal configuration overrides (contains personal names, settings or paths)
+_bmad/config.user.toml
+_bmad/custom/config.user.toml
+*_local*
+*.local.*
+
+# ── General Web App / Backend / API files ──
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.log
+
+# ── System Files ──
+.DS_Store
+Thumbs.db

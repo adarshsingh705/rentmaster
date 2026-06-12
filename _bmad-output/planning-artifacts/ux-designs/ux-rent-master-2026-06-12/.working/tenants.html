@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Tenants</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #E8EAF0;
+      color: #0F1623;
+      min-height: 100vh;
+      display: flex;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :root {
+      --navy: #1B2D4F;
+      --navy2: #243A63;
+      --navy-lt: rgba(27, 45, 79, .07);
+      --saffron: #F97316;
+      --t1: #0F1623;
+      --t2: #5A6473;
+      --t3: #9CA3AE;
+      --card: #FFFFFF;
+      --bg: #E8EAF0;
+      --border: #DDE1EC;
+      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
+      --paid: #0E9F6E;
+      --paid-bg: rgba(14, 159, 110, .09);
+      --pend: #D97706;
+      --pend-bg: rgba(217, 119, 6, .09);
+      --late: #DC2020;
+      --late-bg: rgba(220, 32, 32, .08);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sb-logo {
+      padding: 28px 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .sb-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .sb-logo-text span {
+      color: var(--saffron);
+    }
+
+    .sb-logo-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 6px 12px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--late);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, .07);
+      margin: 8px 12px;
+    }
+
+    .sb-add-btn {
+      margin: 0 12px 16px;
+      background: var(--saffron);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .15s;
+      width: calc(100% - 24px);
+    }
+
+    .sb-add-btn:hover {
+      opacity: .88;
+    }
+
+    .sb-user {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sb-avi {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sb-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sb-role {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .38);
+      margin-top: 1px;
+    }
+
+    .sb-logout {
+      margin-left: auto;
+      color: rgba(255, 255, 255, .28);
+      cursor: pointer;
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(15, 22, 35, .04);
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar-greeting {
+      font-size: 11px;
+      color: var(--t3);
+      font-weight: 500;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--t1);
+      letter-spacing: -.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-date {
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+      background: #F4F5F8;
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: #F4F5F8;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t2);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity .15s;
+    }
+
+    .btn-primary:hover {
+      opacity: .88;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      padding: 16px 20px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--t2);
+      margin-top: 5px;
+    }
+
+    .sv-navy {
+      color: var(--navy);
+    }
+
+    .sv-saffron {
+      color: var(--saffron);
+    }
+
+    .sv-green {
+      color: var(--paid);
+    }
+
+    .sv-amber {
+      color: var(--pend);
+    }
+
+    .sv-red {
+      color: var(--late);
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .ftab {
+      padding: 6px 13px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      cursor: pointer;
+      transition: all .15s;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .ftab:hover {
+      background: var(--bg);
+      color: var(--t1);
+    }
+
+    .ftab.active {
+      background: var(--navy-lt);
+      color: var(--navy);
+    }
+
+    .ftab-cnt {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 99px;
+      background: rgba(15, 22, 35, .08);
+      color: var(--t2);
+    }
+
+    .ftab.active .ftab-cnt {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .ftab-cnt.red {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    .ftab.active .ftab-cnt.red {
+      background: var(--late);
+      color: #fff;
+    }
+
+    .filter-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #F4F5F8;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 12px;
+      transition: border-color .15s;
+    }
+
+    .search-wrap:focus-within {
+      border-color: var(--navy);
+      background: #fff;
+    }
+
+    .search-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 13px;
+      color: var(--t1);
+      font-family: inherit;
+    }
+
+    .search-wrap input::placeholder {
+      color: var(--t3);
+    }
+
+    .search-wrap svg {
+      color: var(--t3);
+      flex-shrink: 0;
+    }
+
+    .filter-count {
+      font-size: 12px;
+      color: var(--t3);
+      font-weight: 500;
+      white-space: nowrap;
+      padding-left: 4px;
+    }
+
+    /* TABLE CARD */
+    .table-card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--sh);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--t3);
+      text-align: left;
+      background: #FAFBFD;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    thead th:last-child {
+      text-align: right;
+    }
+
+    tbody tr {
+      cursor: pointer;
+      transition: background .1s;
+    }
+
+    tbody tr:hover td {
+      background: #F7F8FB;
+    }
+
+    tbody tr:not(:last-child) td {
+      border-bottom: 1px solid var(--bg);
+    }
+
+    tbody tr.hidden {
+      display: none;
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--t1);
+      vertical-align: middle;
+    }
+
+    /* TENANT CELL */
+    .t-cell {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .t-avi {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -.01em;
+    }
+
+    .t-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .t-phone {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 1px;
+    }
+
+    .loc-cell {
+      font-size: 12px;
+      color: var(--t2);
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .rent-cell {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .since-cell {
+      font-size: 12px;
+      color: var(--t2);
+      white-space: nowrap;
+    }
+
+    /* STATUS */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .chip-paid {
+      background: var(--paid-bg);
+      color: var(--paid);
+    }
+
+    .chip-pend {
+      background: var(--pend-bg);
+      color: var(--pend);
+    }
+
+    .chip-late {
+      background: var(--late-bg);
+      color: var(--late);
+    }
+
+    .status-sub {
+      font-size: 10px;
+      color: var(--t3);
+      margin-top: 2px;
+    }
+
+    /* ACTION CELL */
+    .action-cell {
+      text-align: right;
+    }
+
+    .btn-remind {
+      background: var(--late-bg);
+      color: var(--late);
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .btn-remind:hover {
+      opacity: .8;
+    }
+
+    .btn-view {
+      background: var(--navy-lt);
+      color: var(--navy);
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity .15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .btn-view:hover {
+      opacity: .8;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 52px 24px;
+    }
+
+    .empty-state.show {
+      display: block;
+    }
+
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #F4F5F8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      color: var(--t3);
+    }
+
+    .empty-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t2);
+      margin-bottom: 4px;
+    }
+
+    .empty-sub {
+      font-size: 12px;
+      color: var(--t3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Rent<span>Master</span></div>
+      <div class="sb-logo-sub">Property Management</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <a class="nav-item" href="dashboard-desktop.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="property-setup.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
+        </svg>
+        Properties
+      </a>
+      <a class="nav-item active" href="tenants.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>
+        Tenants
+        <span class="nav-badge">4</span>
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Finance</div>
+      <a class="nav-item" href="payments.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
+        </svg>
+        Payments
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section">Settings</div>
+      <a class="nav-item" href="bank-onboarding.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>
+        Bank Account
+      </a>
+      <a class="nav-item" href="settings-desktop.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>
+        Settings
+      </a>
+    </nav>
+    <button class="sb-add-btn" onclick="location.href='add-tenant.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Add Tenant
+    </button>
+    <div class="sb-user">
+      <div class="sb-avi">VA</div>
+      <div>
+        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-role">Property Owner</div>
+      </div>
+      <div class="sb-logout">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-greeting">Sunshine PG · 8 rooms</div>
+        <div class="topbar-title">All Tenants</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date">June 2026</div>
+        <div class="icon-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </div>
+        <button class="btn-primary" onclick="location.href='add-tenant.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add Tenant
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- STATS ROW — FR-28, FR-29 (Story 6.1, 6.2) -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">
+            <span class="stat-dot" style="background:var(--navy)"></span>
+            Active Tenants
+          </div>
+          <div class="stat-value sv-navy">16</div>
+          <div class="stat-sub">Sunshine PG · 8 rooms</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <span class="stat-dot" style="background:var(--saffron)"></span>
+            Collected · June
+          </div>
+          <div class="stat-value sv-saffron">₹70,500</div>
+          <div class="stat-sub">8 of 16 paid</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <span class="stat-dot" style="background:var(--pend)"></span>
+            Pending
+          </div>
+          <div class="stat-value sv-amber">4</div>
+          <div class="stat-sub">Due by 1 Jun 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <span class="stat-dot" style="background:var(--late)"></span>
+            Overdue
+          </div>
+          <div class="stat-value sv-red">4</div>
+          <div class="stat-sub">5+ days past due</div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-tabs">
+          <button class="ftab active" onclick="applyFilter('all', this)">
+            All <span class="ftab-cnt">16</span>
+          </button>
+          <button class="ftab" onclick="applyFilter('paid', this)">
+            Paid <span class="ftab-cnt">8</span>
+          </button>
+          <button class="ftab" onclick="applyFilter('pending', this)">
+            Pending <span class="ftab-cnt">4</span>
+          </button>
+          <button class="ftab" onclick="applyFilter('late', this)">
+            Overdue <span class="ftab-cnt red">4</span>
+          </button>
+        </div>
+        <div class="filter-sep"></div>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="search-input" placeholder="Search by name or phone…" oninput="applySearch(this.value)">
+        </div>
+        <span class="filter-count" id="filter-count">16 tenants</span>
+      </div>
+
+      <!-- TENANT TABLE — Epic 2 (FR-13, FR-14), Story 2.4 data model -->
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Tenant</th>
+              <th>Room · Bed</th>
+              <th>Monthly Rent</th>
+              <th>Move-in</th>
+              <th>June 2026</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tenant-tbody">
+
+            <!-- Rahul Sharma — Pending -->
+            <tr data-status="pending" data-name="rahul sharma" data-phone="98765 43210"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B2D4F">RS</div>
+                  <div>
+                    <div class="t-name">Rahul Sharma</div>
+                    <div class="t-phone">+91 98765 43210</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 101 · Bed A1<br>1st Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Feb 2026</span></td>
+              <td>
+                <div><span class="chip chip-pend">Pending</span>
+                  <div class="status-sub">Due 1 Jun · Link sent 3 Jun</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Priya Patel — Paid -->
+            <tr data-status="paid" data-name="priya patel" data-phone="91234 56780"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#2D4F8A">PP</div>
+                  <div>
+                    <div class="t-name">Priya Patel</div>
+                    <div class="t-phone">+91 91234 56780</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 101 · Bed A2<br>1st Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Mar 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">3 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Amit Kumar — Paid -->
+            <tr data-status="paid" data-name="amit kumar" data-phone="97654 32100"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B4F3A">AK</div>
+                  <div>
+                    <div class="t-name">Amit Kumar</div>
+                    <div class="t-phone">+91 97654 32100</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 102 · Bed B1<br>1st Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">15 Jan 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">1 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Sneha Reddy — Overdue -->
+            <tr data-status="late" data-name="sneha reddy" data-phone="99887 65432"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#6B1B1B">SR</div>
+                  <div>
+                    <div class="t-name">Sneha Reddy</div>
+                    <div class="t-phone">+91 99887 65432</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 102 · Bed B2<br>1st Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Apr 2026</span></td>
+              <td>
+                <div><span class="chip chip-late">Overdue</span>
+                  <div class="status-sub">11 days past due</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-remind"
+                  onclick="event.stopPropagation();sendReminder(this,'Sneha Reddy')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  Remind
+                </button></td>
+            </tr>
+
+            <!-- Vikram Singh — Paid -->
+            <tr data-status="paid" data-name="vikram singh" data-phone="87654 32101"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B2D4F">VS</div>
+                  <div>
+                    <div class="t-name">Vikram Singh</div>
+                    <div class="t-phone">+91 87654 32101</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 103 · Bed C1<br>2nd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,000</span></td>
+              <td><span class="since-cell">1 Dec 2025</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">2 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Anita Sharma — Pending -->
+            <tr data-status="pending" data-name="anita sharma" data-phone="76543 21098"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#4F2D1B">AS</div>
+                  <div>
+                    <div class="t-name">Anita Sharma</div>
+                    <div class="t-phone">+91 76543 21098</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 103 · Bed C2<br>2nd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,000</span></td>
+              <td><span class="since-cell">1 May 2026</span></td>
+              <td>
+                <div><span class="chip chip-pend">Pending</span>
+                  <div class="status-sub">Due 1 Jun · Link sent 4 Jun</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Rohit Verma — Pending -->
+            <tr data-status="pending" data-name="rohit verma" data-phone="95432 10987"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#2D4F1B">RV</div>
+                  <div>
+                    <div class="t-name">Rohit Verma</div>
+                    <div class="t-phone">+91 95432 10987</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 104 · Bed D1<br>2nd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Feb 2026</span></td>
+              <td>
+                <div><span class="chip chip-pend">Pending</span>
+                  <div class="status-sub">Due 1 Jun · Link sent 3 Jun</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Kavita Joshi — Overdue -->
+            <tr data-status="late" data-name="kavita joshi" data-phone="93210 98765"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#4F1B3A">KJ</div>
+                  <div>
+                    <div class="t-name">Kavita Joshi</div>
+                    <div class="t-phone">+91 93210 98765</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 104 · Bed D2<br>2nd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Jan 2026</span></td>
+              <td>
+                <div><span class="chip chip-late">Overdue</span>
+                  <div class="status-sub">7 days past due</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-remind"
+                  onclick="event.stopPropagation();sendReminder(this,'Kavita Joshi')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  Remind
+                </button></td>
+            </tr>
+
+            <!-- Suresh Nair — Paid -->
+            <tr data-status="paid" data-name="suresh nair" data-phone="88765 43219"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B3A4F">SN</div>
+                  <div>
+                    <div class="t-name">Suresh Nair</div>
+                    <div class="t-phone">+91 88765 43219</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 105 · Bed E1<br>Ground Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,500</span></td>
+              <td><span class="since-cell">1 Nov 2025</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">1 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Deepa Menon — Paid -->
+            <tr data-status="paid" data-name="deepa menon" data-phone="77654 32108"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#3A1B4F">DM</div>
+                  <div>
+                    <div class="t-name">Deepa Menon</div>
+                    <div class="t-phone">+91 77654 32108</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 105 · Bed E2<br>Ground Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,500</span></td>
+              <td><span class="since-cell">15 Jan 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">4 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Arjun Desai — Overdue -->
+            <tr data-status="late" data-name="arjun desai" data-phone="96543 21097"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#6B1B1B">AD</div>
+                  <div>
+                    <div class="t-name">Arjun Desai</div>
+                    <div class="t-phone">+91 96543 21097</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 106 · Bed F1<br>Ground Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,000</span></td>
+              <td><span class="since-cell">1 Mar 2026</span></td>
+              <td>
+                <div><span class="chip chip-late">Overdue</span>
+                  <div class="status-sub">9 days past due</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-remind"
+                  onclick="event.stopPropagation();sendReminder(this,'Arjun Desai')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  Remind
+                </button></td>
+            </tr>
+
+            <!-- Meera Pillai — Paid -->
+            <tr data-status="paid" data-name="meera pillai" data-phone="84321 09876"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B4F4F">MP</div>
+                  <div>
+                    <div class="t-name">Meera Pillai</div>
+                    <div class="t-phone">+91 84321 09876</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 106 · Bed F2<br>Ground Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,000</span></td>
+              <td><span class="since-cell">1 Feb 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">2 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Kiran Rao — Paid -->
+            <tr data-status="paid" data-name="kiran rao" data-phone="91098 76543"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#1B2D4F">KR</div>
+                  <div>
+                    <div class="t-name">Kiran Rao</div>
+                    <div class="t-phone">+91 91098 76543</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 107 · Bed G1<br>3rd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 Apr 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">5 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Sunita Gupta — Pending -->
+            <tr data-status="pending" data-name="sunita gupta" data-phone="78901 23456"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#4F3A1B">SG</div>
+                  <div>
+                    <div class="t-name">Sunita Gupta</div>
+                    <div class="t-phone">+91 78901 23456</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 107 · Bed G2<br>3rd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹8,500</span></td>
+              <td><span class="since-cell">1 May 2026</span></td>
+              <td>
+                <div><span class="chip chip-pend">Pending</span>
+                  <div class="status-sub">Due 1 Jun · Link sent 5 Jun</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+            <!-- Rajesh Patel — Overdue -->
+            <tr data-status="late" data-name="rajesh patel" data-phone="92109 87654"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#6B1B1B">RP</div>
+                  <div>
+                    <div class="t-name">Rajesh Patel</div>
+                    <div class="t-phone">+91 92109 87654</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 108 · Bed H1<br>3rd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,000</span></td>
+              <td><span class="since-cell">1 Dec 2025</span></td>
+              <td>
+                <div><span class="chip chip-late">Overdue</span>
+                  <div class="status-sub">6 days past due</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-remind"
+                  onclick="event.stopPropagation();sendReminder(this,'Rajesh Patel')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                  </svg>
+                  Remind
+                </button></td>
+            </tr>
+
+            <!-- Nisha Agarwal — Paid -->
+            <tr data-status="paid" data-name="nisha agarwal" data-phone="83210 98765"
+              onclick="location.href='tenant-detail.html'">
+              <td>
+                <div class="t-cell">
+                  <div class="t-avi" style="background:#2D1B4F">NA</div>
+                  <div>
+                    <div class="t-name">Nisha Agarwal</div>
+                    <div class="t-phone">+91 83210 98765</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="loc-cell">Room 108 · Bed H2<br>3rd Floor</div>
+              </td>
+              <td><span class="rent-cell">₹9,000</span></td>
+              <td><span class="since-cell">1 Jan 2026</span></td>
+              <td>
+                <div><span class="chip chip-paid">Paid</span>
+                  <div class="status-sub">3 Jun · UPI · Cashfree</div>
+                </div>
+              </td>
+              <td class="action-cell"><button class="btn-view"
+                  onclick="event.stopPropagation();location.href='tenant-detail.html'">View</button></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <!-- Empty state (shown when search/filter yields 0 results) -->
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <div class="empty-title">No tenants found</div>
+          <div class="empty-sub">Try a different name, phone number, or filter</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var _activeFilter = 'all';
+    var _searchQuery = '';
+
+    function applyFilter(status, el) {
+      _activeFilter = status;
+      document.querySelectorAll('.ftab').forEach(function (t) { t.classList.remove('active'); });
+      el.classList.add('active');
+      renderRows();
+    }
+
+    function applySearch(val) {
+      _searchQuery = val.trim().toLowerCase();
+      renderRows();
+    }
+
+    function renderRows() {
+      var rows = document.querySelectorAll('#tenant-tbody tr[data-status]');
+      var visible = 0;
+      rows.forEach(function (row) {
+        var status = row.dataset.status;
+        var name = row.dataset.name;
+        var phone = row.dataset.phone;
+
+        var matchFilter = (_activeFilter === 'all') || (status === _activeFilter);
+        var matchSearch = !_searchQuery || name.includes(_searchQuery) || phone.includes(_searchQuery);
+
+        if (matchFilter && matchSearch) {
+          row.classList.remove('hidden');
+          visible++;
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+      document.getElementById('filter-count').textContent = visible + (visible === 1 ? ' tenant' : ' tenants');
+      var empty = document.getElementById('empty-state');
+      empty.classList.toggle('show', visible === 0);
+    }
+
+    /* FR-19 / Story 5A.5: Manual Overdue Reminder Trigger */
+    function sendReminder(btn, name) {
+      btn.textContent = 'Sent ✓';
+      btn.style.background = 'var(--paid-bg)';
+      btn.style.color = 'var(--paid)';
+      btn.disabled = true;
+    }
+  </script>
+
+</body>
+
+</html>

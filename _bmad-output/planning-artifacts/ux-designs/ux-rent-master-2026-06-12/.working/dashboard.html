@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #E6E8EF;
+  color: #0F1623;
+  display: flex; justify-content: center;
+  padding: 48px 20px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SHELL */
+.phone {
+  width: 375px;
+  background: #EEF0F6;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(15,22,35,.18), 0 4px 16px rgba(15,22,35,.08);
+  border: 1px solid rgba(255,255,255,.9);
+}
+
+/* SCROLLABLE AREA */
+.scroll {
+  height: 780px;
+  overflow-y: auto;
+  padding: 28px 18px 100px;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+/* TOKENS */
+:root {
+  --navy:   #1B2D4F;
+  --navy2:  #243A63;
+  --saffron:#F97316;
+  --t1:     #0F1623;
+  --t2:     #5A6473;
+  --t3:     #9CA3AE;
+  --card:   #FFFFFF;
+  --border: #E0E4EE;
+  --sh:     0 2px 8px rgba(15,22,35,.07), 0 1px 2px rgba(15,22,35,.04);
+  --sh-md:  0 4px 16px rgba(15,22,35,.09), 0 1px 4px rgba(15,22,35,.05);
+
+  --paid:   #0E9F6E;  --paid-bg:  rgba(14,159,110,.09);
+  --pend:   #D97706;  --pend-bg:  rgba(217,119,6,.09);
+  --late:   #DC2020;  --late-bg:  rgba(220,32,32,.08);
+}
+
+/* ── HEADER ── */
+.hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+.greeting { font-size: 12px; color: var(--t2); font-weight: 400; margin-bottom: 3px; }
+.greeting strong { color: var(--t1); font-weight: 600; }
+.app-name { font-size: 22px; font-weight: 800; color: var(--t1); letter-spacing: -.03em; line-height: 1; }
+.app-name span { color: var(--saffron); }
+.hdr-actions { display: flex; gap: 8px; align-items: center; padding-top: 2px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  box-shadow: var(--sh);
+  display: flex; align-items: center; justify-content: center; color: var(--t2);
+  position: relative; cursor: pointer;
+}
+.notif-dot {
+  position: absolute; top: 7px; right: 7px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--late); border: 1.5px solid var(--card);
+}
+.avi {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--card); box-shadow: var(--sh);
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  border-radius: 22px;
+  padding: 22px 20px 18px;
+  margin-bottom: 14px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 130px; height: 130px;
+  background: rgba(255,255,255,.04);
+  border-radius: 50%;
+}
+.hero-eye  { font-size: 10px; font-weight: 600; letter-spacing: .11em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 6px; }
+.hero-fig  { display: flex; align-items: baseline; gap: 3px; margin-bottom: 20px; }
+.hero-sym  { font-size: 18px; font-weight: 600; color: rgba(255,255,255,.55); align-self: flex-start; margin-top: 3px; }
+.hero-num  { font-size: 36px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+
+/* 3-SEGMENT BAR */
+.seg-bar { display: flex; height: 4px; border-radius: 99px; overflow: hidden; gap: 3px; margin-bottom: 12px; }
+.seg { border-radius: 99px; }
+.seg.g { background: #3DD68C; flex: 12; }
+.seg.a { background: var(--saffron); flex: 3; }
+.seg.r { background: #F87171; flex: 1; }
+
+.stats-row { display: flex; }
+.stat { flex: 1; }
+.stat + .stat { border-left: 1px solid rgba(255,255,255,.1); padding-left: 14px; }
+.stat-val   { font-size: 20px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 3px; }
+.stat-val.g { color: #3DD68C; }
+.stat-val.a { color: var(--saffron); }
+.stat-val.r { color: #F87171; }
+.stat-lbl   { font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+
+/* ── SUMMARY PILLS ── */
+.pills { display: flex; gap: 8px; margin-bottom: 20px; }
+.pill {
+  flex: 1; background: var(--card);
+  border-radius: 12px; padding: 12px 14px;
+  box-shadow: var(--sh);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.pill-val { font-size: 20px; font-weight: 800; color: var(--t1); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pill-lbl { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); }
+
+/* ── QUICK ACTIONS ── */
+.quick { display: flex; gap: 10px; margin-bottom: 22px; }
+.qa {
+  flex: 1; background: var(--card);
+  border-radius: 14px; padding: 14px 14px 12px;
+  box-shadow: var(--sh);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  cursor: pointer; transition: box-shadow .15s;
+  border: 1px solid var(--border);
+}
+.qa:hover { box-shadow: var(--sh-md); }
+.qa.primary { background: var(--navy); border-color: var(--navy); }
+.qa-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+}
+.qa-icon.light { background: rgba(255,255,255,.12); color: #fff; }
+.qa-icon.navy  { background: rgba(27,45,79,.08); color: var(--navy); }
+.qa-icon.amber { background: rgba(217,119,6,.08); color: var(--pend); }
+.qa-ttl { font-size: 12px; font-weight: 700; color: var(--t1); line-height: 1.2; }
+.qa.primary .qa-ttl { color: #fff; }
+.qa-sub { font-size: 10px; color: var(--t3); font-weight: 500; }
+.qa.primary .qa-sub { color: rgba(255,255,255,.5); }
+
+/* ── SECTION HEADER ── */
+.sec { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sec-ttl  { font-size: 14px; font-weight: 700; color: var(--t1); }
+.sec-link { font-size: 12px; color: var(--navy2); font-weight: 600; }
+
+/* ── ALERT CARD ── */
+.alert-card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--sh);
+  overflow: hidden;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+.alert-hdr {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid #F3F4F8;
+}
+.alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.alert-hdr-ttl { font-size: 12px; font-weight: 700; color: var(--t1); flex: 1; }
+.alert-count {
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 99px;
+}
+
+/* ── TENANT ROW ── */
+.row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid #F3F4F8;
+  cursor: pointer; transition: background .1s;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: #FAFBFD; }
+.ava-sm {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.ri { flex: 1; min-width: 0; }
+.ri-name { font-size: 13px; font-weight: 600; color: var(--t1); }
+.ri-sub  { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.rr { text-align: right; flex-shrink: 0; }
+.rr-amt { font-size: 13px; font-weight: 700; color: var(--t1); font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+
+/* CHIPS */
+.chip { display: inline-block; border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 600; letter-spacing: .02em; line-height: 16px; }
+.c-paid { background: var(--paid-bg); color: var(--paid); }
+.c-pend { background: var(--pend-bg); color: var(--pend); }
+.c-late { background: var(--late-bg); color: var(--late); }
+
+/* REMIND BTN inline */
+.remind-btn {
+  font-size: 10px; font-weight: 600; color: var(--navy2);
+  background: rgba(27,45,79,.06); border: none;
+  border-radius: 6px; padding: 4px 9px; cursor: pointer;
+  font-family: inherit; white-space: nowrap;
+  transition: background .1s;
+}
+.remind-btn:hover { background: rgba(27,45,79,.12); }
+
+/* ── TENANT LIST CARD ── */
+.list-card {
+  background: var(--card); border-radius: 16px;
+  box-shadow: var(--sh); overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+/* ── BOTTOM NAV ── */
+.bnav {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--card);
+  display: flex;
+  border-top: 1px solid var(--border);
+  padding: 12px 18px 22px;
+  border-radius: 0 0 40px 40px;
+}
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; color: var(--t3); cursor: pointer; }
+.ni.on { color: var(--navy); }
+.ni-label { letter-spacing: .02em; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="scroll" style="position:relative">
+
+    <!-- HEADER -->
+    <div class="hdr">
+      <div>
+        <div class="greeting">Good morning, <strong>Priya</strong></div>
+        <div class="app-name">Rent<span>Master</span></div>
+      </div>
+      <div class="hdr-actions">
+        <div class="icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-dot"></span>
+        </div>
+        <div class="avi">PR</div>
+      </div>
+    </div>
+
+    <!-- HERO CARD -->
+    <div class="hero">
+      <div class="hero-eye">June 2026 · Collection</div>
+      <div class="hero-fig">
+        <span class="hero-sym">₹</span>
+        <span class="hero-num">1,14,000</span>
+      </div>
+      <div class="seg-bar">
+        <div class="seg g"></div>
+        <div class="seg a"></div>
+        <div class="seg r"></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-val g">12</div>
+          <div class="stat-lbl">Paid</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val a">3</div>
+          <div class="stat-lbl">Pending</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val r">1</div>
+          <div class="stat-lbl">Late</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY PILLS -->
+    <div class="pills">
+      <div class="pill">
+        <div class="pill-val">2</div>
+        <div class="pill-lbl">Properties</div>
+      </div>
+      <div class="pill">
+        <div class="pill-val">16</div>
+        <div class="pill-lbl">Rooms</div>
+      </div>
+      <div class="pill">
+        <div class="pill-val">16</div>
+        <div class="pill-lbl">Tenants</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick">
+      <div class="qa primary">
+        <div class="qa-icon light">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        <div class="qa-ttl">Add Tenant</div>
+        <div class="qa-sub">Assign a room or bed</div>
+      </div>
+      <div class="qa">
+        <div class="qa-icon amber">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.92 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <div class="qa-ttl">Remind All<br>Pending</div>
+        <div class="qa-sub">Send WhatsApp</div>
+      </div>
+      <div class="qa">
+        <div class="qa-icon navy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01"/>
+          </svg>
+        </div>
+        <div class="qa-ttl">Add<br>Property</div>
+        <div class="qa-sub">New PG or house</div>
+      </div>
+    </div>
+
+    <!-- NEEDS ATTENTION -->
+    <div class="sec">
+      <span class="sec-ttl">Needs Attention</span>
+      <span class="sec-link">4 total</span>
+    </div>
+
+    <div class="alert-card">
+      <div class="alert-hdr">
+        <div class="alert-dot" style="background:var(--late)"></div>
+        <div class="alert-hdr-ttl">Late Payments</div>
+        <span class="alert-count" style="background:var(--late-bg);color:var(--late)">1 tenant</span>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#FFF0F0;color:#EF4444">S</div>
+        <div class="ri">
+          <div class="ri-name">Suresh Kumar</div>
+          <div class="ri-sub">Koramangala PG · Room 1 · Bed C</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt">₹6,500</div>
+          <span class="chip c-late">5d late</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div class="alert-hdr">
+        <div class="alert-dot" style="background:var(--pend)"></div>
+        <div class="alert-hdr-ttl">Pending This Month</div>
+        <span class="alert-count" style="background:var(--pend-bg);color:var(--pend)">3 tenants</span>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#F5F3FF;color:#8B5CF6">P</div>
+        <div class="ri">
+          <div class="ri-name">Priya Nair</div>
+          <div class="ri-sub">Koramangala PG · Room 3 · Bed B</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt">₹7,000</div>
+          <button class="remind-btn">Remind</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#FFF7ED;color:#F97316">A</div>
+        <div class="ri">
+          <div class="ri-name">Anjali Mehta</div>
+          <div class="ri-sub">Koramangala PG · Room 4 · Bed A</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt">₹7,500</div>
+          <button class="remind-btn">Remind</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#F0FDF4;color:#22C55E">V</div>
+        <div class="ri">
+          <div class="ri-name">Vijay Patel</div>
+          <div class="ri-sub">HSR Layout House · Room 2</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt">₹12,000</div>
+          <button class="remind-btn">Remind</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENTLY PAID -->
+    <div class="sec">
+      <span class="sec-ttl">Recently Paid</span>
+      <span class="sec-link">View all 12</span>
+    </div>
+
+    <div class="list-card">
+      <div class="row">
+        <div class="ava-sm" style="background:#EFF6FF;color:#3B82F6">R</div>
+        <div class="ri">
+          <div class="ri-name">Rahul Sharma</div>
+          <div class="ri-sub">Room 2 · Bed A · Today 9:14 am</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt" style="color:var(--paid)">₹8,500</div>
+          <span class="chip c-paid">Paid</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#FDF2F8;color:#EC4899">N</div>
+        <div class="ri">
+          <div class="ri-name">Neha Gupta</div>
+          <div class="ri-sub">Room 5 · Bed A · Yesterday</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt" style="color:var(--paid)">₹8,000</div>
+          <span class="chip c-paid">Paid</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="ava-sm" style="background:#ECFDF5;color:#10B981">K</div>
+        <div class="ri">
+          <div class="ri-name">Karan Singh</div>
+          <div class="ri-sub">Room 1 · Bed A · Jun 9</div>
+        </div>
+        <div class="rr">
+          <div class="rr-amt" style="color:var(--paid)">₹7,500</div>
+          <span class="chip c-paid">Paid</span>
+        </div>
+      </div>
+      <div class="row" style="justify-content:center; padding: 13px 16px;">
+        <span style="font-size:12px;font-weight:600;color:var(--navy2)">See all paid tenants</span>
+      </div>
+    </div>
+
+  </div><!-- end scroll -->
+
+  <!-- BOTTOM NAV -->
+  <div style="position:relative">
+    <div class="bnav">
+      <div class="ni on">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="ni-label">Home</span>
+      </div>
+      <div class="ni">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/>
+        </svg>
+        <span class="ni-label">Properties</span>
+      </div>
+      <div class="ni">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="ni-label">Tenants</span>
+      </div>
+      <div class="ni">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="ni-label">Account</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

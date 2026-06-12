@@ -1,57 +1,117 @@
 # RentMaster Pricing Plan
-**Date:** 2026-06-12  
-**Author:** Adarsh 
+**Date:** 2026-06-12 (Automation-Premium Revision)
+**Author:** Adarsh
 
 ---
 
-## 1. The Market Gap (Why This Works)
+## 1. The Core Pricing Argument — Automation is the Product
 
-No platform in India today does all three things together:
+Every competitor sells a **management tool**. RentMaster sells **automated rent collection**. These are different products at different price points.
 
-| What RentMaster Does | What Exists in India |
-|---|---|
-| WhatsApp automation (reminders + receipts) | Nothing for PG owners below ₹1,500/month |
-| Cashfree payment links (money goes directly to owner bank — no holding) | NoBroker collects and holds funds |
-| Bed-based PG + room-based residential in one product | No one distinguishes PG beds vs residential rooms |
-| Under ₹500/month for full automation | TenantCloud is closest but no Indian gateway/WhatsApp |
+| What you're selling | Competitor equivalent | What competitors charge | What RentMaster should charge |
+|---|---|---|---|
+| Dashboard + manual tracking | GoPGMS, PGManager | ₹180–₹300/month | N/A — we don't sell this |
+| WhatsApp reminders (credit-limited) | TrackMyPG | ₹299–₹999/month | N/A — ours is unlimited |
+| **Automated collection + direct bank transfer + WhatsApp** | **Nobody** | **Doesn't exist** | **₹1,199–₹2,999/month** |
 
-**Bottom line:** RentMaster is in an uncontested space. The closest "competitors" (Zimply, NoBroker Pay) are either dead/basic tools without automation, or listing platforms that do payments differently.
+**The automation stack no competitor has built:**
+1. Auto-triggered 3-step WhatsApp reminder sequence (3-day, due-date, overdue)
+2. Cashfree payment link embedded in the reminder — tenant pays in one tap
+3. Money lands **directly in owner's bank** — no holding, no delay
+4. Auto-generated WhatsApp receipt sent to tenant
+5. Owner gets real-time alert when payment is received
 
----
-
-## 2. Why Beds + Rooms, Not Tenant Count
-
-**Old thinking:** count tenants → limit tenants per plan  
-**Problem:** "20 tenants" means nothing to an owner. They think in rooms and beds.
-
-**New thinking:**
-- A **room-based** owner has 1 tenant per room → 5 rooms = 5 tenants (simple)
-- A **bed-based PG** owner has 2-4 tenants per room → 5 rooms × 3 beds = 15 tenants (complex)
-
-The **Free plan** supports room-based only. This is:
-1. Simpler to build and support
-2. Lower WhatsApp message volume (fewer tenants per room)
-3. A natural upgrade path when the owner adds a PG or expands beds
+This workflow eliminates the most painful part of owning a PG: chasing rent manually.
 
 ---
 
-## 3. Your Real Costs Every Month
+## 2. Where We Stand vs Competitors
 
-### Fixed Infra (roughly)
+Research date: 2026-06-12. All prices verified from live websites.
+
+| Platform | Entry Paid | WhatsApp | Direct Payments | Notes |
+|---|---|---|---|---|
+| **GoPGMS** | ₹9/bed/month (20 beds = ₹180) | ❌ None | ❌ None | Just a tracking tool |
+| **TrackMyPG** | ₹299/mo — 50 credits only | Limited (credits) | ❌ None | No collection |
+| **PGManager** | ₹300/mo + GST | ❌ None | ❌ None | Basic ledger |
+| **RentOk** | ₹25–₹100/bed/month (quote) | ❌ No automation | ❌ None | Quote-based |
+| **RentMaster** | ₹1,199/mo | ✅ Unlimited, absorbed | ✅ Direct to owner bank | **Only one that collects** |
+
+### ROI Story for a PG Owner on Starter Plan
+
+A typical 20-bed PG collects ~₹1,20,000/month:
+- Manual collection time saved: 12 hrs/month × ₹150/hr = **₹1,800/month**
+- Faster collections (3 days faster × 20 beds): **₹3,000–5,000/month cash-flow value**
+- Reduced defaults (automation reduces 2–3 late defaults/month): **₹10,000+/month**
+- **Total value delivered: ₹15,000–17,000/month**
+- RentMaster Starter cost: ₹1,199/month = **~7% of the value delivered**
+
+This is not a ₹299 tool. It is a ₹1,199 tool that pays for itself inside the first week.
+
+---
+
+## 3. The Unified "Slot" Billing Unit
+
+**1 bed (PG property) = 1 slot. 1 room (residential property) = 1 slot.**
+
+The billing unit is a slot. It doesn't matter what type of property — beds and rooms are counted together across all properties the owner has.
+
+### Why "Slot" Works
+
+| Property type | How slots are counted | Example |
+|---|---|---|
+| Bed-based PG | Each bed = 1 slot | 10 rooms × 3 beds = **30 slots** |
+| Room-based flat/house | Each room = 1 slot | 5 rooms = **5 slots** |
+| Mixed (owner has both) | Beds + rooms combined | 30 beds + 5 rooms = **35 slots** |
+
+The WhatsApp cost driver is the same regardless of property type: 1 tenant per slot × 3 messages/month × ₹0.58 = ₹1.74/slot. So charging per slot is fair and consistent.
+
+### How the System Handles a Mixed-Portfolio Owner at Login
+
+```
+Owner Account
+├── Property A: "Sunrise PG"  (type: Bed-based PG)
+│     Room 101 → 3 beds = 3 slots
+│     Room 102 → 3 beds = 3 slots
+│     Room 103 → 3 beds = 3 slots
+│     Subtotal: 9 slots
+│
+└── Property B: "Andheri 2BHK"  (type: Room-based)
+      Room 1 → 1 slot
+      Room 2 → 1 slot
+      Subtotal: 2 slots
+
+Total slots: 11  →  11 × ₹60 = ₹660/month  (Tier 1)
+```
+
+The system queries all properties, checks each property's type (already captured during property setup), counts beds for PG properties and rooms for residential, and sums them. The owner sees one number on their billing page: **"11 active slots — ₹660/month."**
+
+### Property Type is Set Once, at Property Setup
+
+The `property-setup.html` already captures this:
+- **"Bed-based PG"** → beds are counted per room
+- **"Room-based"** → rooms are the unit
+
+No separate billing configuration needed. The property type drives the slot count automatically.
+
+---
+
+## 4. Your Real Costs Every Month
+
+### Fixed Infra
 
 | Service | Cost | Notes |
 |---|---|---|
-| Supabase (DB + Auth + Realtime) | ₹2,100/month | Free tier works for first 30-40 customers |
-| Redis / Upstash (BullMQ job queues) | ₹840/month | Free tier works for first 100 jobs/day |
-| NestJS hosting (Railway) | ₹1,680/month | Starter plan has cold-starts |
-| Interakt WhatsApp BSP | ₹999/month | Starter plan, up to 1,000 conversations |
+| Supabase (DB + Auth + Realtime) | ₹2,100/month | Free tier covers first 30–40 customers |
+| Redis / Upstash (BullMQ queues) | ₹840/month | Free tier covers first 100 jobs/day |
+| NestJS hosting (Railway) | ₹1,680/month | Starter plan |
+| Interakt WhatsApp BSP | ₹999/month | Up to 1,000 conversations |
 | Domain + misc | ₹83/month | |
-| **Total fixed** | **~₹5,700/month** | Ballpark for production |
+| **Total fixed** | **₹5,700/month** | |
 
 ### Variable: WhatsApp Cost Per Bed
 
-Meta charges **~₹0.58 per utility message** (each reminder or receipt).  
-RentMaster sends **3 messages per tenant per month** (3-day warning, due-date, overdue).
+Meta: ~₹0.58/utility message. RentMaster sends 3 messages per tenant per month.
 
 ```
 Cost per bed per month = 3 × ₹0.58 = ₹1.74
@@ -62,99 +122,85 @@ Cost per bed per month = 3 × ₹0.58 = ₹1.74
 | 50 beds | ₹87 |
 | 200 beds | ₹348 |
 | 500 beds | ₹870 |
-| 1,000 beds | ₹1,740 |
 
-At 500 beds the total platform cost is only ₹870 + ₹5,700 = **₹6,570/month**. Very manageable.
-
----
-
-## 4. The Plans
-
-### FREE — ₹0/month
-
-**Who it's for:** Residential landlord with 3-5 flats in one building. Currently using Excel + WhatsApp manually.
-
-| What's included | Value |
-|---|---|
-| 1 property | Fixed |
-| Up to **5 rooms** | Hard limit |
-| **Room-based only** — 1 tenant per room | Bed-based PG not available on Free |
-| Automated WhatsApp reminders | 3-day + due-date sequence |
-| Cashfree payment links | Full |
-| WhatsApp receipts | Full |
-| Live dashboard | Full |
-| PDF/CSV export | Not included |
-| Support | Docs only |
-
-**Your infra cost for a Free user:** ~₹1.74 × 5 rooms = ₹8.70/month in WhatsApp. Nearly zero.  
-**Goal of Free tier:** Let them feel the value of automation so they upgrade when they grow.
+Even at 500 beds, WhatsApp cost is ₹870 — a tiny fraction of revenue.
 
 ---
 
-### STARTER — ₹249/month (or ₹2,490/year)
+## 5. Per-Slot Pricing Tiers
 
-**Who it's for:** Small PG owner, 1 property, 10-20 beds, collecting ₹80,000-₹1,60,000/month.  
-Platform fee = **0.15-0.3% of their rent revenue.** Extremely good value.
+### TRIAL — ₹0 (14 days, no credit card)
 
-| What's included | Value |
-|---|---|
-| 1 property | Fixed |
-| Up to **15 rooms** | |
-| Up to **20 beds total** | PG bed-based unlocked |
-| Full automated reminders (3-step) | 3-day + due-date + overdue |
-| Manual overdue trigger | Owner can push a one-off reminder |
-| Cashfree payment links | Full |
-| WhatsApp receipts + owner alerts | Full |
-| Live dashboard | Full |
-| PDF/CSV export | Not included |
-| Support | Email, 48h response |
-
-**Your gross margin at 20 beds:** ₹249 revenue − ₹34.80 WhatsApp = **₹214 gross (86% margin)**
+Full Tier 1 features. Auto-expires. Conversion prompts at day 10 and day 13.
 
 ---
 
-### PRO — ₹499/month (or ₹4,990/year)
+### TIER 1 — ₹60/slot/month  (1–30 slots)
 
-**Who it's for:** Medium PG operator, 2-3 properties, 30-60 beds, collecting ₹2-6 lakhs/month.
+**Who it's for:** 9-bed PG, small residential landlord, anyone getting started.
 
-| What's included | Value |
-|---|---|
-| Up to **3 properties** | |
-| Up to **40 rooms** | |
-| Up to **60 beds total** | |
-| Everything in Starter | Full |
-| **PDF rent receipts** | New |
-| **CSV export** (monthly collection) | New |
-| Digital agreements / eSign | Phase 3 (coming) |
-| Support | Priority WhatsApp, 24h |
+| Slots | Monthly cost | Owner context |
+|---|---|---|
+| 9 slots (9-bed PG) | ₹540 | ₹54K rent collected → 1% platform fee |
+| 20 slots (20-bed PG) | ₹1,200 | ₹1.2L rent → 1% fee |
+| 30 slots (30-bed PG) | ₹1,800 | ₹1.8L rent → 1% fee |
 
-**Your gross margin at 60 beds:** ₹499 − ₹104 WhatsApp = **₹395 gross (79% margin)**
+**Included:** Unlimited WhatsApp automation · Cashfree direct payments · PDF receipts · Dashboard · Unlimited properties
+
+**Your margin:** ₹1,800 (30 slots revenue) − ₹52 WhatsApp = **₹1,748 gross (97%)**
 
 ---
 
-### SCALE — ₹999/month (or ₹9,990/year)
+### TIER 2 — ₹50/slot/month  (31–100 slots)
 
-**Who it's for:** Large PG operator, 5-10 properties, 100+ beds, collecting ₹5-20 lakhs/month.
+**Who it's for:** 90-bed single hostel, medium multi-property owner, mixed portfolio.
 
-| What's included | Value |
-|---|---|
-| Up to **10 properties** | |
-| **Unlimited rooms + beds** | |
-| Everything in Pro | Full |
-| Analytics dashboard (Phase 4) | Collection trends, occupancy rates |
-| Tenant behaviour trends | Who pays late, who always pays early |
-| REST API access | |
-| Custom WhatsApp templates | |
-| Dedicated account manager | |
-| Priority phone support | |
+**Billing for 90 beds:** 30×₹60 + 60×₹50 = ₹1,800 + ₹3,000 = **₹4,800/month**
 
-**Your gross margin at 200 beds:** ₹999 − ₹348 WhatsApp = **₹651 gross (65% margin)**
+| Slots | Monthly cost | Owner context |
+|---|---|---|
+| 90 slots (90-bed hostel) | ₹4,800 | ₹6.3L rent → 0.76% platform fee |
+| 50 slots (50-bed PG) | ₹2,700 | ₹3.5L rent → 0.77% fee |
+| 35 slots (30 beds + 5 rooms) | ₹2,050 | Mixed portfolio — slots combine |
+
+**Added in Tier 2:** CSV export · eSign (Phase 3) · Priority WhatsApp 24h support
+
+**Your margin at 90 slots:** ₹4,800 − ₹157 WhatsApp = **₹4,643 gross (97%)**
 
 ---
 
-## 5. Revenue: What You Need
+### TIER 3 — ₹40/slot/month  (101+ slots)
 
-### Your Monthly Target Costs
+**Who it's for:** Large hostel chains, 100+ beds, multiple cities.
+
+**Billing for 150 beds:** 30×₹60 + 70×₹50 + 50×₹40 = ₹1,800 + ₹3,500 + ₹2,000 = **₹7,300/month**
+
+| Slots | Monthly cost | Owner context |
+|---|---|---|
+| 150 slots | ₹7,300 | ₹10.5L rent → 0.70% platform fee |
+| 200 slots | ₹9,800 | ₹14L rent → 0.70% fee |
+
+**Added in Tier 3:** REST API · Analytics dashboard (Phase 4) · Custom WhatsApp templates · Dedicated account manager
+
+**Annual pricing:** 2 months free — Tier 1: ₹50/slot · Tier 2: ₹42/slot · Tier 3: ₹33/slot
+
+---
+
+## 6. The Critical Number — 5 Customers Covers Infra
+
+```
+5 × average Tier 1 customer (20 slots × ₹60) = 5 × ₹1,200 = ₹6,000 > ₹5,700 infra ✓
+OR: 1 × 90-bed Tier 2 customer = ₹4,800 alone → almost covers infra solo
+OR: 2 × 50-bed Tier 2 customers = ₹5,400 → covers infra
+```
+
+A **single 90-bed hostel owner** on Tier 2 nearly covers all your infrastructure.
+
+---
+
+## 7. Revenue: What You Need
+
+### Monthly Target Costs
 
 | Item | Monthly |
 |---|---|
@@ -162,67 +208,166 @@ Platform fee = **0.15-0.3% of their rent revenue.** Extremely good value.
 | Your salary target | ₹50,000 |
 | **Total needed** | **₹55,700/month** |
 
-### How Many Customers to Get There
+### Customer Mix + Break-Even
 
-Realistic plan mix: **50% Starter + 35% Pro + 15% Scale**  
-Average revenue per customer at this mix: **~₹449/month**
+Realistic mix: **60% Starter + 25% Pro + 15% Scale**  
+Average revenue/customer: `0.60×1,199 + 0.25×1,999 + 0.15×2,999 = ₹1,669/month`
 
 | Customers | Monthly Revenue | What It Pays |
 |---|---|---|
-| 20 customers | ₹8,980 | Covers infra only |
-| 50 customers | ₹22,450 | Infra + ₹17,000 salary |
-| 80 customers | ₹35,920 | Infra + ₹30,000 salary |
-| **125 customers** | **₹56,125** | **Full break-even (infra + ₹50K salary)** |
-| 200 customers | ₹89,800 | Infra + ₹84,000 salary |
-| 300 customers | ₹1,34,700 | Comfortable |
+| 5 | ₹8,345 | **Infra fully covered** |
+| 10 | ₹16,690 | Infra + ₹10,990 salary |
+| 20 | ₹33,380 | Infra + ₹27,680 salary |
+| **34 customers** | **₹56,746** | **Full break-even (infra + ₹50K salary)** |
+| 50 | ₹83,450 | Infra + ₹77,750 salary |
+| 75 | ₹1,25,175 | Very comfortable |
 
-**You need ~125 paying customers to be fully sustainable.** That's 125 PG owners in India — the country has millions of them.
-
----
-
-## 6. When Free Users Upgrade (Conversion Triggers)
-
-These are the moments to show the upgrade prompt in the UI:
-
-1. **Room limit hit** — "You've reached 5/5 rooms. Add more rooms — upgrade to Starter."
-2. **Bed-sharing request** — "Your tenant wants a shared room. Unlock bed-based PG on Starter."
-3. **Second property added** — "Starter is needed to manage multiple properties."
-4. **PDF receipt requested** — "Download PDF receipts — available on Pro and above."
-5. **Growth message** — "You've collected ₹1,85,000 this month through RentMaster. Scale your PG on Pro."
+**You need just 34 paying customers for full sustainability.**  
+At the previous ₹299–₹599 pricing, you needed 165 customers.  
+The automation premium turns a 165-customer problem into a **34-customer problem.**
 
 ---
 
-## 7. Key Decisions Still Open
+## 8. When Trial Users Upgrade (Conversion Triggers)
 
-| Question | Options | Recommended |
+1. **Trial expires at day 14** — "Your 14-day trial has ended. Continue with full automation from ₹1,199/month."
+2. **Bed limit hit** — "You've reached 20/20 beds. Upgrade to Pro for 60 beds."
+3. **Second property added** — "Pro plan needed for multiple properties."
+4. **CSV requested** — "Download monthly reports — available on Pro and above."
+5. **Growth message** — "You collected ₹1,80,000 this month via RentMaster. Scale up on Pro."
+
+---
+
+## 9. Price Positioning vs Competitors
+
+```
+TrackMyPG Pro   ₹599/mo  →  50 WhatsApp credits, NO payments
+GoPGMS          ₹180/mo  →  20 beds tracked, NO automation, NO payments
+PGManager       ₹300/mo  →  75 beds tracked, NO automation, NO payments
+
+RentMaster Starter ₹1,199/mo → UNLIMITED automation + DIRECT payments + PDF receipts
+
+Premium vs TrackMyPG Pro:  2× the price, incomparably better product
+Premium vs GoPGMS:         6.6× the price, 10× the value delivered
+```
+
+**The one-liner for sales conversations:**  
+> "TrackMyPG reminds your tenants. RentMaster collects your money. That's why it costs more."
+
+---
+
+## 10. Key Decisions Still Open
+
+| Question | Recommended |
+|---|---|
+| Trial card required? | No card — reduce friction |
+| Annual discount | 1 month free (₹11,990 / ₹19,990 / ₹29,990) |
+| WhatsApp cost: absorb or pass on? | Absorb — it's the differentiator, margins are 88–97% |
+| Referral program | Refer 1 owner → ₹1,199 credit (1 free month) |
+| GST invoice | Phase 4 add-on |
+
+---
+
+## 11. What To Update in the UX
+
+- [ ] Update Starter card: ₹1,199/month, 20 beds, unlimited WhatsApp, direct payments
+- [ ] Update Pro card: ₹1,999/month, 60 beds
+- [ ] Update Scale card: ₹2,999/month, unlimited
+- [ ] Update annual prices: ₹11,990 / ₹19,990 / ₹29,990
+- [ ] Update comparison table with competitor row ("vs TrackMyPG")
+- [ ] Update FAQ: new prices, ROI explanation
+- [ ] Update 14-day trial CTA on all cards
+
+---
+
+## 12. 12-Month Revenue Projection
+
+**Assumptions:** Avg ₹1,669/customer/month · 60% Starter + 25% Pro + 15% Scale mix  
+**Fixed costs:** ₹5,700/month infra | **Break-even:** ₹55,700/month (infra + ₹50K salary)
+
+### Key Milestones
+
+| Milestone | Month | Customers | Monthly Revenue | What It Means |
+|---|---|---|---|---|
+| Infra covered | **Month 2** | 5 | ₹8,345 | Platform costs ₹0 net — all infra paid |
+| ₹25K salary | **Month 5** | 18 | ₹30,042 | Half salary viable — can go full-time |
+| Full break-even | **Month 8** | 34 | ₹56,746 | ₹50K salary + all infra fully paid |
+| Comfortable profit | **Month 12** | 55 | ₹91,795 | ~₹36K net profit after all costs |
+
+---
+
+### Month-by-Month Growth Table
+
+```
+Month | Customers | Revenue/mo  | vs Infra ₹5,700 | vs Break-even ₹55,700 | Status
+------|-----------|-------------|-----------------|------------------------|-------
+  M1  |     2     |   ₹3,338    |    -₹2,362      |       -₹52,362         | 🔴 Building
+  M2  |     5     |   ₹8,345    |    +₹2,645 ✓   |       -₹47,355         | 🟡 Infra covered
+  M3  |     8     |  ₹13,352    |    +₹7,652      |       -₹42,348         | 🟡 Growing
+  M4  |    12     |  ₹20,028    |   +₹14,328      |       -₹35,672         | 🟡 Growing
+  M5  |    18     |  ₹30,042    |   +₹24,342 ✓   |       -₹25,658         | 🟢 ₹25K salary
+  M6  |    24     |  ₹40,056    |   +₹34,356      |       -₹15,644         | 🟢 Growing
+  M7  |    30     |  ₹50,070    |   +₹44,370      |        -₹5,630         | 🟢 Near target
+  M8  |    34     |  ₹56,746    |   +₹51,046 ✓   |        +₹1,046 ✓      | ✅ FULL BREAK-EVEN
+  M9  |    39     |  ₹65,091    |   +₹59,391      |        +₹9,391         | ✅ Profitable
+  M10 |    44     |  ₹73,436    |   +₹67,736      |       +₹17,736         | ✅ Growing profit
+  M11 |    50     |  ₹83,450    |   +₹77,750      |       +₹27,750         | ✅ Strong
+  M12 |    55     |  ₹91,795    |   +₹86,095      |       +₹36,095         | ✅ Very comfortable
+```
+
+---
+
+### Visual Revenue Curve
+
+```
+₹92K  ┤                                                                ████ M12
+₹83K  ┤                                                          ████
+₹73K  ┤                                                     ████
+₹65K  ┤                                                ████
+₹56K  ┤ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ BREAK-EVEN ─ ─ ─ ─ ─
+      ┤                                           ████  ← M8: 34 customers ✅
+₹40K  ┤                                     ████
+₹30K  ┤                               ████  ← M5: ₹25K salary ✓
+₹20K  ┤                         ████
+₹13K  ┤                    ████
+₹8.3K ┤         ████  ← M2: infra covered ✓
+₹5.7K ┤ ─ ─ ─ INFRA COST ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+₹3.3K ┤  ████
+      └──M1───M2───M3───M4───M5───M6───M7───M8───M9──M10──M11──M12
+```
+
+---
+
+### Old Pricing vs New Pricing — Impact
+
+| Metric | Old (₹299–₹999) | New (₹1,199–₹2,999) |
 |---|---|---|
-| Annual pricing discount | 10% / 15% / 2 months free | 2 months free (feels bigger) |
-| WhatsApp cost: absorb or pass on? | Absorb in plan price / charge extra above threshold | Absorb — simpler pricing |
-| Referral program | Refer 1 paying owner → unlock 10 extra beds free | Yes — low cost, viral |
-| Starter price: ₹199 or ₹249? | ₹199 feels cheap, ₹249 signals quality | ₹249 |
-| GST invoice for owners | Phase 4 premium add-on / included | Phase 4 add-on (NFR-16) |
+| Avg revenue/customer | ₹344/month | **₹1,669/month** |
+| Customers to cover infra | 17 | **5** |
+| Customers to full break-even | 165 | **34** |
+| Months to full break-even | ~12 | **~8** |
+| Revenue at 55 customers | ₹18,920 | **₹91,795** |
+
+**The automation premium turns a 12-month, 165-customer problem into an 8-month, 34-customer problem.**
 
 ---
 
-## 8. What To Update in the UX
+### Growth Rate Assumption
 
-The current `subscription.html` uses tenant-count limits (20/50/unlimited). It needs:
+- **Months 1–2:** 2–5 customers — beta users, personal network
+- **Months 3–5:** +3–6/month — word of mouth in PG owner WhatsApp groups
+- **Months 6–9:** +5–6/month — referral program active
+- **Months 10–12:** +5/month — steady compounding
 
-- [ ] Replace "20 tenants" → "15 rooms or 20 beds" on Starter card
-- [ ] Replace "50 tenants" → "40 rooms or 60 beds" on Pro card
-- [ ] Add "Room-based only" restriction badge on Free plan
-- [ ] Add "Bed-based PG unlocked" badge on Starter+
-- [ ] Add ₹249 Starter plan (currently missing — gap between Free ₹0 and Pro ₹599)
-- [ ] Add annual billing toggle (monthly / yearly, 2 months free)
-- [ ] Update FAQ with "What counts as a bed vs a room?" explanation
-- [ ] Add conversion trigger UI (upgrade prompts at limit points)
+**34 customers = 0.0017% of India's ~2M PG owners.** This is very achievable.
 
 ---
 
-## 9. One-Line Summary
+## 13. One-Line Summary
 
-> **Give 5 rooms free forever. Charge ₹249/month when they want PG beds or more rooms. Need 125 paying customers to cover infra + salary. No competitor does this under ₹500 in India.**
+> **Charge ₹1,199/month because no competitor collects rent automatically. 5 customers cover all infra costs. Need 34 paying customers for full ₹50K salary. In 8 months.**
 
 ---
 
-*Full brainstorming session log: `_bmad-output/brainstorming/brainstorming-session-2026-06-12-1015.md`*
+*Competitor research: `_bmad-output/planning-artifacts/research/pricing-competitor-analysis-2026-06-12.md`*
+*Previous brainstorming: `_bmad-output/brainstorming/brainstorming-session-2026-06-12-1015.md`*

@@ -1099,6 +1099,77 @@
       vertical-align: middle;
     }
 
+    /* ── SLOT EXPLAINER ── */
+    .slot-explainer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      box-shadow: var(--sh);
+    }
+    .slot-eq-item { display: flex; align-items: center; gap: 7px; }
+    .slot-eq-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .slot-eq-icon.bed  { background: rgba(14,159,110,.1); }
+    .slot-eq-icon.room { background: rgba(27,45,79,.07); }
+    .slot-eq-text  { font-size: 13px; font-weight: 500; color: var(--t2); }
+    .slot-eq-sep   { font-size: 15px; font-weight: 700; color: var(--t3); }
+    .slot-eq-chip  { font-size: 11px; font-weight: 700; background: var(--navy); color: #fff; padding: 3px 10px; border-radius: 99px; }
+    .slot-eq-note  { font-size: 12px; color: var(--t2); font-weight: 500; }
+
+    /* ── TIER LABEL ── */
+    .tier-range {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+      background: var(--navy-lt); color: var(--navy);
+      padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
+    }
+    .plan-rate-unit { font-size: 13px; color: var(--t3); font-weight: 500; margin-bottom: 4px; }
+    .plan-example   { font-size: 12px; color: var(--t2); margin-bottom: 20px; line-height: 1.5; }
+    .plan-example strong { color: var(--saffron); }
+
+    /* ── CALC CARD ── */
+    .calc-card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1.5px dashed var(--border);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .calc-title {
+      font-size: 13px; font-weight: 700; color: var(--t1);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
+    }
+    .calc-row { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+    .calc-group { display: flex; flex-direction: column; gap: 5px; }
+    .calc-group label {
+      font-size: 10px; font-weight: 700; color: var(--t3);
+      text-transform: uppercase; letter-spacing: .07em;
+    }
+    .calc-input {
+      width: 90px; padding: 9px 12px;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--t1);
+      background: #F4F5F8; outline: none; transition: border-color .15s;
+    }
+    .calc-input:focus { border-color: var(--navy); background: #fff; }
+    .calc-op   { font-size: 18px; font-weight: 700; color: var(--t3); padding-bottom: 6px; }
+    .calc-result { display: flex; flex-direction: column; gap: 2px; margin-left: 4px; padding-bottom: 2px; }
+    .calc-result-slots { font-size: 11px; color: var(--t2); font-weight: 600; }
+    .calc-result-price { font-size: 24px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; line-height: 1; }
+    .calc-result-sub   { font-size: 11px; color: var(--t3); }
+    .calc-breakdown {
+      font-size: 11px; color: var(--t2); margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--bg); line-height: 1.9; font-family: 'Courier New', monospace;
+    }
+
     /* TOAST */
     .toast {
       position: fixed;
@@ -1334,10 +1405,7 @@
         </div>
         <div class="ea-body">
           <div class="ea-title">Early Adopter Benefit — Locked-In Pricing</div>
-          <div class="ea-desc">As a Phase 1 user you'll receive a <strong>40% lifetime discount</strong> on any paid
-            plan when Phase 4 billing launches. Your current usage data and tenant history carries over automatically —
-            no re-setup required. We'll email you at <strong>Adarshsingh@gmail.comm</strong> before any plan changes
-            take effect.</div>
+          <div class="ea-desc">As a Phase 1 user you'll receive a <strong>40% lifetime discount</strong> on any paid plan when billing launches — Starter at <strong>₹719/month</strong> instead of ₹1,199. Your usage data and tenant history carries over automatically. We'll notify you at <strong>Adarshsingh@gmail.com</strong> before any plan changes take effect.</div>
         </div>
         <button class="btn-ghost" onclick="showToast('You\'re on the early adopter list ✓')">Confirm Spot</button>
       </div>
@@ -1345,259 +1413,206 @@
       <!-- UPCOMING PLANS -->
       <div class="section-header">
         <div class="section-title">Upcoming Plans — Phase 4</div>
-        <div class="section-sub">Subscription billing launches in Phase 4. Preview pricing below — early adopters get
-          40% off.</div>
+        <div class="section-sub">Automated rent collection — reminders, payments, receipts, all on autopilot. No competitor offers this. Early adopters get 40% off.</div>
       </div>
 
+      <!-- SLOT EXPLAINER -->
+      <div class="slot-explainer">
+        <div class="slot-eq-item">
+          <div class="slot-eq-icon bed">🛏</div>
+          <div class="slot-eq-text">1 bed in a PG</div>
+        </div>
+        <div class="slot-eq-sep">=</div>
+        <div class="slot-eq-chip">1 Slot</div>
+        <div class="slot-eq-sep" style="margin:0 2px">·</div>
+        <div class="slot-eq-item">
+          <div class="slot-eq-icon room">🚪</div>
+          <div class="slot-eq-text">1 room in a flat</div>
+        </div>
+        <div class="slot-eq-sep">=</div>
+        <div class="slot-eq-chip">1 Slot</div>
+        <div class="slot-eq-sep" style="margin:0 2px">·</div>
+        <div class="slot-eq-note">Slots add up across all your properties — PG beds + flat rooms combined</div>
+      </div>
+
+      <!-- BILLING TOGGLE -->
       <div class="billing-toggle-wrap">
         <span class="btl-label active" id="btl-monthly">Monthly</span>
         <div class="btl-switch" id="btl-switch" onclick="toggleBilling()"></div>
         <span class="btl-label" id="btl-yearly">Yearly &nbsp;<span class="btl-save">2 months free</span></span>
       </div>
 
+      <!-- TIER CARDS -->
       <div class="plan-grid">
 
-        <!-- STARTER -->
+        <!-- TIER 1: 1–30 slots -->
         <div class="plan-card">
           <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
             Coming Soon
           </div>
-          <div class="plan-name">Starter</div>
-          <div class="plan-tagline">Single PG or residential property — up to 15 rooms or 20 beds.</div>
+          <div class="tier-range">1 – 30 Slots</div>
           <div class="plan-price-row">
-            <span class="plan-price" data-monthly="₹249" data-yearly="₹208">₹249</span>
-            <span class="plan-price-period" data-monthly="/month" data-yearly="/mo billed yearly">/month</span>
+            <span class="plan-price" data-monthly="₹60" data-yearly="₹50">₹60</span>
+            <span class="plan-price-period">&nbsp;/ slot / mo</span>
           </div>
-          <div class="plan-price-billed" data-monthly="Billed monthly · ₹2,490/year (save 2 months)"
-            data-yearly="₹2,490/year — 2 months free included">Billed monthly · ₹2,490/year (save 2 months)</div>
+          <div class="plan-rate-unit" id="t1-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">e.g. 9 beds = <strong>₹540/mo</strong> &nbsp;·&nbsp; 20 beds = <strong>₹1,200/mo</strong></div>
           <div class="plan-divider"></div>
           <div class="plan-features">
-            <div class="pf-section-head">Properties & Tenants</div>
+            <div class="pf-section-head">All Properties</div>
             <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              1 property · 15 rooms or 20 beds
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Unlimited properties &amp; property types
             </div>
             <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Room-based &amp; bed-based PG
-              <span class="pf-badge">PG Unlocked</span>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              PG beds + flat rooms — mixed portfolio ok
+              <span class="pf-badge">Mixed ✓</span>
             </div>
             <div class="pf-section-head">Automation</div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Automated WhatsApp reminders
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              WhatsApp reminders — unlimited, no credits
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Cashfree payment links
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Cashfree payment link — direct to your bank
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               WhatsApp receipts &amp; owner alerts
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Live collection dashboard
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Live dashboard + PDF receipts
+            </div>
+          </div>
+          <div class="plan-cta">
+            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
+          </div>
+        </div>
+
+        <!-- TIER 2: 31–100 slots — Most Popular -->
+        <div class="plan-card popular">
+          <div class="plan-coming-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Coming Soon
+          </div>
+          <div class="tier-range">31 – 100 Slots</div>
+          <div class="plan-price-row">
+            <span class="plan-price" data-monthly="₹50" data-yearly="₹42">₹50</span>
+            <span class="plan-price-period">&nbsp;/ slot / mo</span>
+          </div>
+          <div class="plan-rate-unit" id="t2-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">e.g. 90 beds = <strong>₹4,800/mo</strong> &nbsp;·&nbsp; 50 beds = <strong>₹2,700/mo</strong></div>
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="pf-section-head">Everything in Tier 1, plus</div>
+            <div class="pf-row highlight">
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Lower rate — ₹50/slot vs ₹60 in Tier 1
             </div>
             <div class="pf-section-head">Reports</div>
             <div class="pf-row">
-              <svg class="pf-check grey" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-              PDF export &amp; statements
-            </div>
-            <div class="pf-row">
-              <svg class="pf-check grey" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-              Digital agreements / eSign
-            </div>
-          </div>
-          <div class="plan-cta">
-            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join
-              Waitlist</button>
-          </div>
-        </div>
-
-        <!-- PRO — MOST POPULAR -->
-        <div class="plan-card popular">
-          <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-            Coming Soon
-          </div>
-          <div class="plan-name">Pro</div>
-          <div class="plan-tagline">Multiple properties, exports, and priority support.</div>
-          <div class="plan-price-row">
-            <span class="plan-price" data-monthly="₹499" data-yearly="₹416">₹499</span>
-            <span class="plan-price-period" data-monthly="/month" data-yearly="/mo billed yearly">/month</span>
-          </div>
-          <div class="plan-price-billed" data-monthly="Billed monthly · ₹4,990/year (save 2 months)"
-            data-yearly="₹4,990/year — 2 months free included">Billed monthly · ₹4,990/year (save 2 months)</div>
-          <div class="plan-divider"></div>
-          <div class="plan-features">
-            <div class="pf-section-head">Properties & Tenants</div>
-            <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              3 properties · 40 rooms or 60 beds
-            </div>
-            <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Everything in Starter
-            </div>
-            <div class="pf-section-head">Reports & Exports</div>
-            <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              PDF rent receipts &amp; statements
-            </div>
-            <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Monthly collection CSV export
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Digital agreements / eSign
+              <span class="lv-soon" style="margin-left:4px">Phase 3</span>
             </div>
             <div class="pf-section-head">Support</div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Priority WhatsApp support
-            </div>
-            <div class="pf-row">
-              <svg class="pf-check grey" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-              Analytics &amp; insights
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Priority WhatsApp support 24h
             </div>
           </div>
           <div class="plan-cta">
-            <button class="btn-plan-primary" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join
-              Waitlist</button>
+            <button class="btn-plan-primary" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
           </div>
         </div>
 
-        <!-- SCALE -->
+        <!-- TIER 3: 101+ slots -->
         <div class="plan-card">
           <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
             Coming Soon
           </div>
-          <div class="plan-name">Scale</div>
-          <div class="plan-tagline">Unlimited properties, analytics, and an API for power users.</div>
+          <div class="tier-range">101+ Slots</div>
           <div class="plan-price-row">
-            <span class="plan-price" data-monthly="₹999" data-yearly="₹833">₹999</span>
-            <span class="plan-price-period" data-monthly="/month" data-yearly="/mo billed yearly">/month</span>
+            <span class="plan-price" data-monthly="₹40" data-yearly="₹33">₹40</span>
+            <span class="plan-price-period">&nbsp;/ slot / mo</span>
           </div>
-          <div class="plan-price-billed" data-monthly="Billed monthly · ₹9,990/year (save 2 months)"
-            data-yearly="₹9,990/year — 2 months free included">Billed monthly · ₹9,990/year (save 2 months)</div>
+          <div class="plan-rate-unit" id="t3-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">e.g. 150 beds = <strong>₹7,200/mo</strong> &nbsp;·&nbsp; 200 beds = <strong>₹9,800/mo</strong></div>
           <div class="plan-divider"></div>
           <div class="plan-features">
-            <div class="pf-section-head">Properties & Tenants</div>
+            <div class="pf-section-head">Everything in Tier 2, plus</div>
             <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Unlimited properties &amp; tenants
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Best rate — ₹40/slot vs ₹60 at entry
             </div>
-            <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Everything in Pro
-            </div>
-            <div class="pf-section-head">Analytics & Insights</div>
+            <div class="pf-section-head">Analytics & API</div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Collection analytics dashboard
+              <span class="lv-soon" style="margin-left:4px">Phase 4</span>
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Tenant payment behaviour trends
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              REST API access
             </div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              API access (REST)
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Custom WhatsApp templates
             </div>
             <div class="pf-section-head">Support</div>
             <div class="pf-row">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2.5" stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Dedicated account manager
             </div>
           </div>
           <div class="plan-cta">
-            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join
-              Waitlist</button>
+            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
           </div>
         </div>
 
+      </div>
+
+      <!-- LIVE CALCULATOR -->
+      <div class="calc-card">
+        <div class="calc-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/>
+          </svg>
+          Calculate your monthly cost
+        </div>
+        <div class="calc-row">
+          <div class="calc-group">
+            <label>PG Beds</label>
+            <input class="calc-input" type="number" id="calc-beds" value="20" min="0" max="999" oninput="calcPrice()">
+          </div>
+          <span class="calc-op">+</span>
+          <div class="calc-group">
+            <label>Flat / Rooms</label>
+            <input class="calc-input" type="number" id="calc-rooms" value="0" min="0" max="999" oninput="calcPrice()">
+          </div>
+          <span class="calc-op">=</span>
+          <div class="calc-result">
+            <div class="calc-result-slots" id="calc-slots-label">20 slots</div>
+            <div class="calc-result-price" id="calc-price">₹1,200</div>
+            <div class="calc-result-sub" id="calc-period">/month</div>
+          </div>
+        </div>
+        <div class="calc-breakdown" id="calc-breakdown">Tier 1: 20 × ₹60 = ₹1,200</div>
       </div>
 
       <!-- COMPARISON TABLE -->
@@ -1609,34 +1624,35 @@
           <thead>
             <tr>
               <th style="width:38%">Feature</th>
-              <th class="col-header-active">Free · Now</th>
-              <th>Starter</th>
-              <th>Pro</th>
-              <th>Scale</th>
+              <th class="col-header-active">Trial · 14 days</th>
+              <th>Tier 1 · ₹60/slot</th>
+              <th>Tier 2 · ₹50/slot</th>
+              <th>Tier 3 · ₹40/slot</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <div class="limits-feat">Properties</div>
+                <div class="limits-feat-sub">PG, hostel, flat — any mix, unlimited count</div>
               </td>
-              <td class="col-active"><span class="lv-count">1</span></td>
-              <td><span class="lv-count">1</span></td>
-              <td><span class="lv-count">3</span></td>
+              <td class="col-active"><span class="lv-count">∞</span></td>
+              <td><span class="lv-count">∞</span></td>
+              <td><span class="lv-count">∞</span></td>
               <td><span class="lv-count">∞</span></td>
             </tr>
             <tr>
               <td>
-                <div class="limits-feat">Rooms / Beds</div>
-                <div class="limits-feat-sub">Room-based: 1 tenant per room · Bed-based: multiple per room</div>
+                <div class="limits-feat">Slots (beds + rooms)</div>
+                <div class="limits-feat-sub">1 PG bed = 1 slot · 1 flat room = 1 slot · mixed ok</div>
               </td>
               <td class="col-active">
-                <span class="lv-count">5 rooms</span>
-                <div style="font-size:10px;color:var(--t3);margin-top:2px;">Room-based only</div>
+                <span class="lv-count">Trial slots</span>
+                <div style="font-size:10px;color:var(--t3);margin-top:2px;">Full Tier 1 for 14 days</div>
               </td>
-              <td><span class="lv-count">15 rooms / 20 beds</span></td>
-              <td><span class="lv-count">40 rooms / 60 beds</span></td>
-              <td><span class="lv-count">∞</span></td>
+              <td><span class="lv-count">1–30 slots · ₹60/slot</span></td>
+              <td><span class="lv-count">31–100 slots · ₹50/slot</span></td>
+              <td><span class="lv-count">101+ slots · ₹40/slot</span></td>
             </tr>
             <tr>
               <td>
@@ -1732,10 +1748,9 @@
                 <div class="limits-feat-sub">Phase 2 feature</div>
               </td>
               <td class="col-active"><span class="lv-soon">Phase 2</span></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round">
+                  <polyline points="4 12 9 17 20 6" />
                 </svg></td>
               <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2.5" stroke-linecap="round">
@@ -1910,8 +1925,8 @@
             </svg>
           </div>
           <div class="faq-a">All owners who joined during Phase 1 (before paid billing launches) get a 40% permanent
-            discount on any plan — for life, as long as the subscription is kept active. For example, the Pro plan at
-            ₹499/month would be ₹299/month for early adopters.</div>
+            discount on any plan — for life, as long as the subscription is kept active. For example, the Starter plan at
+            ₹1,199/month would be ₹719/month for early adopters. Pro at ₹1,999 would be ₹1,199/month.</div>
         </div>
 
       </div>
@@ -1946,6 +1961,47 @@
       document.querySelectorAll('[data-monthly]').forEach(function (el) {
         el.textContent = el.dataset[key];
       });
+      calcPrice();
+    }
+
+    function fmtINR(n) {
+      return n.toLocaleString('en-IN');
+    }
+
+    function calcSlotCost(slots, yearly) {
+      var r1 = yearly ? 50 : 60;
+      var r2 = yearly ? 42 : 50;
+      var r3 = yearly ? 33 : 40;
+      if (slots <= 0) return { price: 0, breakdown: '0 slots — ₹0' };
+      var price = 0, parts = [];
+      var t1 = Math.min(slots, 30);
+      price += t1 * r1;
+      parts.push('Tier 1: ' + t1 + ' × ₹' + r1 + ' = ₹' + fmtINR(t1 * r1));
+      if (slots > 30) {
+        var t2 = Math.min(slots - 30, 70);
+        price += t2 * r2;
+        parts.push('Tier 2: ' + t2 + ' × ₹' + r2 + ' = ₹' + fmtINR(t2 * r2));
+      }
+      if (slots > 100) {
+        var t3 = slots - 100;
+        price += t3 * r3;
+        parts.push('Tier 3: ' + t3 + ' × ₹' + r3 + ' = ₹' + fmtINR(t3 * r3));
+      }
+      parts.push('→ Total ₹' + fmtINR(price) + '/month');
+      return { price: price, breakdown: parts.join('   +   ') };
+    }
+
+    function calcPrice() {
+      var beds  = parseInt(document.getElementById('calc-beds').value)  || 0;
+      var rooms = parseInt(document.getElementById('calc-rooms').value) || 0;
+      var slots = beds + rooms;
+      var res   = calcSlotCost(slots, _billingYearly);
+      var slotLabel = slots + ' slot' + (slots !== 1 ? 's' : '');
+      if (beds && rooms) slotLabel += ' (' + beds + ' PG beds + ' + rooms + ' flat rooms)';
+      document.getElementById('calc-slots-label').textContent = slotLabel;
+      document.getElementById('calc-price').textContent = '₹' + fmtINR(res.price);
+      document.getElementById('calc-period').textContent = _billingYearly ? '/month (billed yearly)' : '/month';
+      document.getElementById('calc-breakdown').textContent = res.breakdown;
     }
 
     var _toastTimer = null;

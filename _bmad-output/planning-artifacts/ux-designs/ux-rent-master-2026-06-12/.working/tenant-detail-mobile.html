@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Tenant Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #2A2D35; display: flex; justify-content: center; align-items: flex-start; padding: 48px 20px 80px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:root {
+  --navy: #1C2537; --navy2: #6B5B45; --saffron: #C8A96E;
+  --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+  --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+  --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+  --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+  --pend: #D97706; --pend-bg: rgba(217,119,6,.09);
+  --late: #DC2020; --late-bg: rgba(220,32,32,.08);
+}
+.phone { width: 375px; background: var(--bg); border-radius: 40px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.28), 0 4px 16px rgba(0,0,0,.1); border: 1px solid rgba(255,255,255,.08); position: relative; }
+.scroll { height: 780px; overflow-y: auto; padding-bottom: 80px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { padding: 52px 18px 14px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.back-btn { color: var(--navy2); cursor: pointer; flex-shrink: 0; }
+.tb-title { font-size: 16px; font-weight: 800; color: var(--t1); flex: 1; }
+.tb-more { color: var(--t2); cursor: pointer; }
+.profile-card { background: var(--navy); margin: 14px 16px 0; border-radius: 16px; padding: 20px 18px; }
+.pc-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.pc-ava { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.pc-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -.01em; margin-bottom: 3px; }
+.pc-room { font-size: 12px; color: rgba(255,255,255,.55); }
+.pc-status { display: inline-flex; align-items: center; gap: 5px; }
+.pc-chip { display: inline-block; border-radius: 5px; padding: 3px 9px; font-size: 11px; font-weight: 700; }
+.pc-stats { display: flex; gap: 0; }
+.pcs { flex: 1; border-right: 1px solid rgba(255,255,255,.1); padding-right: 12px; margin-right: 12px; }
+.pcs:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+.pcs-val { font-size: 18px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 3px; }
+.pcs-lbl { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.4); }
+.action-strip { display: flex; gap: 8px; padding: 12px 16px; }
+.act-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; background: var(--card); border-radius: 11px; padding: 11px 8px; border: 1px solid var(--border); box-shadow: var(--sh); cursor: pointer; }
+.act-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.act-lbl { font-size: 10px; font-weight: 600; color: var(--t1); text-align: center; line-height: 1.2; }
+.info-card { margin: 0 16px 10px; background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; }
+.ic-hdr { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.ic-hdr-ttl { font-size: 12px; font-weight: 700; color: var(--t1); }
+.ic-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.ic-row:last-child { border-bottom: none; }
+.ic-key { font-size: 12px; color: var(--t2); font-weight: 500; }
+.ic-val { font-size: 13px; font-weight: 700; color: var(--t1); }
+.ic-val.accent { color: var(--saffron); }
+.ic-val.green { color: var(--paid); }
+.sec-hdr { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 8px; }
+.sec-ttl { font-size: 13px; font-weight: 700; color: var(--t1); }
+.sec-link { font-size: 11px; color: var(--navy2); font-weight: 600; }
+.pay-card { margin: 0 16px 10px; background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; }
+.pay-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.pay-row:last-child { border-bottom: none; }
+.pay-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pay-info { flex: 1; }
+.pay-month { font-size: 13px; font-weight: 600; color: var(--t1); }
+.pay-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.pay-right { text-align: right; flex-shrink: 0; }
+.pay-amt { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+.chip { display: inline-block; border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 600; }
+.c-paid { background: var(--paid-bg); color: var(--paid); }
+.c-pend { background: var(--pend-bg); color: var(--pend); }
+.c-late { background: var(--late-bg); color: var(--late); }
+.bnav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 12px 18px 22px; border-radius: 0 0 40px 40px; }
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; color: var(--t3); cursor: pointer; text-decoration: none; }
+.ni.on { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="scroll">
+  <div class="topbar">
+    <a class="back-btn" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+    <div class="tb-title">Tenant Detail</div>
+    <div class="tb-more"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></div>
+  </div>
+
+  <div class="profile-card">
+    <div class="pc-top">
+      <div class="pc-ava">SK</div>
+      <div>
+        <div class="pc-name">Suresh Kumar</div>
+        <div class="pc-room">Koramangala PG · Room 1 · Bed C</div>
+      </div>
+      <span class="chip c-late" style="margin-left:auto;align-self:flex-start">5d late</span>
+    </div>
+    <div class="pc-stats">
+      <div class="pcs"><div class="pcs-val">₹6,500</div><div class="pcs-lbl">Monthly Rent</div></div>
+      <div class="pcs"><div class="pcs-val" style="color:#F87171">₹6,500</div><div class="pcs-lbl">Overdue</div></div>
+      <div class="pcs"><div class="pcs-val">6</div><div class="pcs-lbl">Months</div></div>
+    </div>
+  </div>
+
+  <div class="action-strip">
+    <div class="act-btn" style="cursor:pointer">
+      <div class="act-icon" style="background:rgba(37,211,102,.1);color:#25D366"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="act-lbl">WhatsApp<br>Remind</div>
+    </div>
+    <div class="act-btn" onclick="location.href='payments-mobile.html'" style="cursor:pointer">
+      <div class="act-icon" style="background:var(--paid-bg);color:var(--paid)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="act-lbl">Record<br>Payment</div>
+    </div>
+    <div class="act-btn" onclick="location.href='add-tenant-mobile.html'" style="cursor:pointer">
+      <div class="act-icon" style="background:rgba(107,91,69,.08);color:var(--navy2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div class="act-lbl">Edit<br>Details</div>
+    </div>
+    <div class="act-btn" onclick="location.href='tenants-mobile.html'" style="cursor:pointer">
+      <div class="act-icon" style="background:var(--late-bg);color:var(--late)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+      <div class="act-lbl">Move<br>Out</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-hdr"><div class="ic-hdr-ttl">Lease Details</div></div>
+    <div class="ic-row"><span class="ic-key">Move-in</span><span class="ic-val">1 Jan 2026</span></div>
+    <div class="ic-row"><span class="ic-key">Monthly rent</span><span class="ic-val accent">₹6,500</span></div>
+    <div class="ic-row"><span class="ic-key">Due day</span><span class="ic-val">1st of month</span></div>
+    <div class="ic-row"><span class="ic-key">Security deposit</span><span class="ic-val">₹13,000</span></div>
+    <div class="ic-row"><span class="ic-key">Aadhaar (last 4)</span><span class="ic-val">7823</span></div>
+  </div>
+
+  <div class="info-card">
+    <div class="ic-hdr"><div class="ic-hdr-ttl">Contact</div></div>
+    <div class="ic-row"><span class="ic-key">WhatsApp</span><span class="ic-val">+91 98765 43210</span></div>
+    <div class="ic-row"><span class="ic-key">Emergency</span><span class="ic-val">Ramesh Kumar · +91 98001 23456</span></div>
+  </div>
+
+  <div class="sec-hdr"><span class="sec-ttl">Payment History</span><span class="sec-link">6 months</span></div>
+  <div class="pay-card">
+    <div class="pay-row">
+      <div class="pay-icon" style="background:var(--late-bg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--late)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="pay-info"><div class="pay-month">June 2026</div><div class="pay-sub">Due Jun 1 · 5 days overdue</div></div>
+      <div class="pay-right"><div class="pay-amt" style="color:var(--late)">₹6,500</div><span class="chip c-late">Overdue</span></div>
+    </div>
+    <div class="pay-row">
+      <div class="pay-icon" style="background:var(--paid-bg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paid)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="pay-info"><div class="pay-month">May 2026</div><div class="pay-sub">Paid May 3 · UPI</div></div>
+      <div class="pay-right"><div class="pay-amt" style="color:var(--paid)">₹6,500</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="pay-row">
+      <div class="pay-icon" style="background:var(--paid-bg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paid)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="pay-info"><div class="pay-month">April 2026</div><div class="pay-sub">Paid Apr 1 · Net Banking</div></div>
+      <div class="pay-right"><div class="pay-amt" style="color:var(--paid)">₹6,500</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="pay-row">
+      <div class="pay-icon" style="background:var(--paid-bg)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paid)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="pay-info"><div class="pay-month">March 2026</div><div class="pay-sub">Paid Mar 2 · UPI</div></div>
+      <div class="pay-right"><div class="pay-amt" style="color:var(--paid)">₹6,500</div><span class="chip c-paid">Paid</span></div>
+    </div>
+  </div>
+
+</div>
+<div class="bnav">
+  <a class="ni" href="dashboard-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a class="ni on" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Tenants</span></a>
+  <a class="ni" href="payments-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Payments</span></a>
+  <a class="ni" href="settings-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a>
+</div>
+</div>
+</body>
+</html>

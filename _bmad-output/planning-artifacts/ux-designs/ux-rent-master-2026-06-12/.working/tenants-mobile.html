@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Tenants</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #2A2D35; display: flex; justify-content: center; align-items: flex-start; padding: 48px 20px 80px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:root {
+  --navy: #1C2537; --navy2: #6B5B45; --saffron: #C8A96E;
+  --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+  --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+  --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+  --sh-md: 0 4px 16px rgba(28,37,55,.08), 0 1px 4px rgba(28,37,55,.05);
+  --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+  --pend: #D97706; --pend-bg: rgba(217,119,6,.09);
+  --late: #DC2020; --late-bg: rgba(220,32,32,.08);
+}
+.phone { width: 375px; background: var(--bg); border-radius: 40px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.28), 0 4px 16px rgba(0,0,0,.1); border: 1px solid rgba(255,255,255,.08); position: relative; }
+.scroll { height: 780px; overflow-y: auto; padding-bottom: 80px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { padding: 52px 18px 14px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.tb-title { font-size: 17px; font-weight: 800; color: var(--t1); letter-spacing: -.01em; }
+.add-btn { background: var(--navy); color: #fff; border: none; border-radius: 9px; padding: 7px 14px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 16px 0; }
+.stat-card { background: var(--card); border-radius: 12px; padding: 14px 16px; box-shadow: var(--sh); border: 1px solid var(--border); }
+.sc-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin-bottom: 6px; }
+.sc-val { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--t1); line-height: 1; margin-bottom: 4px; }
+.sc-val.green { color: var(--paid); }
+.sc-val.amber { color: var(--pend); }
+.sc-val.red { color: var(--late); }
+.sc-sub { font-size: 10px; color: var(--t3); }
+.filter-bar { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; }
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-chip { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border); background: var(--card); color: var(--t2); white-space: nowrap; cursor: pointer; font-family: inherit; }
+.filter-chip.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.search-wrap { padding: 0 16px 10px; }
+.search-input { width: 100%; padding: 10px 14px 10px 36px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.search-wrap { position: relative; padding: 0 16px 10px; }
+.search-icon { position: absolute; left: 28px; top: 50%; transform: translateY(-60%); color: var(--t3); }
+.section-hdr { display: flex; justify-content: space-between; align-items: center; padding: 4px 16px 8px; }
+.sec-ttl { font-size: 13px; font-weight: 700; color: var(--t1); }
+.sec-count { font-size: 12px; color: var(--t2); font-weight: 600; }
+.list-card { margin: 0 16px 10px; background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; }
+.trow { display: flex; align-items: center; gap: 11px; padding: 12px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+.trow:last-child { border-bottom: none; }
+.trow:hover { background: #F5F1EB; }
+.ava { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.tinfo { flex: 1; min-width: 0; }
+.tname { font-size: 13px; font-weight: 600; color: var(--t1); }
+.tsub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.tright { text-align: right; flex-shrink: 0; }
+.tamt { font-size: 13px; font-weight: 700; color: var(--t1); font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+.chip { display: inline-block; border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 600; letter-spacing: .02em; }
+.c-paid { background: var(--paid-bg); color: var(--paid); }
+.c-pend { background: var(--pend-bg); color: var(--pend); }
+.c-late { background: var(--late-bg); color: var(--late); }
+.bnav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 12px 18px 22px; border-radius: 0 0 40px 40px; }
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; color: var(--t3); cursor: pointer; text-decoration: none; }
+.ni.on { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="scroll">
+  <div class="topbar">
+    <div class="tb-title">Tenants</div>
+    <button class="add-btn" onclick="location.href='add-tenant-mobile.html'">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Tenant
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="sc-label">Total</div><div class="sc-val">16</div><div class="sc-sub">Tenants</div></div>
+    <div class="stat-card"><div class="sc-label">Paid</div><div class="sc-val green">12</div><div class="sc-sub">This month</div></div>
+    <div class="stat-card"><div class="sc-label">Pending</div><div class="sc-val amber">3</div><div class="sc-sub">Awaiting payment</div></div>
+    <div class="stat-card"><div class="sc-label">Overdue</div><div class="sc-val red">1</div><div class="sc-sub">Action needed</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-chip on">All (16)</button>
+    <button class="filter-chip">Paid (12)</button>
+    <button class="filter-chip">Pending (3)</button>
+    <button class="filter-chip">Overdue (1)</button>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+    <input class="search-input" placeholder="Search tenants..." style="padding-left:36px">
+  </div>
+
+  <div class="section-hdr"><span class="sec-ttl">Needs Attention</span><span class="sec-count">4 tenants</span></div>
+  <div class="list-card">
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#FFF0F0;color:#EF4444">S</div>
+      <div class="tinfo"><div class="tname">Suresh Kumar</div><div class="tsub">Koramangala PG · Room 1 · Bed C</div></div>
+      <div class="tright"><div class="tamt">₹6,500</div><span class="chip c-late">5d late</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#F5F3FF;color:#8B5CF6">P</div>
+      <div class="tinfo"><div class="tname">Priya Nair</div><div class="tsub">Koramangala PG · Room 3 · Bed B</div></div>
+      <div class="tright"><div class="tamt">₹7,000</div><span class="chip c-pend">Pending</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#FFF7ED;color:#C8A96E">A</div>
+      <div class="tinfo"><div class="tname">Anjali Mehta</div><div class="tsub">Koramangala PG · Room 4 · Bed A</div></div>
+      <div class="tright"><div class="tamt">₹7,500</div><span class="chip c-pend">Pending</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#F0FDF4;color:#22C55E">V</div>
+      <div class="tinfo"><div class="tname">Vijay Patel</div><div class="tsub">HSR Layout House · Room 2</div></div>
+      <div class="tright"><div class="tamt">₹12,000</div><span class="chip c-pend">Pending</span></div>
+    </div>
+  </div>
+
+  <div class="section-hdr"><span class="sec-ttl">Paid This Month</span><span class="sec-count">12 tenants</span></div>
+  <div class="list-card">
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#EFF6FF;color:#3B82F6">R</div>
+      <div class="tinfo"><div class="tname">Rahul Sharma</div><div class="tsub">Room 2 · Bed A · Paid today</div></div>
+      <div class="tright"><div class="tamt" style="color:var(--paid)">₹8,500</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#FDF2F8;color:#EC4899">N</div>
+      <div class="tinfo"><div class="tname">Neha Gupta</div><div class="tsub">Room 5 · Bed A · Yesterday</div></div>
+      <div class="tright"><div class="tamt" style="color:var(--paid)">₹8,000</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#ECFDF5;color:#10B981">K</div>
+      <div class="tinfo"><div class="tname">Karan Singh</div><div class="tsub">Room 1 · Bed A · Jun 9</div></div>
+      <div class="tright"><div class="tamt" style="color:var(--paid)">₹7,500</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="trow" onclick="location.href='tenant-detail-mobile.html'">
+      <div class="ava" style="background:#F0F9FF;color:#0EA5E9">M</div>
+      <div class="tinfo"><div class="tname">Meena Sharma</div><div class="tsub">Room 3 · Bed B · Jun 8</div></div>
+      <div class="tright"><div class="tamt" style="color:var(--paid)">₹9,000</div><span class="chip c-paid">Paid</span></div>
+    </div>
+    <div class="trow" style="justify-content:center;padding:13px">
+      <span style="font-size:12px;font-weight:600;color:var(--navy2)">See all 12 paid tenants</span>
+    </div>
+  </div>
+
+</div>
+<div class="bnav">
+  <a class="ni" href="dashboard-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a class="ni on" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Tenants</span></a>
+  <a class="ni" href="payments-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Payments</span></a>
+  <a class="ni" href="settings-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a>
+</div>
+</div>
+</body>
+</html>

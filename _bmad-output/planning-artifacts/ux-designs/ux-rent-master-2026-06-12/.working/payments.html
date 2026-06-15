@@ -17,24 +17,24 @@
 
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #E8EAF0;
-      color: #0F1623;
+      background: #F0EDE8;
+      color: #1C2537;
       min-height: 100vh;
       display: flex;
       -webkit-font-smoothing: antialiased;
     }
 
     :root {
-      --navy: #1B2D4F;
-      --saffron: #F97316;
-      --t1: #0F1623;
-      --t2: #5A6473;
-      --t3: #9CA3AE;
-      --card: #FFFFFF;
-      --bg: #E8EAF0;
-      --border: #DDE1EC;
-      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
-      --sh-md: 0 4px 16px rgba(15, 22, 35, .10), 0 1px 4px rgba(15, 22, 35, .05);
+      --navy: #1C2537;
+      --saffron: #C8A96E;
+      --t1: #1C2537;
+      --t2: #6B5B45;
+      --t3: #9B8E7E;
+      --card: #FAF8F5;
+      --bg: #F0EDE8;
+      --border: #E2D9CC;
+      --sh: 0 1px 3px rgba(28, 37, 55, .06), 0 2px 8px rgba(28, 37, 55, .05);
+      --sh-md: 0 4px 16px rgba(28, 37, 55, .10), 0 1px 4px rgba(28, 37, 55, .05);
       --paid: #0E9F6E;
       --paid-bg: rgba(14, 159, 110, .09);
       --pend: #D97706;
@@ -269,7 +269,7 @@
     }
 
     .month-btn:hover {
-      background: rgba(27, 45, 79, .07);
+      background: rgba(28, 37, 55, .07);
       color: var(--navy);
     }
 
@@ -635,14 +635,14 @@
       letter-spacing: .06em;
       color: var(--t3);
       padding: 10px 18px;
-      background: #FAFBFD;
+      background: #F7F3EE;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     .pay-table td {
       padding: 12px 18px;
-      border-bottom: 1px solid #F5F6FA;
+      border-bottom: 1px solid #EDE8E0;
       vertical-align: middle;
     }
 
@@ -651,7 +651,7 @@
     }
 
     .pay-table tr:hover td {
-      background: #FAFBFD;
+      background: #F7F3EE;
     }
 
     .tenant-cell {
@@ -811,12 +811,12 @@
     }
 
     .act-btn-view {
-      background: rgba(27, 45, 79, .07);
+      background: rgba(28, 37, 55, .07);
       color: var(--navy);
     }
 
     .act-btn-view:hover {
-      background: rgba(27, 45, 79, .13);
+      background: rgba(28, 37, 55, .13);
     }
 
     .date-cell {
@@ -829,7 +829,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 22, 35, .25);
+      background: rgba(28, 37, 55, .25);
       z-index: 40;
     }
 
@@ -840,7 +840,7 @@
       width: 440px;
       height: 100vh;
       background: var(--card);
-      box-shadow: -4px 0 32px rgba(15, 22, 35, .12);
+      box-shadow: -4px 0 32px rgba(28, 37, 55, .12);
       z-index: 50;
       display: flex;
       flex-direction: column;
@@ -987,11 +987,11 @@
 
     .method-opt.on {
       border-color: var(--navy);
-      background: rgba(27, 45, 79, .04);
+      background: rgba(28, 37, 55, .04);
     }
 
     .method-opt:hover:not(.on) {
-      border-color: rgba(27, 45, 79, .25);
+      border-color: rgba(28, 37, 55, .25);
     }
 
     .method-opt-name {
@@ -1313,7 +1313,7 @@
             <tr data-status="pending" data-name="anjali mehta">
               <td>
                 <div class="tenant-cell">
-                  <div class="t-avi" style="background:#FFF7ED;color:#F97316">A</div>
+                  <div class="t-avi" style="background:#FFF7ED;color:#C8A96E">A</div>
                   <div>
                     <div class="t-name">Anjali Mehta</div>
                     <div class="t-room">Sunshine PG · Room G02 · Bed C</div>
@@ -1769,7 +1769,7 @@
           <span class="chip chip-pend" style="font-size:9px">Pending</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:9px">
-          <div class="t-avi" style="background:#FFF7ED;color:#F97316;width:30px;height:30px;font-size:11px">A</div>
+          <div class="t-avi" style="background:#FFF7ED;color:#C8A96E;width:30px;height:30px;font-size:11px">A</div>
           <div style="flex:1">
             <div style="font-size:12px;font-weight:600">Anjali Mehta</div>
             <div style="font-size:10px;color:var(--t3)">₹7,500 · pending</div>

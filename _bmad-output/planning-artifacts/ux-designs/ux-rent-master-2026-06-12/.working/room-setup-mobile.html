@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Room Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #2A2D35; display: flex; justify-content: center; align-items: flex-start; padding: 48px 20px 80px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:root {
+  --navy: #1C2537; --navy2: #6B5B45; --saffron: #C8A96E;
+  --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+  --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+  --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+  --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+}
+.phone { width: 375px; background: var(--bg); border-radius: 40px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.28), 0 4px 16px rgba(0,0,0,.1); border: 1px solid rgba(255,255,255,.08); position: relative; }
+.scroll { height: 780px; overflow-y: auto; padding-bottom: 80px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { padding: 52px 18px 14px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.back-btn { color: var(--navy2); cursor: pointer; }
+.tb-title { font-size: 16px; font-weight: 800; color: var(--t1); flex: 1; }
+.prog-bar-wrap { padding: 12px 18px; background: var(--card); border-bottom: 1px solid var(--border); }
+.prog-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--t2); margin-bottom: 6px; }
+.prog-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; width: 33%; background: var(--navy); border-radius: 99px; }
+.content { padding: 14px 16px; }
+.room-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); margin-bottom: 10px; overflow: hidden; }
+.rc-hdr { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.rc-left { display: flex; align-items: center; gap: 10px; }
+.rc-num { width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rc-name { font-size: 13px; font-weight: 700; color: var(--t1); }
+.rc-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.rc-expand { color: var(--t3); transition: transform .2s; }
+.rc-body { padding: 12px 14px; }
+.form-group { margin-bottom: 11px; }
+.form-label { font-size: 11px; font-weight: 600; color: var(--t2); display: block; margin-bottom: 4px; }
+.form-input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 13px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: var(--t3); }
+.form-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 11px; }
+.input-prefix-wrap { display: flex; border: 1.5px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--card); }
+.input-prefix-wrap:focus-within { border-color: var(--navy); }
+.input-prefix { padding: 9px 10px; background: var(--bg); color: var(--t2); font-size: 12px; font-weight: 600; border-right: 1.5px solid var(--border); }
+.input-prefix-wrap input { flex: 1; border: none; padding: 9px 12px; font-size: 13px; font-family: inherit; color: var(--t1); background: transparent; outline: none; }
+.bed-toggle { display: flex; align-items: center; gap: 8px; }
+.bed-lbl { font-size: 12px; color: var(--t2); font-weight: 500; flex: 1; }
+.toggle-wrap { position: relative; width: 38px; height: 22px; }
+.toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 99px; cursor: pointer; transition: background .2s; }
+.toggle-wrap input:checked + .toggle-track { background: var(--navy); }
+.toggle-track::after { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform .2s; }
+.toggle-wrap input:checked + .toggle-track::after { transform: translateX(16px); }
+.add-room-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: var(--bg); border: 1.5px dashed var(--border); border-radius: 12px; color: var(--navy2); font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 4px; }
+.footer-btns { display: flex; gap: 10px; padding: 12px 16px; background: var(--card); border-top: 1px solid var(--border); }
+.btn-back { flex: 1; padding: 12px; background: var(--bg); color: var(--t1); border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+.btn-next { flex: 2; padding: 12px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.bnav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 12px 18px 22px; border-radius: 0 0 40px 40px; }
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; color: var(--t3); cursor: pointer; text-decoration: none; }
+.ni.on { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="scroll">
+  <div class="topbar">
+    <a class="back-btn" href="property-setup-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+    <div class="tb-title">Set Up Rooms</div>
+  </div>
+  <div class="prog-bar-wrap">
+    <div class="prog-label"><span>Koramangala PG · Room setup</span><span>Room 1 of 3</span></div>
+    <div class="prog-bar"><div class="prog-fill"></div></div>
+  </div>
+  <div class="content">
+
+    <div class="room-card">
+      <div class="rc-hdr">
+        <div class="rc-left">
+          <div class="rc-num">1</div>
+          <div><div class="rc-name">Room 1</div><div class="rc-sub">Ground Floor · 4 beds · ₹6,500/bed</div></div>
+        </div>
+        <div class="rc-expand"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg></div>
+      </div>
+      <div class="rc-body">
+        <div class="form-group"><label class="form-label">Room name / number</label><input class="form-input" type="text" value="Room 1 / G01"></div>
+        <div class="form-group"><label class="form-label">Floor</label><input class="form-input" type="text" value="Ground Floor"></div>
+        <div class="form-row2">
+          <div><label class="form-label">No. of beds</label><input class="form-input" type="number" value="4"></div>
+          <div><label class="form-label">Rent / bed</label><div class="input-prefix-wrap"><span class="input-prefix">₹</span><input type="number" value="6500"></div></div>
+        </div>
+        <div class="bed-toggle">
+          <span class="bed-lbl">Shared bathroom</span>
+          <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-track"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card">
+      <div class="rc-hdr">
+        <div class="rc-left">
+          <div class="rc-num" style="background:var(--border);color:var(--t2)">2</div>
+          <div><div class="rc-name">Room 2</div><div class="rc-sub">Tap to configure</div></div>
+        </div>
+        <div class="rc-expand"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+    </div>
+
+    <div class="room-card">
+      <div class="rc-hdr">
+        <div class="rc-left">
+          <div class="rc-num" style="background:var(--border);color:var(--t2)">3</div>
+          <div><div class="rc-name">Room 3</div><div class="rc-sub">Tap to configure</div></div>
+        </div>
+        <div class="rc-expand"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </div>
+    </div>
+
+    <button class="add-room-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add another room
+    </button>
+  </div>
+  <div class="footer-btns">
+    <button class="btn-back" onclick="location.href='property-setup-mobile.html'">← Back</button>
+    <button class="btn-next" onclick="location.href='dashboard-mobile.html'">Save Property →</button>
+  </div>
+</div>
+<div class="bnav">
+  <a class="ni on" href="dashboard-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a class="ni" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Tenants</span></a>
+  <a class="ni" href="payments-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Payments</span></a>
+  <a class="ni" href="settings-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a>
+</div>
+</div>
+</body>
+</html>

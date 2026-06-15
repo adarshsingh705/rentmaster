@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentMaster — Plan &amp; Billing (Mobile)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #E5E0D8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; -webkit-font-smoothing: antialiased; }
+    :root {
+      --navy: #1C2537; --saffron: #C8A96E;
+      --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+      --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+      --pend: #D97706; --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+      --sh: 0 1px 3px rgba(28,37,55,.07), 0 2px 8px rgba(28,37,55,.05);
+      --sh-md: 0 4px 16px rgba(28,37,55,.1);
+    }
+
+    /* PHONE FRAME */
+    .phone-frame { width: 375px; background: var(--bg); border-radius: 44px; box-shadow: 0 0 0 8px #1C1C1E, 0 30px 60px rgba(0,0,0,.4); overflow: hidden; position: relative; }
+    .phone-notch { background: #1C1C1E; border-radius: 0 0 20px 20px; height: 30px; width: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+    .phone-notch-dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+
+    /* HEADER */
+    .mob-header { background: var(--navy); padding: 16px 20px 18px; display: flex; align-items: center; gap: 10px; }
+    .mob-back { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+    .mob-header-title { flex: 1; font-size: 15px; font-weight: 700; color: #fff; }
+    .mob-header-action { font-size: 12px; font-weight: 600; color: var(--saffron); cursor: pointer; }
+
+    /* SCROLL AREA */
+    .mob-scroll { max-height: 780px; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; background: var(--bg); }
+    .mob-scroll::-webkit-scrollbar { display: none; }
+
+    /* ACTIVE PLAN HERO */
+    .mob-hero { background: var(--navy); padding: 18px 20px 20px; position: relative; overflow: hidden; }
+    .mh-bg { position: absolute; right: -30px; top: -40px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.04); pointer-events: none; }
+    .mh-label { font-size: 10px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--saffron); margin-bottom: 4px; }
+    .mh-plan-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+    .mh-plan-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -.01em; }
+    .mh-badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--paid); color: #fff; letter-spacing: .04em; text-transform: uppercase; }
+    .mh-price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+    .mh-price { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+    .mh-price-sub { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 500; }
+    .mh-next { font-size: 11px; color: rgba(255,255,255,.4); margin-bottom: 14px; }
+    .mh-next strong { color: rgba(255,255,255,.65); }
+
+    /* SLOT CHIPS SCROLL */
+    .mh-chips { display: flex; gap: 7px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; scrollbar-width: none; margin-bottom: 14px; }
+    .mh-chips::-webkit-scrollbar { display: none; }
+    .mh-chip { flex-shrink: 0; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 7px 12px; font-size: 11px; color: rgba(255,255,255,.8); font-weight: 500; white-space: nowrap; }
+    .mh-chip strong { font-size: 14px; font-weight: 800; color: #fff; }
+
+    /* AUTOPAY ROW */
+    .mh-autopay { display: flex; align-items: center; gap: 7px; background: rgba(14,159,110,.14); border: 1px solid rgba(14,159,110,.28); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; }
+    .mh-ap-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; flex-shrink: 0; }
+    .mh-ap-text { flex: 1; font-size: 11px; color: rgba(255,255,255,.8); font-weight: 500; }
+    .mh-ap-text strong { color: #fff; }
+    .mh-ap-btn { font-size: 11px; font-weight: 700; color: var(--saffron); cursor: pointer; white-space: nowrap; }
+
+    /* HERO ACTIONS */
+    .mh-actions { display: flex; gap: 8px; }
+    .btn-hero-ghost { flex: 1; padding: 9px 0; border-radius: 9px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.07); color: rgba(255,255,255,.8); }
+    .btn-hero-saffron { flex: 1; padding: 9px 0; border-radius: 9px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; border: none; background: var(--saffron); color: #fff; }
+
+    /* SECTION */
+    .mob-section { padding: 16px 20px 4px; }
+    .mob-section-title { font-size: 13px; font-weight: 800; color: var(--t1); margin-bottom: 2px; }
+    .mob-section-sub { font-size: 11px; color: var(--t2); }
+
+    /* MODIFY CARD */
+    .modify-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; margin: 12px 16px; padding: 16px; box-shadow: var(--sh); }
+    .mc-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+    .mc-sub { font-size: 11px; color: var(--t2); margin-bottom: 12px; }
+
+    /* SLOT ROWS */
+    .slot-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--bg); }
+    .slot-row:last-of-type { border-bottom: none; }
+    .sr-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .sr-icon.bed  { background: rgba(14,159,110,.1); }
+    .sr-icon.room { background: rgba(28,37,55,.07); }
+    .sr-icon.shop { background: rgba(200,169,110,.12); }
+    .sr-label { flex: 1; }
+    .sr-name { font-size: 12px; font-weight: 700; color: var(--t1); }
+    .sr-rate { font-size: 10px; color: var(--t2); }
+    .sr-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .sr-stepper { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
+    .sr-btn { width: 30px; height: 32px; border: none; background: #fff; cursor: pointer; font-size: 16px; font-weight: 700; color: var(--t2); display: flex; align-items: center; justify-content: center; }
+    .sr-val { width: 36px; text-align: center; font-size: 13px; font-weight: 800; color: var(--t1); border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 32px; display: flex; align-items: center; justify-content: center; }
+    .sr-subtotal { font-size: 10px; color: var(--t2); }
+    .sr-subtotal strong { color: var(--saffron); }
+
+    /* MODIFY RESULT */
+    .mc-result { background: #F7F3EE; border-radius: 10px; padding: 12px 14px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; border: 1.5px dashed var(--border); gap: 12px; }
+    .mc-breakdown { font-size: 10px; color: var(--t2); line-height: 1.8; font-family: 'Courier New', monospace; flex: 1; min-width: 0; }
+    .mc-total { text-align: right; flex-shrink: 0; }
+    .mc-total-price { font-size: 22px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; }
+    .mc-total-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+    .mc-reauth { font-size: 10px; color: var(--pend); margin-top: 8px; display: none; align-items: center; gap: 4px; }
+    .mc-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-mc-apply { flex: 1; padding: 10px 0; border-radius: 9px; font-size: 12px; font-weight: 700; font-family: inherit; background: var(--navy); color: #fff; border: none; cursor: pointer; }
+    .btn-mc-reset { padding: 10px 16px; border-radius: 9px; font-size: 12px; font-weight: 600; font-family: inherit; background: #fff; color: var(--t1); border: 1.5px solid var(--border); cursor: pointer; }
+
+    /* SLOT EXPLAINER */
+    .slot-explainer { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin: 0 16px 12px; padding: 12px 14px; box-shadow: var(--sh); }
+    .se-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--t3); margin-bottom: 8px; }
+    .se-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+    .se-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .se-icon.bed  { background: rgba(14,159,110,.1); }
+    .se-icon.room { background: rgba(28,37,55,.07); }
+    .se-icon.shop { background: rgba(200,169,110,.12); }
+    .se-text { flex: 1; font-size: 12px; color: var(--t2); font-weight: 500; }
+    .se-chip { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 99px; background: var(--navy); color: #fff; }
+    .se-chip.comm { background: var(--saffron); }
+
+    /* TIER CARDS — horizontal scroll */
+    .tier-scroll-wrap { padding: 0 16px 4px; }
+    .tier-scroll { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; scrollbar-width: none; }
+    .tier-scroll::-webkit-scrollbar { display: none; }
+    .tier-card { flex-shrink: 0; width: 210px; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--sh); display: flex; flex-direction: column; }
+    .tier-card.active-tier { border-color: var(--paid); }
+    .tier-card.popular-tier { border-color: var(--navy); }
+    .tier-tag { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; background: rgba(28,37,55,.07); color: var(--navy); padding: 2px 8px; border-radius: 99px; display: inline-block; margin-bottom: 8px; }
+    .tier-tag.active-tag { background: var(--paid-bg); color: var(--paid); }
+    .tier-tag.popular-tag { background: var(--navy); color: #fff; }
+    .tier-price { font-size: 26px; font-weight: 800; color: var(--saffron); letter-spacing: -.03em; }
+    .tier-rate { font-size: 11px; color: var(--t3); font-weight: 500; margin-bottom: 3px; }
+    .tier-range { font-size: 10px; color: var(--t2); margin-bottom: 8px; }
+    .tier-example { font-size: 11px; color: var(--t2); margin-bottom: 10px; line-height: 1.5; }
+    .tier-example strong { color: var(--saffron); }
+    .tier-divider { height: 1px; background: var(--border); margin-bottom: 10px; }
+    .tier-features { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; flex: 1; }
+    .tf-row { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: var(--t2); line-height: 1.4; }
+    .tf-check { flex-shrink: 0; margin-top: 1px; }
+    .tf-check.green { color: var(--paid); }
+    .btn-tier-active { width: 100%; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: default; border: 1.5px solid var(--paid); background: var(--paid-bg); color: var(--paid); }
+    .btn-tier-primary { width: 100%; padding: 9px 0; border-radius: 8px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; border: none; background: var(--navy); color: #fff; }
+    .btn-tier-ghost { width: 100%; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1.5px solid var(--border); background: #EDE8E0; color: var(--t2); }
+    .new-badge { font-size: 9px; font-weight: 700; background: rgba(14,159,110,.12); color: var(--paid); padding: 1px 6px; border-radius: 4px; margin-left: 3px; vertical-align: middle; }
+    .soon-badge { font-size: 9px; font-weight: 600; background: rgba(100,110,130,.1); color: var(--t3); padding: 1px 5px; border-radius: 4px; margin-left: 3px; vertical-align: middle; }
+
+    /* CALCULATOR */
+    .calc-card { background: var(--card); border: 1.5px dashed var(--border); border-radius: 12px; margin: 0 16px 16px; padding: 14px; }
+    .cc-title { font-size: 12px; font-weight: 700; color: var(--t1); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .cc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .cc-group { display: flex; flex-direction: column; gap: 4px; }
+    .cc-group label { font-size: 9px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .06em; }
+    .cc-group .rate { font-size: 9px; color: var(--saffron); font-weight: 600; }
+    .cc-input { padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--t1); background: var(--bg); outline: none; width: 100%; }
+    .cc-input:focus { border-color: var(--navy); background: #fff; }
+    .cc-result { background: var(--bg); border-radius: 8px; padding: 10px 12px; }
+    .ccr-slots { font-size: 11px; color: var(--t2); font-weight: 600; margin-bottom: 2px; }
+    .ccr-price { font-size: 22px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; }
+    .ccr-sub { font-size: 10px; color: var(--t3); }
+    .cc-breakdown { font-size: 10px; color: var(--t2); line-height: 1.9; font-family: 'Courier New', monospace; margin-top: 8px; }
+
+    /* BILLING HISTORY */
+    .billing-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin: 0 16px 16px; padding: 14px; box-shadow: var(--sh); }
+    .bc-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 12px; }
+    .billing-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--bg); }
+    .billing-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .br-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--paid-bg); color: var(--paid); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .br-desc { font-size: 12px; font-weight: 600; color: var(--t1); }
+    .br-date { font-size: 10px; color: var(--t3); margin-top: 2px; }
+    .br-right { margin-left: auto; text-align: right; }
+    .br-amount { font-size: 14px; font-weight: 800; color: var(--t1); }
+    .br-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: var(--paid-bg); color: var(--paid); margin-top: 2px; display: inline-block; }
+
+    /* FAQ */
+    .faq-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin: 0 16px 24px; padding: 14px; box-shadow: var(--sh); }
+    .faq-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 10px; }
+    .faq-item { padding: 10px 0; border-bottom: 1px solid var(--bg); cursor: pointer; }
+    .faq-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .faq-q { font-size: 12px; font-weight: 600; color: var(--t1); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .faq-q svg { flex-shrink: 0; color: var(--t3); margin-top: 1px; transition: transform .2s; }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a { font-size: 11px; color: var(--t2); line-height: 1.7; margin-top: 7px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* HOME INDICATOR */
+    .phone-home { height: 28px; display: flex; align-items: center; justify-content: center; background: var(--bg); }
+    .home-bar { width: 120px; height: 4px; border-radius: 99px; background: rgba(28,37,55,.2); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--navy); color: #fff; border-radius: 10px; padding: 10px 18px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px; box-shadow: var(--sh-md); opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; z-index: 200; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <div class="phone-notch"><div class="phone-notch-dot"></div></div>
+
+    <!-- HEADER -->
+    <div class="mob-header">
+      <div class="mob-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <div class="mob-header-title">Plan &amp; Billing</div>
+      <div class="mob-header-action" onclick="document.getElementById('modify-section').scrollIntoView({behavior:'smooth'})">Modify</div>
+    </div>
+
+    <div class="mob-scroll">
+
+      <!-- HERO -->
+      <div class="mob-hero">
+        <div class="mh-bg"></div>
+        <div class="mh-label">Active Subscription</div>
+        <div class="mh-plan-row">
+          <div class="mh-plan-name">Tier 1 · Per Slot</div>
+          <span class="mh-badge">Active</span>
+        </div>
+        <div class="mh-price-row">
+          <div class="mh-price">₹1,680</div>
+          <div class="mh-price-sub">/month</div>
+        </div>
+        <div class="mh-next">Next debit <strong>5 July 2026</strong> · auto-debited</div>
+
+        <div class="mh-chips">
+          <div class="mh-chip">🛏 <strong>20</strong> PG beds × ₹60 = ₹1,200</div>
+          <div class="mh-chip">🚪 <strong>8</strong> rooms × ₹60 = ₹480</div>
+          <div class="mh-chip" style="opacity:.45">🏪 <strong>0</strong> shops × ₹80 = ₹0</div>
+        </div>
+
+        <div class="mh-autopay">
+          <div class="mh-ap-dot"></div>
+          <div class="mh-ap-text">UPI AutoPay via <strong>GPay ···1234</strong></div>
+          <div class="mh-ap-btn" onclick="showToast('Manage auto-pay')">Manage →</div>
+        </div>
+
+        <div class="mh-actions">
+          <button class="btn-hero-ghost" onclick="showToast('View billing history below')">History</button>
+          <button class="btn-hero-saffron" onclick="document.getElementById('modify-section').scrollIntoView({behavior:'smooth'})">Modify Plan</button>
+        </div>
+      </div>
+
+      <!-- MODIFY -->
+      <div class="mob-section" id="modify-section">
+        <div class="mob-section-title">Modify Your Plan</div>
+        <div class="mob-section-sub">Adjust slots — changes apply next billing cycle</div>
+      </div>
+
+      <div class="modify-card">
+        <div class="mc-title">Slot Count Editor</div>
+        <div class="mc-sub">Tap + / − to adjust. New total updates instantly.</div>
+
+        <div class="slot-row">
+          <div class="sr-icon bed">🛏</div>
+          <div class="sr-label">
+            <div class="sr-name">PG Beds</div>
+            <div class="sr-rate">₹60/slot</div>
+          </div>
+          <div class="sr-right">
+            <div class="sr-stepper">
+              <button class="sr-btn" onclick="mAdjust('beds',-1)">−</button>
+              <div class="sr-val" id="m-beds">20</div>
+              <button class="sr-btn" onclick="mAdjust('beds',1)">+</button>
+            </div>
+            <div class="sr-subtotal" id="m-beds-sub">= <strong>₹1,200</strong></div>
+          </div>
+        </div>
+
+        <div class="slot-row">
+          <div class="sr-icon room">🚪</div>
+          <div class="sr-label">
+            <div class="sr-name">Flat Rooms</div>
+            <div class="sr-rate">₹60/slot</div>
+          </div>
+          <div class="sr-right">
+            <div class="sr-stepper">
+              <button class="sr-btn" onclick="mAdjust('rooms',-1)">−</button>
+              <div class="sr-val" id="m-rooms">8</div>
+              <button class="sr-btn" onclick="mAdjust('rooms',1)">+</button>
+            </div>
+            <div class="sr-subtotal" id="m-rooms-sub">= <strong>₹480</strong></div>
+          </div>
+        </div>
+
+        <div class="slot-row">
+          <div class="sr-icon shop">🏪</div>
+          <div class="sr-label">
+            <div class="sr-name">Shops / Offices</div>
+            <div class="sr-rate" style="color:var(--saffron)">₹80/slot · commercial</div>
+          </div>
+          <div class="sr-right">
+            <div class="sr-stepper">
+              <button class="sr-btn" onclick="mAdjust('shops',-1)">−</button>
+              <div class="sr-val" id="m-shops">0</div>
+              <button class="sr-btn" onclick="mAdjust('shops',1)">+</button>
+            </div>
+            <div class="sr-subtotal" id="m-shops-sub">= <strong>₹0</strong></div>
+          </div>
+        </div>
+
+        <div class="mc-result">
+          <div class="mc-breakdown" id="m-breakdown">Res Tier 1: 28 × ₹60 = ₹1,680</div>
+          <div class="mc-total">
+            <div style="font-size:10px;color:var(--t3);margin-bottom:2px">New total</div>
+            <div class="mc-total-price" id="m-total">₹1,680</div>
+            <div class="mc-total-sub" id="m-total-sub">No change</div>
+          </div>
+        </div>
+        <div class="mc-reauth" id="m-reauth">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Re-authorization required via WhatsApp
+        </div>
+        <div class="mc-actions">
+          <button class="btn-mc-reset" onclick="mReset()">Reset</button>
+          <button class="btn-mc-apply" onclick="showToast('Plan updated — effective next billing cycle ✓')">Apply Changes</button>
+        </div>
+      </div>
+
+      <!-- SLOT EXPLAINER -->
+      <div class="mob-section" style="padding-bottom:10px">
+        <div class="mob-section-title">How Slots Work</div>
+      </div>
+      <div class="slot-explainer">
+        <div class="se-title">1 slot per unit — rate drops as you grow</div>
+        <div class="se-row">
+          <div class="se-icon bed">🛏</div>
+          <div class="se-text">1 PG bed</div>
+          <span class="se-chip">₹60/slot</span>
+        </div>
+        <div class="se-row">
+          <div class="se-icon room">🚪</div>
+          <div class="se-text">1 flat room</div>
+          <span class="se-chip">₹60/slot</span>
+        </div>
+        <div class="se-row">
+          <div class="se-icon shop">🏪</div>
+          <div class="se-text">1 shop or office</div>
+          <span class="se-chip comm">₹80/slot</span>
+        </div>
+      </div>
+
+      <!-- TIER CARDS -->
+      <div class="mob-section" style="padding-bottom:10px">
+        <div class="mob-section-title">Pricing Tiers</div>
+        <div class="mob-section-sub">Rate auto-drops at 30 and 100 slots</div>
+      </div>
+      <div class="tier-scroll-wrap">
+        <div class="tier-scroll">
+
+          <div class="tier-card active-tier">
+            <div class="tier-tag active-tag">✓ Your Tier</div>
+            <div class="tier-price">₹60</div>
+            <div class="tier-rate">per residential slot/month</div>
+            <div class="tier-range">1–30 residential slots</div>
+            <div class="tier-example">20 beds = <strong>₹1,200/mo</strong></div>
+            <div class="tier-divider"></div>
+            <div class="tier-features">
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>PG + rooms + shops</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Electricity billing</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Tenant UPI AutoPay <span class="new-badge">New</span></div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>WhatsApp reminders</div>
+            </div>
+            <button class="btn-tier-active">✓ Current Tier</button>
+          </div>
+
+          <div class="tier-card popular-tier">
+            <div class="tier-tag popular-tag">Most Popular</div>
+            <div class="tier-price">₹50</div>
+            <div class="tier-rate">per residential slot/month</div>
+            <div class="tier-range">31–100 residential slots</div>
+            <div class="tier-example">50 beds = <strong>₹2,700/mo</strong></div>
+            <div class="tier-divider"></div>
+            <div class="tier-features">
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Everything in Tier 1</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>₹50/slot — 17% savings</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>PDF receipts + CSV</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>eSign <span class="soon-badge">Phase 2</span></div>
+            </div>
+            <button class="btn-tier-primary" onclick="showToast('Contact support to upgrade')">Upgrade to Tier 2</button>
+          </div>
+
+          <div class="tier-card">
+            <div class="tier-tag">Enterprise</div>
+            <div class="tier-price">₹40</div>
+            <div class="tier-rate">per residential slot/month</div>
+            <div class="tier-range">101+ residential slots</div>
+            <div class="tier-example">200 beds = <strong>₹9,800/mo</strong></div>
+            <div class="tier-divider"></div>
+            <div class="tier-features">
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Everything in Tier 2</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Best rate — ₹40/slot</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>REST API access</div>
+              <div class="tf-row"><svg class="tf-check green" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>Account manager</div>
+            </div>
+            <button class="btn-tier-ghost" onclick="showToast('Contact support for Tier 3')">Contact Us</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CALCULATOR -->
+      <div class="mob-section" style="padding-bottom:10px;margin-top:16px">
+        <div class="mob-section-title">Plan Calculator</div>
+        <div class="mob-section-sub">See your exact monthly cost</div>
+      </div>
+      <div class="calc-card">
+        <div class="cc-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/></svg>
+          Enter your slot counts
+        </div>
+        <div class="cc-row">
+          <div class="cc-group">
+            <label>PG Beds</label>
+            <div class="rate">₹60</div>
+            <input class="cc-input" type="number" id="c-beds" value="20" min="0" oninput="cCalc()">
+          </div>
+          <div class="cc-group">
+            <label>Rooms</label>
+            <div class="rate">₹60</div>
+            <input class="cc-input" type="number" id="c-rooms" value="8" min="0" oninput="cCalc()">
+          </div>
+          <div class="cc-group">
+            <label>Shops</label>
+            <div class="rate" style="color:var(--saffron)">₹80</div>
+            <input class="cc-input" type="number" id="c-shops" value="0" min="0" oninput="cCalc()">
+          </div>
+        </div>
+        <div class="cc-result">
+          <div class="ccr-slots" id="c-slots">28 total slots</div>
+          <div class="ccr-price" id="c-price">₹1,680</div>
+          <div class="ccr-sub">/month</div>
+        </div>
+        <div class="cc-breakdown" id="c-breakdown">Res Tier 1: 28 × ₹60 = ₹1,680</div>
+      </div>
+
+      <!-- BILLING HISTORY -->
+      <div class="mob-section" style="padding-bottom:10px">
+        <div class="mob-section-title">Billing History</div>
+      </div>
+      <div class="billing-card">
+        <div class="billing-row">
+          <div class="br-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="br-desc">28 slots · Jun 2026</div>
+            <div class="br-date">Debited 5 Jun 2026 · GPay</div>
+          </div>
+          <div class="br-right">
+            <div class="br-amount">₹1,680</div>
+            <span class="br-badge">Paid</span>
+          </div>
+        </div>
+        <div class="billing-row">
+          <div class="br-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="br-desc">28 slots · May 2026</div>
+            <div class="br-date">Debited 5 May 2026 · GPay</div>
+          </div>
+          <div class="br-right">
+            <div class="br-amount">₹1,680</div>
+            <span class="br-badge">Paid</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mob-section" style="padding-bottom:10px">
+        <div class="mob-section-title">FAQ</div>
+      </div>
+      <div class="faq-card">
+        <div class="faq-item" onclick="faqToggle(this)">
+          <div class="faq-q">What counts as a slot?<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">1 PG bed = 1 slot (₹60). 1 flat room = 1 slot (₹60). 1 shop = 1 slot (₹80). Totals are summed across all properties. Residential and commercial tiers are calculated independently.</div>
+        </div>
+        <div class="faq-item" onclick="faqToggle(this)">
+          <div class="faq-q">What happens when I add a property?<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">Adding a property increases your slot count and updates your plan. If within your mandate limit, it's automatic. If it exceeds the limit, you'll get a WhatsApp re-auth link. Changes take effect from the next billing cycle only.</div>
+        </div>
+        <div class="faq-item" onclick="faqToggle(this)">
+          <div class="faq-q">Does RentMaster take a cut of rent?<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">No. Rent goes directly to your bank via Cashfree. RentMaster charges a flat per-slot fee only — completely separate from rent amounts.</div>
+        </div>
+        <div class="faq-item" onclick="faqToggle(this)">
+          <div class="faq-q">Is electricity billing included?<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">Yes — free in all paid tiers. Choose sub-meter, flat-rate, or shared-split billing per property. Electricity amount is combined with rent in the same WhatsApp payment link.</div>
+        </div>
+      </div>
+
+    </div><!-- /mob-scroll -->
+
+    <div class="phone-home">
+      <div class="home-bar"></div>
+    </div>
+  </div><!-- /phone-frame -->
+
+  <div class="toast" id="toast">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script>
+    var _mBeds = 20, _mRooms = 8, _mShops = 0;
+    var _curBeds = 20, _curRooms = 8, _curShops = 0;
+    var MAX_AMT = 2520;
+
+    function fmtINR(n) { return n.toLocaleString('en-IN'); }
+
+    function calcRes(slots) {
+      if (slots <= 0) return { cost: 0, parts: [] };
+      var cost = 0, parts = [];
+      var t1 = Math.min(slots, 30); cost += t1 * 60; parts.push('Res T1: ' + t1 + '×₹60=₹' + fmtINR(t1*60));
+      if (slots > 30) { var t2 = Math.min(slots-30,70); cost += t2*50; parts.push('T2: '+t2+'×₹50=₹'+fmtINR(t2*50)); }
+      if (slots > 100) { var t3 = slots-100; cost += t3*40; parts.push('T3: '+t3+'×₹40=₹'+fmtINR(t3*40)); }
+      return { cost: cost, parts: parts };
+    }
+    function calcComm(slots) {
+      if (slots <= 0) return { cost: 0, parts: [] };
+      var cost = 0, parts = [];
+      var t1 = Math.min(slots,30); cost += t1*80; parts.push('Comm T1: '+t1+'×₹80=₹'+fmtINR(t1*80));
+      if (slots > 30) { var t2 = Math.min(slots-30,70); cost += t2*65; parts.push('C T2: '+t2+'×₹65=₹'+fmtINR(t2*65)); }
+      if (slots > 100) { var t3 = slots-100; cost += t3*50; parts.push('C T3: '+t3+'×₹50=₹'+fmtINR(t3*50)); }
+      return { cost: cost, parts: parts };
+    }
+
+    function mAdjust(type, d) {
+      if (type === 'beds')  { _mBeds  = Math.max(0, _mBeds  + d); document.getElementById('m-beds').textContent  = _mBeds; }
+      if (type === 'rooms') { _mRooms = Math.max(0, _mRooms + d); document.getElementById('m-rooms').textContent = _mRooms; }
+      if (type === 'shops') { _mShops = Math.max(0, _mShops + d); document.getElementById('m-shops').textContent = _mShops; }
+      mUpdate();
+    }
+
+    function mUpdate() {
+      var rRes = calcRes(_mBeds + _mRooms), rComm = calcComm(_mShops);
+      var nt = rRes.cost + rComm.cost, ot = calcRes(_curBeds+_curRooms).cost + calcComm(_curShops).cost;
+      document.getElementById('m-beds-sub').innerHTML  = '= <strong>₹' + fmtINR(_mBeds*60)  + '</strong>';
+      document.getElementById('m-rooms-sub').innerHTML = '= <strong>₹' + fmtINR(_mRooms*60) + '</strong>';
+      document.getElementById('m-shops-sub').innerHTML = '= <strong>₹' + fmtINR(_mShops*80) + '</strong>';
+      var parts = rRes.parts.concat(rComm.parts);
+      document.getElementById('m-breakdown').textContent = parts.join('  ·  ') || 'No slots selected';
+      document.getElementById('m-total').textContent = '₹' + fmtINR(nt);
+      var diff = nt - ot;
+      document.getElementById('m-total-sub').textContent = diff === 0 ? 'No change' : (diff > 0 ? '+₹'+fmtINR(diff)+'/mo' : '−₹'+fmtINR(Math.abs(diff))+'/mo');
+      var r = document.getElementById('m-reauth'); r.style.display = nt > MAX_AMT ? 'flex' : 'none';
+    }
+
+    function mReset() {
+      _mBeds = _curBeds; _mRooms = _curRooms; _mShops = _curShops;
+      document.getElementById('m-beds').textContent  = _mBeds;
+      document.getElementById('m-rooms').textContent = _mRooms;
+      document.getElementById('m-shops').textContent = _mShops;
+      mUpdate();
+    }
+
+    function cCalc() {
+      var beds  = parseInt(document.getElementById('c-beds').value)  || 0;
+      var rooms = parseInt(document.getElementById('c-rooms').value) || 0;
+      var shops = parseInt(document.getElementById('c-shops').value) || 0;
+      var rRes = calcRes(beds+rooms), rComm = calcComm(shops);
+      var total = rRes.cost + rComm.cost;
+      var parts = rRes.parts.concat(rComm.parts);
+      if (total > 0) parts.push('→ ₹'+fmtINR(total)+'/mo');
+      document.getElementById('c-slots').textContent = (beds+rooms+shops)+' total slots';
+      document.getElementById('c-price').textContent = total > 0 ? '₹'+fmtINR(total) : '₹0';
+      document.getElementById('c-breakdown').textContent = parts.join('  ·  ') || 'Enter counts above';
+    }
+
+    function faqToggle(el) { el.classList.toggle('open'); }
+
+    var _tt = null;
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      clearTimeout(_tt);
+      _tt = setTimeout(function(){ t.classList.remove('show'); }, 2800);
+    }
+
+    mUpdate(); cCalc();
+  </script>
+</body>
+</html>

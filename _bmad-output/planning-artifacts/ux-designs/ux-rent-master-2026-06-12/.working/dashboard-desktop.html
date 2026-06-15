@@ -17,26 +17,26 @@
 
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #E8EAF0;
-      color: #0F1623;
+      background: #F0EDE8;
+      color: #1C2537;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       display: flex;
     }
 
     :root {
-      --navy: #1B2D4F;
-      --navy2: #243A63;
-      --navy-lt: rgba(27, 45, 79, .07);
-      --saffron: #F97316;
-      --t1: #0F1623;
-      --t2: #5A6473;
-      --t3: #9CA3AE;
-      --card: #FFFFFF;
-      --bg: #E8EAF0;
-      --border: #DDE1EC;
-      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
-      --sh-md: 0 4px 16px rgba(15, 22, 35, .08), 0 1px 4px rgba(15, 22, 35, .05);
+      --navy: #1C2537;
+      --navy2: #6B5B45;
+      --navy-lt: rgba(107, 91, 69, .07);
+      --saffron: #C8A96E;
+      --t1: #1C2537;
+      --t2: #6B5B45;
+      --t3: #9B8E7E;
+      --card: #FAF8F5;
+      --bg: #F0EDE8;
+      --border: #E2D9CC;
+      --sh: 0 1px 3px rgba(28, 37, 55, .06), 0 2px 8px rgba(28, 37, 55, .05);
+      --sh-md: 0 4px 16px rgba(28, 37, 55, .08), 0 1px 4px rgba(28, 37, 55, .05);
       --paid: #0E9F6E;
       --paid-bg: rgba(14, 159, 110, .09);
       --pend: #D97706;
@@ -155,6 +155,58 @@
       padding: 6px 12px 4px;
     }
 
+    .sb-collect {
+      margin: 0 12px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 12px;
+      padding: 14px 14px 12px;
+    }
+    .sb-collect-eye {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.38);
+      margin-bottom: 6px;
+    }
+    .sb-collect-amt {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.03em;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .sb-collect-amt span { font-size: 13px; font-weight: 600; opacity: .6; }
+    .sb-seg {
+      display: flex;
+      height: 5px;
+      border-radius: 99px;
+      overflow: hidden;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+    .sb-seg-g { flex: 12; background: var(--paid); border-radius: 99px; }
+    .sb-seg-a { flex: 3; background: var(--pend); border-radius: 99px; }
+    .sb-seg-r { flex: 1; background: var(--late); border-radius: 99px; }
+    .sb-collect-stats {
+      display: flex;
+      gap: 0;
+    }
+    .sb-cstat {
+      flex: 1;
+      border-right: 1px solid rgba(255,255,255,.08);
+      padding-right: 8px;
+      margin-right: 8px;
+    }
+    .sb-cstat:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+    .sb-cstat-val { font-size: 16px; font-weight: 800; line-height: 1; margin-bottom: 2px; }
+    .sb-cstat-lbl { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.35); }
+    .sb-cstat-val.g { color: var(--paid); }
+    .sb-cstat-val.a { color: var(--pend); }
+    .sb-cstat-val.r { color: var(--late); }
+
     .sb-add-btn {
       margin: 16px 12px;
       background: var(--saffron);
@@ -235,7 +287,7 @@
       justify-content: space-between;
       height: 60px;
       flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(15, 22, 35, .04);
+      box-shadow: 0 1px 3px rgba(28, 37, 55, .04);
     }
 
     .topbar-left {
@@ -266,7 +318,7 @@
       font-size: 12px;
       color: var(--t2);
       font-weight: 500;
-      background: #F4F5F8;
+      background: #EDE8E0;
       padding: 5px 12px;
       border-radius: 8px;
     }
@@ -275,7 +327,7 @@
       width: 36px;
       height: 36px;
       border-radius: 9px;
-      background: #F4F5F8;
+      background: #EDE8E0;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -565,7 +617,7 @@
       align-items: center;
       gap: 8px;
       padding: 13px 18px;
-      border-bottom: 1px solid #F0F2F8;
+      border-bottom: 1px solid #EDE8E0;
     }
 
     .th-dot {
@@ -595,7 +647,7 @@
       align-items: center;
       gap: 12px;
       padding: 11px 18px;
-      border-bottom: 1px solid #F5F6FA;
+      border-bottom: 1px solid #EDE8E0;
       transition: background .1s;
       cursor: pointer;
     }
@@ -605,7 +657,7 @@
     }
 
     .trow:hover {
-      background: #FAFBFD;
+      background: #F5F1EB;
     }
 
     .tava {
@@ -694,7 +746,7 @@
     }
 
     .action-btn:hover {
-      background: rgba(27, 45, 79, .12);
+      background: rgba(107, 91, 69, .12);
     }
 
     /* RIGHT COLUMN */
@@ -727,7 +779,7 @@
     }
 
     .qa-item {
-      background: #F5F7FB;
+      background: #F5F1EB;
       border-radius: 10px;
       padding: 13px 14px;
       cursor: pointer;
@@ -736,7 +788,7 @@
     }
 
     .qa-item:hover {
-      background: #EEF1FA;
+      background: #EDE8E0;
     }
 
     .qa-item.primary {
@@ -755,8 +807,8 @@
     }
 
     .qi-navy {
-      background: rgba(27, 45, 79, .08);
-      color: var(--navy);
+      background: rgba(107, 91, 69, .08);
+      color: var(--navy2);
     }
 
     .qi-amber {
@@ -853,6 +905,29 @@
             d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
         </svg>Settings</a>
     </nav>
+    <div class="sb-collect">
+      <div class="sb-collect-eye">June 2026 · Collection</div>
+      <div class="sb-collect-amt">₹1,14,000</div>
+      <div class="sb-seg">
+        <div class="sb-seg-g"></div>
+        <div class="sb-seg-a"></div>
+        <div class="sb-seg-r"></div>
+      </div>
+      <div class="sb-collect-stats">
+        <div class="sb-cstat">
+          <div class="sb-cstat-val g">12</div>
+          <div class="sb-cstat-lbl">Paid</div>
+        </div>
+        <div class="sb-cstat">
+          <div class="sb-cstat-val a">3</div>
+          <div class="sb-cstat-lbl">Pending</div>
+        </div>
+        <div class="sb-cstat">
+          <div class="sb-cstat-val r">1</div>
+          <div class="sb-cstat-lbl">Late</div>
+        </div>
+      </div>
+    </div>
     <button class="sb-add-btn" onclick="location.href='add-tenant.html'"><svg width="14" height="14" viewBox="0 0 24 24"
         fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
         <line x1="12" y1="5" x2="12" y2="19" />
@@ -1019,7 +1094,7 @@
               <button class="action-btn" style="margin-left:8px">Remind</button>
             </div>
             <div class="trow" onclick="location.href='tenant-detail.html'" style="cursor:pointer">
-              <div class="tava" style="background:#FFF7ED;color:#F97316">A</div>
+              <div class="tava" style="background:#FBF5EA;color:#C8A96E">A</div>
               <div class="tinfo">
                 <div class="tname">Anjali Mehta</div>
                 <div class="tsub">Koramangala PG · Room 4 · Bed A</div>

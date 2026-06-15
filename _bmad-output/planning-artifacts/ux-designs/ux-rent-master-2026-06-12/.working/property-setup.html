@@ -17,25 +17,25 @@
 
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #E8EAF0;
-      color: #0F1623;
+      background: #F0EDE8;
+      color: #1C2537;
       min-height: 100vh;
       display: flex;
       -webkit-font-smoothing: antialiased;
     }
 
     :root {
-      --navy: #1B2D4F;
-      --navy2: #243A63;
-      --saffron: #F97316;
-      --t1: #0F1623;
-      --t2: #5A6473;
-      --t3: #9CA3AE;
-      --card: #FFFFFF;
-      --bg: #E8EAF0;
-      --border: #DDE1EC;
-      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
-      --sh-md: 0 4px 16px rgba(15, 22, 35, .09), 0 1px 4px rgba(15, 22, 35, .05);
+      --navy: #1C2537;
+      --navy2: #6B5B45;
+      --saffron: #C8A96E;
+      --t1: #1C2537;
+      --t2: #6B5B45;
+      --t3: #9B8E7E;
+      --card: #FAF8F5;
+      --bg: #F0EDE8;
+      --border: #E2D9CC;
+      --sh: 0 1px 3px rgba(28, 37, 55, .06), 0 2px 8px rgba(28, 37, 55, .05);
+      --sh-md: 0 4px 16px rgba(28, 37, 55, .09), 0 1px 4px rgba(28, 37, 55, .05);
       --paid: #0E9F6E;
       --paid-bg: rgba(14, 159, 110, .09);
       --pend: #D97706;
@@ -324,7 +324,7 @@
       width: 42px;
       height: 42px;
       border-radius: 11px;
-      background: rgba(27, 45, 79, .07);
+      background: rgba(28, 37, 55, .07);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -367,7 +367,7 @@
     }
 
     .badge-bed {
-      background: rgba(27, 45, 79, .07);
+      background: rgba(28, 37, 55, .07);
       color: var(--navy);
     }
 
@@ -468,7 +468,7 @@
       width: 48px;
       height: 48px;
       border-radius: 12px;
-      background: rgba(27, 45, 79, .06);
+      background: rgba(28, 37, 55, .06);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -490,7 +490,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 22, 35, .25);
+      background: rgba(28, 37, 55, .25);
       z-index: 40;
     }
 
@@ -501,7 +501,7 @@
       width: 440px;
       height: 100vh;
       background: var(--card);
-      box-shadow: -4px 0 32px rgba(15, 22, 35, .12);
+      box-shadow: -4px 0 32px rgba(28, 37, 55, .12);
       z-index: 50;
       display: flex;
       flex-direction: column;
@@ -612,7 +612,7 @@
     /* RADIO CARDS for property type */
     .type-cards {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 10px;
     }
 
@@ -625,19 +625,19 @@
     }
 
     .type-card:hover {
-      border-color: rgba(27, 45, 79, .3);
+      border-color: rgba(28, 37, 55, .3);
     }
 
     .type-card.selected {
       border-color: var(--navy);
-      background: rgba(27, 45, 79, .03);
+      background: rgba(28, 37, 55, .03);
     }
 
     .type-card-icon {
       width: 36px;
       height: 36px;
       border-radius: 9px;
-      background: rgba(27, 45, 79, .07);
+      background: rgba(28, 37, 55, .07);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -679,6 +679,35 @@
       background: var(--navy);
       color: #fff;
     }
+
+    .type-card.commercial.selected .type-card-icon { background: var(--saffron); }
+    .type-card.commercial.selected { border-color: var(--saffron); }
+    .type-card.commercial.selected .type-check { border-color: var(--saffron); background: var(--saffron); }
+
+    /* PLAN IMPACT BOX */
+    .plan-impact {
+      background: #F7F3EE;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 4px;
+    }
+    .pi-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .pi-title { font-size: 12px; font-weight: 700; color: var(--t1); display: flex; align-items: center; gap: 6px; }
+    .pi-title-icon { width: 20px; height: 20px; border-radius: 5px; background: rgba(28,37,55,.08); display: flex; align-items: center; justify-content: center; }
+    .pi-link { font-size: 11px; font-weight: 600; color: var(--navy); cursor: pointer; text-decoration: underline; }
+    .pi-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(226,217,204,.6); font-size: 12px; color: var(--t2); }
+    .pi-row:last-of-type { border-bottom: none; }
+    .pi-row-val { font-weight: 600; color: var(--t1); }
+    .pi-new-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 6px; border-top: 1.5px dashed var(--border); margin-top: 4px; }
+    .pi-new-label { font-size: 12px; font-weight: 600; color: var(--t2); }
+    .pi-new-price { font-size: 20px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; }
+    .pi-diff { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
+    .pi-diff.up { background: rgba(217,119,6,.1); color: var(--pend); }
+    .pi-diff.down { background: var(--paid-bg); color: var(--paid); }
+    .pi-diff.none { background: rgba(28,37,55,.07); color: var(--t3); }
+    .pi-reauth-note { font-size: 11px; color: var(--pend); display: flex; align-items: center; gap: 5px; margin-top: 8px; background: rgba(217,119,6,.06); border-radius: 7px; padding: 6px 10px; display: none; }
+    .pi-comm-note { font-size: 11px; color: var(--t2); margin-top: 6px; padding: 7px 10px; background: rgba(200,169,110,.08); border-radius: 7px; border-left: 2px solid var(--saffron); display: none; }
   </style>
 </head>
 
@@ -898,7 +927,7 @@
             </svg>
           </div>
           <div class="prop-add-text">Add a property</div>
-          <div class="prop-add-sub">PG hostel or residential flat</div>
+          <div class="prop-add-sub">PG, residential flat, or commercial</div>
         </div>
 
       </div>
@@ -930,7 +959,7 @@
       <div class="form-group">
         <label class="form-label" style="margin-bottom:10px">Property type</label>
         <div class="type-cards">
-          <div class="type-card selected" onclick="selectType(this)">
+          <div class="type-card selected" onclick="selectType(this,'pg')">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
               <div class="type-card-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -946,9 +975,9 @@
               </div>
             </div>
             <div class="type-card-label">Bed-based PG</div>
-            <div class="type-card-desc">Rooms contain individual named beds</div>
+            <div class="type-card-desc">Named beds per room</div>
           </div>
-          <div class="type-card" onclick="selectType(this)">
+          <div class="type-card" onclick="selectType(this,'room')">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
               <div class="type-card-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -960,9 +989,32 @@
               <div class="type-check"></div>
             </div>
             <div class="type-card-label">Room-based</div>
-            <div class="type-card-desc">Flat or house with individual rooms</div>
+            <div class="type-card-desc">Flat or house with rooms</div>
+          </div>
+          <div class="type-card commercial" onclick="selectType(this,'commercial')">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+              <div class="type-card-icon" style="background:rgba(200,169,110,.12);color:var(--saffron)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <path d="M3 9h18v12a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                  <path d="M3 9l2-5h14l2 5"/>
+                  <line x1="9" y1="22" x2="9" y2="13"/>
+                  <line x1="15" y1="22" x2="15" y2="13"/>
+                </svg>
+              </div>
+              <div class="type-check"></div>
+            </div>
+            <div class="type-card-label">Commercial</div>
+            <div class="type-card-desc">Shops, offices or market units</div>
           </div>
         </div>
+      </div>
+
+      <!-- UNIT COUNT — shown after type selection -->
+      <div class="form-group" id="unit-count-group">
+        <label class="form-label" id="unit-count-label">Number of beds</label>
+        <input class="form-input" type="number" id="unit-count-input" min="1" max="999" placeholder="e.g. 20" value="5" oninput="updatePlanImpact()">
+        <div class="form-hint" id="unit-count-hint">Each bed counts as 1 slot at ₹60/month</div>
       </div>
 
       <div class="form-group">
@@ -992,28 +1044,180 @@
           style="resize:none;line-height:1.5"></textarea>
       </div>
 
+      <!-- PLAN IMPACT -->
+      <div class="form-group">
+        <label class="form-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Plan Impact
+        </label>
+        <div class="plan-impact" id="plan-impact-box">
+          <div class="pi-header">
+            <div class="pi-title">
+              <div class="pi-title-icon">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              Subscription update
+            </div>
+            <a class="pi-link" href="subscription.html" target="_blank">Manage Plan →</a>
+          </div>
+          <div class="pi-row">
+            <span>Current slots</span>
+            <span class="pi-row-val" id="pi-current-slots">28 slots (₹1,680/mo)</span>
+          </div>
+          <div class="pi-row">
+            <span id="pi-adding-label">Adding</span>
+            <span class="pi-row-val" id="pi-adding-val">5 beds = +5 slots</span>
+          </div>
+          <div class="pi-row">
+            <span>New total</span>
+            <span class="pi-row-val" id="pi-new-slots">33 slots</span>
+          </div>
+          <div class="pi-new-row">
+            <div class="pi-new-label">New monthly cost</div>
+            <div style="display:flex;align-items:center">
+              <div class="pi-new-price" id="pi-new-price">₹1,980</div>
+              <span class="pi-diff up" id="pi-diff">+₹300/mo</span>
+            </div>
+          </div>
+          <div class="pi-reauth-note" id="pi-reauth-note">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            New amount exceeds your mandate limit — you'll re-authorize once via WhatsApp (30 sec)
+          </div>
+          <div class="pi-comm-note" id="pi-comm-note">
+            Commercial slots billed at ₹80/slot · Includes CAM billing, escalation tracking, and agreement expiry alerts
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="so-footer">
       <button class="btn-secondary" onclick="closePanel()">Cancel</button>
       <button class="btn-primary"
-        style="flex:1;justify-content:center;padding:11px;font-size:14px;border-radius:12px">Save Property</button>
+        style="flex:1;justify-content:center;padding:11px;font-size:14px;border-radius:12px" onclick="showSaveToast()">Save Property</button>
     </div>
   </div>
 
+  <!-- TOAST -->
+  <div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(28,37,55,.18);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:200;white-space:nowrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+    <span id="toast-msg">Property saved!</span>
+  </div>
+
   <script>
+    /* ── STATE ── */
+    var _selectedType = 'pg';
+    var CURRENT_RES_SLOTS = 28;  // 20 beds + 8 rooms
+    var CURRENT_COMM_SLOTS = 0;
+    var MAX_AMOUNT = 2520;        // 1680 * 1.5 rounded to nearest 100
+
     function openPanel() {
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('slideover').style.display = 'flex';
       document.getElementById('slideover').style.flexDirection = 'column';
+      updateUnitLabel();
+      updatePlanImpact();
     }
+
     function closePanel() {
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('slideover').style.display = 'none';
     }
-    function selectType(card) {
-      document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+
+    function selectType(card, type) {
+      document.querySelectorAll('.type-card').forEach(function(c) { c.classList.remove('selected'); });
       card.classList.add('selected');
+      _selectedType = type;
+      updateUnitLabel();
+      updatePlanImpact();
     }
+
+    function updateUnitLabel() {
+      var label  = document.getElementById('unit-count-label');
+      var hint   = document.getElementById('unit-count-hint');
+      var commNote = document.getElementById('pi-comm-note');
+      if (_selectedType === 'pg') {
+        label.textContent = 'Number of beds';
+        hint.textContent  = 'Each bed = 1 slot at ₹60/month';
+        commNote.style.display = 'none';
+      } else if (_selectedType === 'room') {
+        label.textContent = 'Number of rooms';
+        hint.textContent  = 'Each room = 1 slot at ₹60/month';
+        commNote.style.display = 'none';
+      } else {
+        label.textContent = 'Number of units (shops / offices)';
+        hint.textContent  = 'Each unit = 1 slot at ₹80/month · commercial rate';
+        commNote.style.display = 'block';
+      }
+    }
+
+    function fmtINR(n) { return n.toLocaleString('en-IN'); }
+
+    function calcRes(slots) {
+      if (slots <= 0) return 0;
+      var cost = 0;
+      var t1 = Math.min(slots, 30);  cost += t1 * 60;
+      if (slots > 30)  { cost += Math.min(slots - 30, 70) * 50; }
+      if (slots > 100) { cost += (slots - 100) * 40; }
+      return cost;
+    }
+
+    function calcComm(slots) {
+      if (slots <= 0) return 0;
+      var cost = 0;
+      var t1 = Math.min(slots, 30);  cost += t1 * 80;
+      if (slots > 30)  { cost += Math.min(slots - 30, 70) * 65; }
+      if (slots > 100) { cost += (slots - 100) * 50; }
+      return cost;
+    }
+
+    function updatePlanImpact() {
+      var units = parseInt(document.getElementById('unit-count-input').value) || 0;
+      var isComm = _selectedType === 'commercial';
+
+      var oldCost    = calcRes(CURRENT_RES_SLOTS) + calcComm(CURRENT_COMM_SLOTS);
+      var newResSlots  = CURRENT_RES_SLOTS  + (isComm ? 0 : units);
+      var newCommSlots = CURRENT_COMM_SLOTS + (isComm ? units : 0);
+      var newCost    = calcRes(newResSlots) + calcComm(newCommSlots);
+      var newTotal   = newResSlots + newCommSlots;
+      var diff       = newCost - oldCost;
+
+      var unitLabel = isComm ? 'units' : (_selectedType === 'pg' ? 'beds' : 'rooms');
+      var rateLabel = isComm ? '₹80/slot' : '₹60/slot';
+
+      document.getElementById('pi-current-slots').textContent =
+        (CURRENT_RES_SLOTS + CURRENT_COMM_SLOTS) + ' slots (₹' + fmtINR(oldCost) + '/mo)';
+      document.getElementById('pi-adding-label').textContent = 'Adding (' + rateLabel + ')';
+      document.getElementById('pi-adding-val').textContent   = units + ' ' + unitLabel + ' = +' + units + ' slots';
+      document.getElementById('pi-new-slots').textContent    = newTotal + ' total slots';
+      document.getElementById('pi-new-price').textContent    = '₹' + fmtINR(newCost);
+
+      var diffEl = document.getElementById('pi-diff');
+      if (diff > 0) {
+        diffEl.textContent = '+₹' + fmtINR(diff) + '/mo';
+        diffEl.className = 'pi-diff up';
+      } else if (diff < 0) {
+        diffEl.textContent = '−₹' + fmtINR(Math.abs(diff)) + '/mo';
+        diffEl.className = 'pi-diff down';
+      } else {
+        diffEl.textContent = 'No change';
+        diffEl.className = 'pi-diff none';
+      }
+
+      document.getElementById('pi-reauth-note').style.display = newCost > MAX_AMOUNT ? 'flex' : 'none';
+    }
+
+    /* TOAST */
+    var _tt = null;
+    function showSaveToast() {
+      var t = document.getElementById('toast');
+      t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(_tt);
+      _tt = setTimeout(function() {
+        t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)';
+        closePanel();
+      }, 2200);
+    }
+
     // open by default for demo
     openPanel();
   </script>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Bank Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #2A2D35; display: flex; justify-content: center; align-items: flex-start; padding: 48px 20px 80px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:root {
+  --navy: #1C2537; --navy2: #6B5B45; --saffron: #C8A96E;
+  --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+  --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+  --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+  --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+  --pend: #D97706; --pend-bg: rgba(217,119,6,.09);
+}
+.phone { width: 375px; background: var(--bg); border-radius: 40px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.28), 0 4px 16px rgba(0,0,0,.1); border: 1px solid rgba(255,255,255,.08); position: relative; }
+.scroll { height: 780px; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { padding: 52px 18px 14px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.back-btn { color: var(--navy2); cursor: pointer; }
+.tb-title { font-size: 16px; font-weight: 800; color: var(--t1); flex: 1; }
+.stepper { display: flex; align-items: center; padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border); }
+.step { display: flex; align-items: center; gap: 6px; }
+.sc { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+.sc.done { background: var(--paid); color: #fff; }
+.sc.active { background: var(--navy); color: #fff; }
+.sc.up { background: var(--bg); color: var(--t3); border: 1.5px solid var(--border); }
+.sl { font-size: 10px; font-weight: 700; }
+.sl.done { color: var(--paid); }
+.sl.active { color: var(--navy); }
+.sl.up { color: var(--t3); }
+.con { flex: 1; height: 2px; background: var(--border); margin: 0 8px; }
+.con.done { background: var(--paid); }
+.content { padding: 16px; }
+.card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; margin-bottom: 12px; }
+.card-hdr { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.card-ttl { font-size: 14px; font-weight: 800; color: var(--t1); margin-bottom: 3px; }
+.card-sub { font-size: 11px; color: var(--t2); }
+.card-body { padding: 14px 16px; }
+.form-group { margin-bottom: 13px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--t2); display: block; margin-bottom: 5px; }
+.form-input { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: var(--t3); }
+.form-select { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.bank-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.bank-opt { padding: 8px 12px; border-radius: 9px; border: 1.5px solid var(--border); background: var(--bg); color: var(--t2); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .12s; }
+.bank-opt.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.info-box { background: var(--paid-bg); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 8px; }
+.info-txt { font-size: 12px; color: #0A7A56; line-height: 1.5; }
+.otp-row { display: flex; gap: 8px; align-items: flex-end; }
+.otp-row .form-input { flex: 1; letter-spacing: .2em; text-align: center; font-size: 18px; font-weight: 700; }
+.otp-send-btn { padding: 10px 14px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.verify-row { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paid-bg); border-radius: 10px; }
+.vr-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--paid); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.vr-main { font-size: 13px; font-weight: 700; color: var(--paid); }
+.vr-sub { font-size: 11px; color: var(--t2); margin-top: 1px; }
+.footer-btns { display: flex; gap: 10px; padding: 12px 16px 16px; background: var(--card); border-top: 1px solid var(--border); }
+.btn-back { flex: 1; padding: 12px; background: var(--bg); color: var(--t1); border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+.btn-next { flex: 2; padding: 12px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.panel { display: none; }
+.panel.active { display: block; }
+.bnav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; border-top: 1px solid var(--border); padding: 12px 18px 22px; border-radius: 0 0 40px 40px; }
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; color: var(--t3); cursor: pointer; text-decoration: none; }
+.ni.on { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="scroll" style="padding-bottom:80px">
+  <div class="topbar">
+    <a class="back-btn" href="settings-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+    <div class="tb-title">Bank Account</div>
+  </div>
+  <div class="stepper">
+    <div class="step"><div class="sc active" id="s1c">1</div><div class="sl active" id="s1l">Bank Info</div></div>
+    <div class="con" id="con1"></div>
+    <div class="step"><div class="sc up" id="s2c">2</div><div class="sl up" id="s2l">Verify OTP</div></div>
+    <div class="con" id="con2"></div>
+    <div class="step"><div class="sc up" id="s3c">3</div><div class="sl up" id="s3l">Penny Drop</div></div>
+  </div>
+
+  <div class="panel active" id="step1">
+    <div class="content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Enter bank details</div><div class="card-sub">Rent will be settled directly to this account within 2 business days</div></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Account holder name</label><input class="form-input" type="text" placeholder="As per bank records" value="Adarsh Singh"></div>
+          <div class="form-group"><label class="form-label">Account number</label><input class="form-input" type="text" placeholder="e.g. 9876543210123" value="9876543210123"></div>
+          <div class="form-group"><label class="form-label">Confirm account number</label><input class="form-input" type="text" placeholder="Re-enter account number" value="9876543210123"></div>
+          <div class="form-group"><label class="form-label">IFSC code</label><input class="form-input" type="text" placeholder="e.g. HDFC0001234" value="HDFC0001234" style="text-transform:uppercase"></div>
+          <div class="form-group" style="margin-bottom:0"><label class="form-label">Select your bank</label>
+            <div class="bank-selector">
+              <button class="bank-opt on">HDFC</button>
+              <button class="bank-opt">SBI</button>
+              <button class="bank-opt">ICICI</button>
+              <button class="bank-opt">Axis</button>
+              <button class="bank-opt">Kotak</button>
+              <button class="bank-opt">Other</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <a href="settings-mobile.html" class="btn-back" style="text-decoration:none;text-align:center">Cancel</a>
+      <button class="btn-next" onclick="goStep(2)">Verify via OTP →</button>
+    </div>
+  </div>
+
+  <div class="panel" id="step2">
+    <div class="content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Verify your account</div><div class="card-sub">Enter the OTP sent to your Aadhaar-linked mobile number</div></div>
+        <div class="card-body">
+          <div class="info-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paid)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.99 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.92 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg><div class="info-txt">OTP sent to +91 98765 •••• 10 linked to HDFC account ending 3123</div></div>
+          <div class="form-group">
+            <label class="form-label">Enter 6-digit OTP</label>
+            <div class="otp-row">
+              <input class="form-input" type="text" placeholder="• • • • • •" maxlength="6" value="847291">
+              <button class="otp-send-btn">Resend</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px">OTP valid for 10 minutes · Resend in 00:45</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" onclick="goStep(3)">Verify OTP →</button>
+    </div>
+  </div>
+
+  <div class="panel" id="step3">
+    <div class="content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Penny drop verification</div><div class="card-sub">We've sent ₹1 to your account to confirm it's active and correct</div></div>
+        <div class="card-body">
+          <div class="verify-row">
+            <div class="vr-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div><div class="vr-main">₹1 sent to HDFC ••••3123</div><div class="vr-sub">Usually credited within 2–5 minutes</div></div>
+          </div>
+          <div style="margin-top:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:8px">Account summary</div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--t2)">Bank</span><span style="font-size:13px;font-weight:700;color:var(--t1)">HDFC Bank</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--t2)">Account holder</span><span style="font-size:13px;font-weight:700;color:var(--t1)">Adarsh Singh</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--t2)">Account number</span><span style="font-size:13px;font-weight:700;color:var(--t1)">••••••••3123</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="font-size:12px;color:var(--t2)">IFSC</span><span style="font-size:13px;font-weight:700;color:var(--t1)">HDFC0001234</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" style="background:var(--paid)" onclick="location.href='settings-mobile.html'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>Confirm Bank Account
+      </button>
+    </div>
+  </div>
+
+</div>
+<div class="bnav">
+  <a class="ni" href="dashboard-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a class="ni" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Tenants</span></a>
+  <a class="ni" href="payments-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Payments</span></a>
+  <a class="ni on" href="settings-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a>
+</div>
+</div>
+<script>
+function goStep(n){
+  [1,2,3].forEach(i=>document.getElementById('step'+i).classList.toggle('active',i===n));
+  [1,2,3].forEach(i=>{
+    const c=document.getElementById('s'+i+'c'),l=document.getElementById('s'+i+'l');
+    if(i<n){c.className='sc done';c.innerHTML='✓';l.className='sl done';}
+    else if(i===n){c.className='sc active';c.innerHTML=i;l.className='sl active';}
+    else{c.className='sc up';c.innerHTML=i;l.className='sl up';}
+  });
+  document.getElementById('con1').className='con'+(n>1?' done':'');
+  document.getElementById('con2').className='con'+(n>2?' done':'');
+}
+</script>
+</body>
+</html>

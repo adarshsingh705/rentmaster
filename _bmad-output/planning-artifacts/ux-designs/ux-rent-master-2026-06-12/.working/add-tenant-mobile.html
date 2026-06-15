@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RentMaster — Add Tenant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #2A2D35; display: flex; justify-content: center; align-items: flex-start; padding: 48px 20px 80px; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:root {
+  --navy: #1C2537; --navy2: #6B5B45; --saffron: #C8A96E;
+  --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+  --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+  --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+  --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+  --pend: #D97706; --pend-bg: rgba(217,119,6,.09);
+  --late: #DC2020; --late-bg: rgba(220,32,32,.08);
+}
+.phone { width: 375px; background: var(--bg); border-radius: 40px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.28), 0 4px 16px rgba(0,0,0,.1); border: 1px solid rgba(255,255,255,.08); position: relative; }
+.scroll { height: 780px; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.topbar { padding: 52px 18px 14px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.back-btn { color: var(--navy2); cursor: pointer; }
+.tb-title { font-size: 16px; font-weight: 800; color: var(--t1); flex: 1; }
+.cancel-btn { font-size: 12px; font-weight: 600; color: var(--t2); cursor: pointer; }
+.stepper { display: flex; align-items: center; padding: 14px 18px; background: var(--card); border-bottom: 1px solid var(--border); }
+.step { display: flex; align-items: center; gap: 6px; }
+.sc { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+.sc.done { background: var(--paid); color: #fff; }
+.sc.active { background: var(--navy); color: #fff; }
+.sc.up { background: var(--bg); color: var(--t3); border: 1.5px solid var(--border); }
+.sl { font-size: 11px; font-weight: 700; }
+.sl.done { color: var(--paid); }
+.sl.active { color: var(--navy); }
+.sl.up { color: var(--t3); }
+.con { flex: 1; height: 2px; background: var(--border); margin: 0 8px; }
+.con.done { background: var(--paid); }
+.step-content { padding: 16px; }
+.card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; margin-bottom: 12px; }
+.card-hdr { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.card-ttl { font-size: 14px; font-weight: 800; color: var(--t1); margin-bottom: 3px; }
+.card-sub { font-size: 11px; color: var(--t2); }
+.card-body { padding: 14px 16px; }
+.bed-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.bed-card { border-radius: 9px; border: 1.5px solid var(--border); padding: 9px 11px; flex: 1; min-width: 100px; cursor: pointer; background: var(--card); transition: all .12s; }
+.bed-card.selected { border-color: var(--navy); background: rgba(28,37,55,.04); }
+.bed-card.occupied { background: var(--bg); cursor: not-allowed; opacity: .6; }
+.bc-name { font-size: 11px; font-weight: 700; color: var(--t1); margin-bottom: 2px; }
+.bc-status { font-size: 10px; font-weight: 500; }
+.bc-status.vacant { color: var(--paid); }
+.bc-status.occupied { color: var(--t3); }
+.bc-tenant { font-size: 10px; color: var(--t3); }
+.form-group { margin-bottom: 12px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--t2); display: block; margin-bottom: 5px; }
+.form-input { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: var(--t3); }
+.input-prefix-wrap { display: flex; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--card); }
+.input-prefix-wrap:focus-within { border-color: var(--navy); }
+.input-prefix { padding: 10px 11px; background: var(--bg); color: var(--t2); font-size: 13px; font-weight: 600; border-right: 1.5px solid var(--border); white-space: nowrap; }
+.input-prefix-wrap input { flex: 1; border: none; padding: 10px 13px; font-size: 14px; font-family: inherit; color: var(--t1); background: transparent; outline: none; }
+.form-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.form-select { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--t1); background: var(--card); outline: none; }
+.footer-btns { display: flex; gap: 10px; padding: 12px 16px 16px; background: var(--card); border-top: 1px solid var(--border); }
+.btn-back { flex: 1; padding: 12px; background: var(--bg); color: var(--t1); border: 1.5px solid var(--border); border-radius: 10px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; }
+.btn-next { flex: 2; padding: 12px; background: var(--navy); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.btn-next:disabled { opacity: .4; cursor: not-allowed; }
+.btn-save { flex: 2; padding: 12px; background: var(--paid); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.confirm-row:last-child { border-bottom: none; }
+.ck { font-size: 12px; color: var(--t2); }
+.cv { font-size: 13px; font-weight: 700; color: var(--t1); }
+.cv.gold { color: var(--saffron); }
+.cv.green { color: var(--paid); }
+.cv.pend { color: var(--pend); }
+.wa-note { display: flex; align-items: flex-start; gap: 8px; padding: 12px 16px; background: rgba(37,211,102,.06); border-top: 1px solid rgba(37,211,102,.12); }
+.wa-txt { font-size: 11px; color: #1A7A3C; line-height: 1.5; }
+.panel { display: none; }
+.panel.active { display: block; }
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="scroll">
+  <div class="topbar">
+    <a class="back-btn" href="tenants-mobile.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+    <div class="tb-title">Add Tenant</div>
+    <a class="cancel-btn" href="tenants-mobile.html">Cancel</a>
+  </div>
+
+  <div class="stepper" id="stepper">
+    <div class="step"><div class="sc active" id="s1c">1</div><div class="sl active" id="s1l">Room/Bed</div></div>
+    <div class="con" id="con1"></div>
+    <div class="step"><div class="sc up" id="s2c">2</div><div class="sl up" id="s2l">Details</div></div>
+    <div class="con" id="con2"></div>
+    <div class="step"><div class="sc up" id="s3c">3</div><div class="sl up" id="s3l">Confirm</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="panel active" id="step1">
+    <div class="step-content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Select vacant slot</div><div class="card-sub">Tap a bed to assign this tenant</div></div>
+        <div class="card-body">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:8px">Ground Floor</div>
+          <div class="bed-grid">
+            <div class="bed-card occupied"><div class="bc-name">Bed G01-A</div><div class="bc-status occupied">Occupied</div><div class="bc-tenant">Rahul S.</div></div>
+            <div class="bed-card occupied"><div class="bc-name">Bed G01-B</div><div class="bc-status occupied">Occupied</div><div class="bc-tenant">Kiran P.</div></div>
+            <div class="bed-card" onclick="selectBed(this,'G01-C')"><div class="bc-name">Bed G01-C</div><div class="bc-status vacant">Vacant</div><div class="bc-tenant">&nbsp;</div></div>
+            <div class="bed-card" onclick="selectBed(this,'G01-D')"><div class="bc-name">Bed G01-D</div><div class="bc-status vacant">Vacant</div><div class="bc-tenant">&nbsp;</div></div>
+          </div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:8px;margin-top:12px">1st Floor</div>
+          <div class="bed-grid">
+            <div class="bed-card occupied"><div class="bc-name">Bed 101-A</div><div class="bc-status occupied">Occupied</div><div class="bc-tenant">Arjun S.</div></div>
+            <div class="bed-card occupied"><div class="bc-name">Bed 101-B</div><div class="bc-status occupied">Occupied</div><div class="bc-tenant">Vikram N.</div></div>
+            <div class="bed-card" onclick="selectBed(this,'101-C')"><div class="bc-name">Bed 101-C</div><div class="bc-status vacant">Vacant</div><div class="bc-tenant">&nbsp;</div></div>
+            <div class="bed-card occupied"><div class="bc-name">Bed 102-A</div><div class="bc-status occupied">Occupied</div><div class="bc-tenant">Anjali M.</div></div>
+            <div class="bed-card" onclick="selectBed(this,'102-B')"><div class="bc-name">Bed 102-B</div><div class="bc-status vacant">Vacant</div><div class="bc-tenant">&nbsp;</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <a href="tenants-mobile.html" class="btn-back" style="text-decoration:none;text-align:center">Cancel</a>
+      <button class="btn-next" id="btn1" disabled onclick="goStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel" id="step2">
+    <div class="step-content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Tenant Information</div><div class="card-sub">A welcome WhatsApp will be sent after saving</div></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Full name</label><input class="form-input" type="text" placeholder="e.g. Priya Mehta" id="f-name"></div>
+          <div class="form-group"><label class="form-label">WhatsApp number</label><div class="input-prefix-wrap"><span class="input-prefix">+91</span><input type="tel" placeholder="9876543210" maxlength="10" id="f-phone"></div></div>
+          <div class="form-row2">
+            <div class="form-group" style="margin-bottom:0"><label class="form-label">Move-in date</label><input class="form-input" type="date" value="2026-06-15" id="f-movein"></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label">Monthly rent</label><div class="input-prefix-wrap"><span class="input-prefix">₹</span><input type="number" placeholder="8500" id="f-rent"></div></div>
+          </div>
+          <div class="form-group" style="margin-top:12px"><label class="form-label">Rent due day</label>
+            <select class="form-select" id="f-dueday">
+              <option value="1" selected>1st of every month</option>
+              <option value="5">5th of every month</option>
+              <option value="10">10th of every month</option>
+              <option value="15">15th of every month</option>
+            </select>
+          </div>
+          <div class="form-row2">
+            <div class="form-group" style="margin-bottom:0"><label class="form-label">Aadhaar last 4 <span style="color:var(--t3);font-weight:400">(opt)</span></label><input class="form-input" type="text" placeholder="XXXX" maxlength="4"></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label">Security deposit <span style="color:var(--t3);font-weight:400">(opt)</span></label><div class="input-prefix-wrap"><span class="input-prefix">₹</span><input type="number" placeholder="17000"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" onclick="goStep(3)">Review →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel" id="step3">
+    <div class="step-content">
+      <div class="card">
+        <div class="card-hdr"><div class="card-ttl">Confirm &amp; Save</div><div class="card-sub">Review before activating this lease</div></div>
+        <div class="card-body">
+          <div style="background:rgba(28,37,55,.04);border:1.5px solid rgba(28,37,55,.1);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:9px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4v16M2 8h18a2 2 0 012 2v10M2 14h20"/></svg></div>
+            <div><div style="font-size:14px;font-weight:800;color:var(--t1)" id="c-slot">—</div><div style="font-size:11px;color:var(--t2);margin-top:2px">Sunshine PG · Ground Floor</div></div>
+          </div>
+          <div class="confirm-row"><span class="ck">Full name</span><span class="cv" id="c-name">—</span></div>
+          <div class="confirm-row"><span class="ck">WhatsApp</span><span class="cv" id="c-phone">—</span></div>
+          <div class="confirm-row"><span class="ck">Move-in date</span><span class="cv" id="c-movein">—</span></div>
+          <div class="confirm-row"><span class="ck">Monthly rent</span><span class="cv gold" id="c-rent">—</span></div>
+          <div class="confirm-row"><span class="ck">Rent due</span><span class="cv" id="c-dueday">1st of month</span></div>
+          <div class="confirm-row"><span class="ck">First rent record</span><span class="cv pend">June 2026 · Pending</span></div>
+          <div class="confirm-row"><span class="ck">Welcome WhatsApp</span><span class="cv green">Will be sent</span></div>
+        </div>
+        <div class="wa-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <div class="wa-txt">Welcome WhatsApp with payment link sent immediately after saving</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-btns">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-save" onclick="location.href='tenants-mobile.html'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Save &amp; Send Welcome
+      </button>
+    </div>
+  </div>
+
+</div>
+</div>
+<script>
+let selBed = null;
+function selectBed(el, code) {
+  document.querySelectorAll('.bed-card.selected').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selBed = code;
+  document.getElementById('btn1').disabled = false;
+  document.getElementById('c-slot').textContent = 'Bed ' + code;
+}
+function goStep(n) {
+  [1,2,3].forEach(i => document.getElementById('step'+i).classList.toggle('active', i===n));
+  [1,2,3].forEach(i => {
+    const c = document.getElementById('s'+i+'c'), l = document.getElementById('s'+i+'l');
+    if(i<n){c.className='sc done';c.innerHTML='✓';l.className='sl done';}
+    else if(i===n){c.className='sc active';c.innerHTML=i;l.className='sl active';}
+    else{c.className='sc up';c.innerHTML=i;l.className='sl up';}
+  });
+  document.getElementById('con1').className='con'+(n>1?' done':'');
+  document.getElementById('con2').className='con'+(n>2?' done':'');
+  if(n===3) fillConfirm();
+}
+function fillConfirm() {
+  const name=document.getElementById('f-name').value||'—';
+  const phone=document.getElementById('f-phone').value;
+  const rent=document.getElementById('f-rent').value;
+  document.getElementById('c-name').textContent=name;
+  document.getElementById('c-phone').textContent=phone?'+91 '+phone:'—';
+  document.getElementById('c-rent').textContent=rent?'₹'+Number(rent).toLocaleString('en-IN')+'/mo':'—';
+}
+</script>
+</body>
+</html>

@@ -1,1205 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RentMaster — Plan & Billing</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: #E8EAF0;
-      color: #0F1623;
-      min-height: 100vh;
-      display: flex;
-      -webkit-font-smoothing: antialiased;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #F0EDE8; color: #1C2537; min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; }
     :root {
-      --navy: #1B2D4F;
-      --navy2: #243A63;
-      --navy-lt: rgba(27, 45, 79, .07);
-      --saffron: #F97316;
-      --saffron-lt: rgba(249, 115, 22, .08);
-      --t1: #0F1623;
-      --t2: #5A6473;
-      --t3: #9CA3AE;
-      --card: #FFFFFF;
-      --bg: #E8EAF0;
-      --border: #DDE1EC;
-      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
-      --sh-md: 0 4px 16px rgba(15, 22, 35, .09), 0 1px 4px rgba(15, 22, 35, .05);
-      --paid: #0E9F6E;
-      --paid-bg: rgba(14, 159, 110, .09);
-      --pend: #D97706;
-      --pend-bg: rgba(217, 119, 6, .09);
+      --navy: #1C2537; --navy-lt: rgba(28,37,55,.07);
+      --saffron: #C8A96E; --saffron-lt: rgba(200,169,110,.1);
+      --t1: #1C2537; --t2: #6B5B45; --t3: #9B8E7E;
+      --card: #FAF8F5; --bg: #F0EDE8; --border: #E2D9CC;
+      --sh: 0 1px 3px rgba(28,37,55,.06), 0 2px 8px rgba(28,37,55,.05);
+      --sh-md: 0 4px 16px rgba(28,37,55,.09), 0 1px 4px rgba(28,37,55,.05);
+      --paid: #0E9F6E; --paid-bg: rgba(14,159,110,.09);
+      --pend: #D97706; --pend-bg: rgba(217,119,6,.09);
       --late: #DC2020;
-      --late-bg: rgba(220, 32, 32, .08);
     }
 
     /* SIDEBAR */
-    .sidebar {
-      width: 240px;
-      flex-shrink: 0;
-      background: var(--navy);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-    }
-
-    .sb-logo {
-      padding: 28px 24px 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
-    }
-
-    .sb-logo-text {
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -.02em;
-    }
-
-    .sb-logo-text span {
-      color: var(--saffron);
-    }
-
-    .sb-logo-sub {
-      font-size: 10px;
-      color: rgba(255, 255, 255, .3);
-      font-weight: 500;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .sb-nav {
-      flex: 1;
-      padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      overflow-y: auto;
-    }
-
-    .sb-section {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .25);
-      padding: 6px 12px 4px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, .5);
-      cursor: pointer;
-      transition: all .15s;
-      text-decoration: none;
-    }
-
-    .nav-item:hover {
-      background: rgba(255, 255, 255, .06);
-      color: rgba(255, 255, 255, .85);
-    }
-
-    .nav-item.active {
-      background: rgba(255, 255, 255, .12);
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .nav-item svg {
-      opacity: .55;
-      flex-shrink: 0;
-    }
-
-    .nav-item.active svg {
-      opacity: 1;
-    }
-
-    .nav-badge {
-      margin-left: auto;
-      font-size: 10px;
-      font-weight: 700;
-      background: var(--late);
-      color: #fff;
-      padding: 1px 7px;
-      border-radius: 99px;
-    }
-
-    .sb-divider {
-      height: 1px;
-      background: rgba(255, 255, 255, .07);
-      margin: 8px 12px;
-    }
-
-    .sb-add-btn {
-      margin: 0 12px 16px;
-      background: var(--saffron);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity .15s;
-      width: calc(100% - 24px);
-    }
-
-    .sb-add-btn:hover {
-      opacity: .88;
-    }
-
-    .sb-user {
-      padding: 16px;
-      border-top: 1px solid rgba(255, 255, 255, .08);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .sb-avi {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .15);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .sb-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .sb-role {
-      font-size: 10px;
-      color: rgba(255, 255, 255, .38);
-      margin-top: 1px;
-    }
-
-    .sb-logout {
-      margin-left: auto;
-      color: rgba(255, 255, 255, .28);
-      cursor: pointer;
-    }
+    .sidebar { width: 240px; flex-shrink: 0; background: var(--navy); min-height: 100vh; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+    .sb-logo { padding: 28px 24px 24px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .sb-logo-text { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+    .sb-logo-text span { color: var(--saffron); }
+    .sb-logo-sub { font-size: 10px; color: rgba(255,255,255,.3); font-weight: 500; letter-spacing: .08em; text-transform: uppercase; margin-top: 3px; }
+    .sb-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+    .sb-section { font-size: 10px; font-weight: 600; letter-spacing: .10em; text-transform: uppercase; color: rgba(255,255,255,.25); padding: 6px 12px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.5); cursor: pointer; transition: all .15s; text-decoration: none; }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.85); }
+    .nav-item.active { background: rgba(255,255,255,.12); color: #fff; font-weight: 600; }
+    .nav-item svg { opacity: .55; flex-shrink: 0; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--late); color: #fff; padding: 1px 7px; border-radius: 99px; }
+    .sb-divider { height: 1px; background: rgba(255,255,255,.07); margin: 8px 12px; }
+    .sb-add-btn { margin: 0 12px 16px; background: var(--saffron); color: #fff; border: none; border-radius: 10px; padding: 11px 14px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: opacity .15s; width: calc(100% - 24px); }
+    .sb-add-btn:hover { opacity: .88; }
+    .sb-user { padding: 16px; border-top: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .sb-avi { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .sb-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .sb-role { font-size: 10px; color: rgba(255,255,255,.38); margin-top: 1px; }
+    .sb-logout { margin-left: auto; color: rgba(255,255,255,.28); cursor: pointer; }
 
     /* MAIN */
-    .main {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-      flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(15, 22, 35, .04);
-    }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-    }
-
-    .breadcrumb a {
-      color: var(--t2);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .breadcrumb a:hover {
-      color: var(--t1);
-    }
-
-    .breadcrumb-sep {
-      color: var(--t3);
-      display: flex;
-      align-items: center;
-    }
-
-    .breadcrumb-current {
-      font-weight: 700;
-      color: var(--t1);
-      font-size: 15px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .topbar-date {
-      font-size: 12px;
-      color: var(--t2);
-      font-weight: 500;
-      background: #F4F5F8;
-      padding: 5px 12px;
-      border-radius: 8px;
-    }
-
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      background: #F4F5F8;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--t2);
-      cursor: pointer;
-    }
-
-    /* CONTENT */
-    .content {
-      flex: 1;
-      padding: 28px 32px;
-      overflow-y: auto;
-      max-width: 960px;
-    }
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 60px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(28,37,55,.04); }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .breadcrumb a { color: var(--t2); text-decoration: none; font-weight: 500; }
+    .breadcrumb-sep { color: var(--t3); display: flex; align-items: center; }
+    .breadcrumb-current { font-weight: 700; color: var(--t1); font-size: 15px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-date { font-size: 12px; color: var(--t2); font-weight: 500; background: #EDE8E0; padding: 5px 12px; border-radius: 8px; }
+    .icon-btn { width: 36px; height: 36px; border-radius: 9px; background: #EDE8E0; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--t2); cursor: pointer; }
+    .content { flex: 1; padding: 28px 32px; overflow-y: auto; max-width: 980px; }
 
     /* BUTTONS */
-    .btn-primary {
-      background: var(--navy);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      transition: opacity .15s;
-    }
-
-    .btn-primary:hover {
-      opacity: .88;
-    }
-
-    .btn-secondary {
-      background: #fff;
-      color: var(--t1);
-      border: 1.5px solid var(--border);
-      border-radius: 9px;
-      padding: 9px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background .15s;
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg);
-    }
-
-    .btn-saffron {
-      background: var(--saffron);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      transition: opacity .15s;
-    }
-
-    .btn-saffron:hover {
-      opacity: .88;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--navy);
-      border: 1.5px solid var(--navy);
-      border-radius: 9px;
-      padding: 9px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      transition: background .15s;
-    }
-
-    .btn-ghost:hover {
-      background: var(--navy-lt);
-    }
-
-    /* ── CURRENT PLAN HERO ── */
-    .current-plan-card {
-      background: var(--navy);
-      border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cpc-bg-shape {
-      position: absolute;
-      right: -40px;
-      top: -60px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .04);
-      pointer-events: none;
-    }
-
-    .cpc-bg-shape2 {
-      position: absolute;
-      right: 60px;
-      bottom: -80px;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .03);
-      pointer-events: none;
-    }
-
-    .cpc-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .12);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 24px;
-      font-weight: 800;
-      border: 1px solid rgba(255, 255, 255, .1);
-    }
-
-    .cpc-body {
-      flex: 1;
-    }
-
-    .cpc-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .45);
-      margin-bottom: 4px;
-    }
-
-    .cpc-plan-name {
-      font-size: 26px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .cpc-badge {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 99px;
-      background: var(--saffron);
-      color: #fff;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
-    .cpc-desc {
-      font-size: 13px;
-      color: rgba(255, 255, 255, .55);
-      margin-top: 4px;
-      line-height: 1.5;
-    }
-
-    .cpc-features {
-      display: flex;
-      gap: 20px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
-    .cpc-feat {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, .7);
-      font-weight: 500;
-    }
-
-    .cpc-feat svg {
-      color: #4ADE80;
-      flex-shrink: 0;
-    }
-
-    .cpc-right {
-      flex-shrink: 0;
-      text-align: right;
-    }
-
-    .cpc-price {
-      font-size: 28px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -.02em;
-    }
-
-    .cpc-price-sub {
-      font-size: 12px;
-      color: rgba(255, 255, 255, .4);
-      margin-top: 2px;
-    }
-
-    .cpc-usage {
-      margin-top: 16px;
-      text-align: right;
-    }
-
-    .cpc-usage-row {
-      font-size: 12px;
-      color: rgba(255, 255, 255, .5);
-      margin-top: 4px;
-    }
-
-    .cpc-usage-val {
-      color: rgba(255, 255, 255, .85);
-      font-weight: 600;
-    }
-
-    /* ── EARLY ADOPTER BANNER ── */
-    .ea-banner {
-      background: linear-gradient(135deg, rgba(249, 115, 22, .1) 0%, rgba(249, 115, 22, .05) 100%);
-      border: 1px solid rgba(249, 115, 22, .25);
-      border-radius: 12px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .ea-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: var(--saffron);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .ea-body {
-      flex: 1;
-    }
-
-    .ea-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--t1);
-      margin-bottom: 3px;
-    }
-
-    .ea-desc {
-      font-size: 12px;
-      color: var(--t2);
-      line-height: 1.6;
-    }
-
-    .ea-desc strong {
-      color: var(--t1);
-      font-weight: 600;
-    }
-
-    /* ── SECTION HEADER ── */
-    .section-header {
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--t1);
-      letter-spacing: -.01em;
-    }
-
-    .section-sub {
-      font-size: 13px;
-      color: var(--t2);
-      margin-top: 3px;
-    }
-
-    /* ── PLAN GRID ── */
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .plan-card {
-      background: var(--card);
-      border-radius: 14px;
-      border: 1.5px solid var(--border);
-      box-shadow: var(--sh);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: box-shadow .2s, border-color .2s;
-    }
-
-    .plan-card:hover {
-      box-shadow: var(--sh-md);
-    }
-
-    .plan-card.popular {
-      border-color: var(--navy);
-    }
-
-    .plan-card.popular::before {
-      content: 'Most Popular';
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      background: var(--navy);
-      color: #fff;
-      padding: 3px 10px;
-      border-radius: 99px;
-    }
-
-    .plan-coming-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      background: rgba(90, 100, 115, .1);
-      color: var(--t2);
-      padding: 3px 10px;
-      border-radius: 99px;
-      margin-bottom: 12px;
-    }
-
-    .plan-coming-badge svg {
-      flex-shrink: 0;
-    }
-
-    .plan-name {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--t1);
-      letter-spacing: -.01em;
-      margin-bottom: 4px;
-    }
-
-    .plan-tagline {
-      font-size: 12px;
-      color: var(--t2);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .plan-price-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      margin-bottom: 4px;
-    }
-
-    .plan-price {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--saffron);
-      letter-spacing: -.03em;
-    }
-
-    .plan-price-period {
-      font-size: 13px;
-      color: var(--t3);
-      font-weight: 500;
-      padding-bottom: 4px;
-    }
-
-    .plan-price-billed {
-      font-size: 11px;
-      color: var(--t3);
-      margin-bottom: 20px;
-    }
-
-    .plan-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 16px;
-    }
-
-    .plan-features {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .pf-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--t2);
-      line-height: 1.5;
-    }
-
-    .pf-row.highlight {
-      color: var(--t1);
-      font-weight: 500;
-    }
-
-    .pf-check {
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .pf-check.green {
-      color: var(--paid);
-    }
-
-    .pf-check.grey {
-      color: var(--t3);
-    }
-
-    .pf-section-head {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--t3);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-top: 4px;
-      margin-bottom: 2px;
-    }
-
-    .plan-cta {
-      margin-top: auto;
-    }
-
-    .btn-plan-cs {
-      width: 100%;
-      padding: 10px 0;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      border: 1.5px solid var(--border);
-      background: #F4F5F8;
-      color: var(--t2);
-      transition: background .15s;
-    }
-
-    .btn-plan-cs:hover {
-      background: var(--border);
-    }
-
-    .btn-plan-primary {
-      width: 100%;
-      padding: 11px 0;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: var(--navy);
-      color: #fff;
-      transition: opacity .15s;
-    }
-
-    .btn-plan-primary:hover {
-      opacity: .88;
-    }
-
-    .btn-plan-saffron {
-      width: 100%;
-      padding: 11px 0;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: var(--saffron);
-      color: #fff;
-      transition: opacity .15s;
-    }
-
-    .btn-plan-saffron:hover {
-      opacity: .88;
-    }
-
-    /* ── LIMITS TABLE ── */
-    .limits-card {
-      background: var(--card);
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--sh);
-      overflow: hidden;
-      margin-bottom: 28px;
-    }
-
-    .limits-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .limits-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--t1);
-    }
-
-    table.limits-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .limits-table th {
-      padding: 10px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--t3);
-      text-align: left;
-      background: #FAFBFD;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .limits-table th:not(:first-child) {
-      text-align: center;
-    }
-
-    .limits-table td {
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--t1);
-      border-bottom: 1px solid var(--bg);
-      vertical-align: middle;
-    }
-
-    .limits-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .limits-table td:not(:first-child) {
-      text-align: center;
-    }
-
-    .limits-feat {
-      font-weight: 500;
-    }
-
-    .limits-feat-sub {
-      font-size: 11px;
-      color: var(--t3);
-      font-weight: 400;
-      margin-top: 1px;
-    }
-
-    .lv-check {
-      color: var(--paid);
-    }
-
-    .lv-cross {
-      color: var(--t3);
-    }
-
-    .lv-count {
-      font-weight: 700;
-      color: var(--t1);
-    }
-
-    .lv-soon {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--t3);
-      background: rgba(90, 100, 115, .09);
-      padding: 2px 7px;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-
-    .col-active {
-      background: rgba(27, 45, 79, .025);
-    }
-
-    .col-header-active {
-      background: rgba(27, 45, 79, .04) !important;
-      color: var(--navy) !important;
-    }
-
-    /* ── BILLING HISTORY ── */
-    .billing-card {
-      background: var(--card);
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--sh);
-      padding: 20px 24px;
-      margin-bottom: 28px;
-    }
-
-    .billing-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--t1);
-      margin-bottom: 16px;
-    }
-
-    .billing-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 0 8px;
-    }
-
-    .billing-empty-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: #F4F5F8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--t3);
-      margin-bottom: 10px;
-    }
-
-    .billing-empty-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--t2);
-    }
-
-    .billing-empty-sub {
-      font-size: 12px;
-      color: var(--t3);
-      margin-top: 3px;
-    }
-
-    /* ── FAQ ── */
-    .faq-card {
-      background: var(--card);
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--sh);
-      padding: 20px 24px;
-    }
-
-    .faq-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--t1);
-      margin-bottom: 16px;
-    }
-
-    .faq-item {
-      padding: 13px 0;
-      border-bottom: 1px solid var(--bg);
-      cursor: pointer;
-    }
-
-    .faq-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .faq-q {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--t1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .faq-q svg {
-      flex-shrink: 0;
-      color: var(--t3);
-      transition: transform .2s;
-    }
-
-    .faq-item.open .faq-q svg {
-      transform: rotate(180deg);
-    }
-
-    .faq-a {
-      font-size: 12px;
-      color: var(--t2);
-      line-height: 1.7;
-      margin-top: 8px;
-      display: none;
-    }
-
-    .faq-item.open .faq-a {
-      display: block;
-    }
-
-    /* ── BILLING TOGGLE ── */
-    .billing-toggle-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .btl-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--t2);
-      cursor: pointer;
-      transition: color .15s;
-    }
-
-    .btl-label.active {
-      font-weight: 700;
-      color: var(--t1);
-    }
-
-    .btl-switch {
-      width: 44px;
-      height: 24px;
-      background: var(--navy);
-      border-radius: 99px;
-      cursor: pointer;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .btl-switch::after {
-      content: '';
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      background: #fff;
-      border-radius: 50%;
-      top: 3px;
-      left: 3px;
-      transition: left .2s;
-    }
-
-    .btl-switch.yearly::after {
-      left: 23px;
-    }
-
-    .btl-save {
-      font-size: 10px;
-      font-weight: 700;
-      background: var(--paid-bg);
-      color: var(--paid);
-      padding: 2px 8px;
-      border-radius: 99px;
-    }
-
-    /* room-only badge in hero */
-    .cpc-restrict {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, .55);
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .12);
-      padding: 3px 10px;
-      border-radius: 99px;
-      margin-top: 10px;
-    }
-
-    /* bed-unlock badge on plan cards */
-    .pf-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      background: var(--paid-bg);
-      color: var(--paid);
-      padding: 2px 8px;
-      border-radius: 99px;
-      margin-left: 4px;
-      vertical-align: middle;
-    }
+    .btn-primary { background: var(--navy); color: #fff; border: none; border-radius: 9px; padding: 10px 20px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: opacity .15s; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-secondary { background: #fff; color: var(--t1); border: 1.5px solid var(--border); border-radius: 9px; padding: 9px 18px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background .15s; }
+    .btn-secondary:hover { background: var(--bg); }
+    .btn-saffron { background: var(--saffron); color: #fff; border: none; border-radius: 9px; padding: 10px 20px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: opacity .15s; }
+    .btn-saffron:hover { opacity: .88; }
+    .btn-ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); border-radius: 9px; padding: 9px 18px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: background .15s; }
+    .btn-ghost:hover { background: var(--navy-lt); }
+
+    /* SECTION */
+    .section-header { margin-bottom: 16px; }
+    .section-title { font-size: 16px; font-weight: 800; color: var(--t1); letter-spacing: -.01em; }
+    .section-sub { font-size: 13px; color: var(--t2); margin-top: 3px; }
+
+    /* ── ACTIVE PLAN HERO ── */
+    .plan-hero { background: var(--navy); border-radius: 16px; padding: 28px 32px; margin-bottom: 20px; position: relative; overflow: hidden; }
+    .ph-bg1 { position: absolute; right: -40px; top: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,.04); pointer-events: none; }
+    .ph-bg2 { position: absolute; right: 60px; bottom: -80px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.03); pointer-events: none; }
+    .ph-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+    .ph-left { flex: 1; }
+    .ph-label { font-size: 10px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--saffron); margin-bottom: 6px; }
+    .ph-plan { font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+    .ph-active-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--paid); color: #fff; letter-spacing: .04em; text-transform: uppercase; }
+    .ph-desc { font-size: 13px; color: rgba(255,255,255,.55); margin-top: 5px; line-height: 1.5; }
+    .ph-right { text-align: right; flex-shrink: 0; }
+    .ph-price { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -.03em; }
+    .ph-price-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+    .ph-next { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 6px; }
+    .ph-next strong { color: rgba(255,255,255,.7); }
+    .ph-breakdown { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .ph-slot-chip { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: rgba(255,255,255,.8); font-weight: 500; }
+    .ph-slot-chip .chip-val { font-size: 16px; font-weight: 800; color: #fff; margin-right: 2px; }
+    .ph-slot-chip .chip-rate { font-size: 10px; color: rgba(255,255,255,.4); margin-left: 2px; }
+    .ph-actions { display: flex; gap: 10px; align-items: center; }
+    .ph-autopay-row { display: flex; align-items: center; gap: 8px; background: rgba(14,159,110,.15); border: 1px solid rgba(14,159,110,.3); border-radius: 9px; padding: 8px 14px; }
+    .ph-autopay-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; flex-shrink: 0; }
+    .ph-autopay-text { font-size: 12px; color: rgba(255,255,255,.8); font-weight: 500; }
+    .ph-autopay-text strong { color: #fff; }
+    .btn-ph-ghost { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.15); border-radius: 9px; padding: 8px 16px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s; }
+    .btn-ph-ghost:hover { background: rgba(255,255,255,.14); }
+    .btn-ph-saffron { background: var(--saffron); color: #fff; border: none; border-radius: 9px; padding: 9px 16px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity .15s; }
+    .btn-ph-saffron:hover { opacity: .88; }
+
+    /* ── MODIFY PLAN CARD ── */
+    .modify-card { background: var(--card); border-radius: 14px; border: 1.5px solid var(--border); box-shadow: var(--sh); padding: 22px 24px; margin-bottom: 24px; }
+    .modify-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .modify-sub { font-size: 12px; color: var(--t2); margin-bottom: 18px; }
+    .modify-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .modify-slot-group { background: #F7F3EE; border-radius: 10px; padding: 14px; border: 1.5px solid var(--border); }
+    .msg-label { font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .msg-icon { font-size: 14px; }
+    .msg-rate { font-size: 10px; color: var(--t3); font-weight: 500; margin-bottom: 8px; }
+    .msg-input-row { display: flex; align-items: center; gap: 8px; }
+    .msg-stepper { display: flex; align-items: center; gap: 0; border: 1.5px solid var(--border); border-radius: 9px; overflow: hidden; background: #fff; }
+    .msg-step-btn { width: 32px; height: 36px; border: none; background: #fff; cursor: pointer; font-size: 18px; font-weight: 700; color: var(--t2); display: flex; align-items: center; justify-content: center; transition: background .1s; }
+    .msg-step-btn:hover { background: var(--bg); }
+    .msg-step-val { width: 44px; text-align: center; font-size: 15px; font-weight: 800; color: var(--t1); border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; display: flex; align-items: center; justify-content: center; }
+    .msg-subtotal { font-size: 12px; color: var(--t2); margin-top: 8px; font-weight: 500; }
+    .msg-subtotal strong { color: var(--saffron); }
+    .modify-result { background: #F7F3EE; border-radius: 10px; padding: 14px 18px; border: 1.5px dashed var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .mr-breakdown { font-size: 12px; color: var(--t2); line-height: 1.9; font-family: 'Courier New', monospace; }
+    .mr-total-label { font-size: 11px; color: var(--t3); margin-bottom: 3px; text-align: right; }
+    .mr-total-price { font-size: 26px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; text-align: right; }
+    .mr-total-sub { font-size: 11px; color: var(--t3); text-align: right; }
+    .mr-reauth-note { font-size: 11px; color: var(--pend); margin-top: 8px; display: flex; align-items: center; gap: 5px; display: none; }
+    .modify-actions { display: flex; gap: 10px; margin-top: 14px; }
 
     /* ── SLOT EXPLAINER ── */
-    .slot-explainer {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 20px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      box-shadow: var(--sh);
-    }
+    .slot-explainer { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; flex-wrap: wrap; box-shadow: var(--sh); }
     .slot-eq-item { display: flex; align-items: center; gap: 7px; }
-    .slot-eq-icon {
-      width: 28px; height: 28px; border-radius: 7px;
-      display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0;
-    }
+    .slot-eq-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
     .slot-eq-icon.bed  { background: rgba(14,159,110,.1); }
     .slot-eq-icon.room { background: rgba(27,45,79,.07); }
-    .slot-eq-text  { font-size: 13px; font-weight: 500; color: var(--t2); }
-    .slot-eq-sep   { font-size: 15px; font-weight: 700; color: var(--t3); }
-    .slot-eq-chip  { font-size: 11px; font-weight: 700; background: var(--navy); color: #fff; padding: 3px 10px; border-radius: 99px; }
-    .slot-eq-note  { font-size: 12px; color: var(--t2); font-weight: 500; }
+    .slot-eq-icon.shop { background: rgba(200,169,110,.12); }
+    .slot-eq-text { font-size: 13px; font-weight: 500; color: var(--t2); }
+    .slot-eq-sep { font-size: 15px; font-weight: 700; color: var(--t3); }
+    .slot-eq-chip { font-size: 11px; font-weight: 700; background: var(--navy); color: #fff; padding: 3px 10px; border-radius: 99px; }
+    .slot-eq-chip.comm { background: var(--saffron); }
+    .slot-eq-note { font-size: 12px; color: var(--t2); font-weight: 500; }
 
-    /* ── TIER LABEL ── */
-    .tier-range {
-      display: inline-block;
-      font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-      background: var(--navy-lt); color: var(--navy);
-      padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
-    }
+    /* BILLING TOGGLE */
+    .billing-toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
+    .btl-label { font-size: 13px; font-weight: 500; color: var(--t2); cursor: pointer; transition: color .15s; }
+    .btl-label.active { font-weight: 700; color: var(--t1); }
+    .btl-switch { width: 44px; height: 24px; background: var(--navy); border-radius: 99px; cursor: pointer; position: relative; flex-shrink: 0; }
+    .btl-switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: left .2s; }
+    .btl-switch.yearly::after { left: 23px; }
+    .btl-save { font-size: 10px; font-weight: 700; background: var(--paid-bg); color: var(--paid); padding: 2px 8px; border-radius: 99px; }
+
+    /* TIER CARDS */
+    .plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .plan-card { background: var(--card); border-radius: 14px; border: 1.5px solid var(--border); box-shadow: var(--sh); padding: 24px; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, border-color .2s; }
+    .plan-card:hover { box-shadow: var(--sh-md); }
+    .plan-card.current-tier { border-color: var(--paid); }
+    .plan-card.popular { border-color: var(--navy); }
+    .plan-card.popular::before { content: 'Most Popular'; position: absolute; top: 14px; right: 14px; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: var(--navy); color: #fff; padding: 3px 10px; border-radius: 99px; }
+    .plan-card.current-tier::before { content: 'Your Current Tier'; position: absolute; top: 14px; right: 14px; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--paid); color: #fff; padding: 3px 10px; border-radius: 99px; }
+    .tier-range { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; background: var(--navy-lt); color: var(--navy); padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
+    .tier-range.comm { background: rgba(200,169,110,.15); color: var(--saffron); }
+    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 4px; }
+    .plan-price { font-size: 30px; font-weight: 800; color: var(--saffron); letter-spacing: -.03em; }
+    .plan-price-period { font-size: 13px; color: var(--t3); font-weight: 500; padding-bottom: 4px; }
     .plan-rate-unit { font-size: 13px; color: var(--t3); font-weight: 500; margin-bottom: 4px; }
-    .plan-example   { font-size: 12px; color: var(--t2); margin-bottom: 20px; line-height: 1.5; }
+    .plan-example { font-size: 12px; color: var(--t2); margin-bottom: 20px; line-height: 1.5; }
     .plan-example strong { color: var(--saffron); }
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+    .plan-features { flex: 1; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .pf-row { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--t2); line-height: 1.5; }
+    .pf-row.highlight { color: var(--t1); font-weight: 500; }
+    .pf-check { flex-shrink: 0; margin-top: 1px; }
+    .pf-check.green { color: var(--paid); }
+    .pf-check.grey { color: var(--t3); }
+    .pf-section-head { font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; margin-bottom: 2px; }
+    .plan-cta { margin-top: auto; }
+    .btn-plan-active { width: 100%; padding: 10px 0; border-radius: 9px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: default; border: 1.5px solid var(--paid); background: var(--paid-bg); color: var(--paid); }
+    .btn-plan-primary { width: 100%; padding: 11px 0; border-radius: 9px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; border: none; background: var(--navy); color: #fff; transition: opacity .15s; }
+    .btn-plan-primary:hover { opacity: .88; }
+    .btn-plan-ghost { width: 100%; padding: 10px 0; border-radius: 9px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1.5px solid var(--border); background: #EDE8E0; color: var(--t2); transition: background .15s; }
+    .btn-plan-ghost:hover { background: var(--border); }
+    .pf-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--paid-bg); color: var(--paid); padding: 2px 8px; border-radius: 99px; margin-left: 4px; vertical-align: middle; }
+    .lv-soon { font-size: 10px; font-weight: 600; color: var(--t3); background: rgba(90,100,115,.09); padding: 2px 7px; border-radius: 4px; white-space: nowrap; margin-left: 4px; }
 
-    /* ── CALC CARD ── */
-    .calc-card {
-      background: var(--card);
-      border-radius: 14px;
-      border: 1.5px dashed var(--border);
-      padding: 20px 24px;
-      margin-bottom: 28px;
-    }
-    .calc-title {
-      font-size: 13px; font-weight: 700; color: var(--t1);
-      margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
-    }
+    /* CALC CARD */
+    .calc-card { background: var(--card); border-radius: 14px; border: 1.5px dashed var(--border); padding: 20px 24px; margin-bottom: 28px; }
+    .calc-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
     .calc-row { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
     .calc-group { display: flex; flex-direction: column; gap: 5px; }
-    .calc-group label {
-      font-size: 10px; font-weight: 700; color: var(--t3);
-      text-transform: uppercase; letter-spacing: .07em;
-    }
-    .calc-input {
-      width: 90px; padding: 9px 12px;
-      border: 1.5px solid var(--border); border-radius: 9px;
-      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--t1);
-      background: #F4F5F8; outline: none; transition: border-color .15s;
-    }
+    .calc-group label { font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .07em; }
+    .calc-group .rate-hint { font-size: 10px; color: rgba(200,169,110,.9); font-weight: 600; margin-top: 1px; }
+    .calc-input { width: 90px; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-family: inherit; font-size: 15px; font-weight: 700; color: var(--t1); background: #EDE8E0; outline: none; transition: border-color .15s; }
     .calc-input:focus { border-color: var(--navy); background: #fff; }
-    .calc-op   { font-size: 18px; font-weight: 700; color: var(--t3); padding-bottom: 6px; }
+    .calc-op { font-size: 18px; font-weight: 700; color: var(--t3); padding-bottom: 6px; }
     .calc-result { display: flex; flex-direction: column; gap: 2px; margin-left: 4px; padding-bottom: 2px; }
     .calc-result-slots { font-size: 11px; color: var(--t2); font-weight: 600; }
     .calc-result-price { font-size: 24px; font-weight: 800; color: var(--saffron); letter-spacing: -.02em; line-height: 1; }
-    .calc-result-sub   { font-size: 11px; color: var(--t3); }
-    .calc-breakdown {
-      font-size: 11px; color: var(--t2); margin-top: 10px; padding-top: 10px;
-      border-top: 1px solid var(--bg); line-height: 1.9; font-family: 'Courier New', monospace;
-    }
+    .calc-result-sub { font-size: 11px; color: var(--t3); }
+    .calc-breakdown { font-size: 11px; color: var(--t2); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--bg); line-height: 1.9; font-family: 'Courier New', monospace; }
+
+    /* LIMITS TABLE */
+    .limits-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); overflow: hidden; margin-bottom: 28px; }
+    .limits-header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .limits-title { font-size: 14px; font-weight: 700; color: var(--t1); }
+    table.limits-table { width: 100%; border-collapse: collapse; }
+    .limits-table th { padding: 10px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--t3); text-align: left; background: #F7F3EE; border-bottom: 1px solid var(--border); }
+    .limits-table th:not(:first-child) { text-align: center; }
+    .limits-table td { padding: 12px 16px; font-size: 13px; color: var(--t1); border-bottom: 1px solid var(--bg); vertical-align: middle; }
+    .limits-table tr:last-child td { border-bottom: none; }
+    .limits-table td:not(:first-child) { text-align: center; }
+    .limits-feat { font-weight: 500; }
+    .limits-feat-sub { font-size: 11px; color: var(--t3); font-weight: 400; margin-top: 1px; }
+    .lv-check { color: var(--paid); }
+    .lv-cross { color: var(--t3); }
+    .lv-count { font-weight: 700; color: var(--t1); }
+    .col-active { background: rgba(28,37,55,.025); }
+    .col-header-active { background: rgba(28,37,55,.04) !important; color: var(--navy) !important; }
+
+    /* BILLING HISTORY */
+    .billing-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); padding: 20px 24px; margin-bottom: 28px; }
+    .billing-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 16px; }
+    .billing-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--bg); }
+    .billing-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .br-left { display: flex; align-items: center; gap: 12px; }
+    .br-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--paid-bg); color: var(--paid); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .br-desc { font-size: 13px; font-weight: 600; color: var(--t1); }
+    .br-date { font-size: 11px; color: var(--t3); margin-top: 2px; }
+    .br-amount { font-size: 15px; font-weight: 800; color: var(--t1); }
+    .br-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--paid-bg); color: var(--paid); margin-left: 8px; }
+
+    /* FAQ */
+    .faq-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--sh); padding: 20px 24px; }
+    .faq-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 16px; }
+    .faq-item { padding: 13px 0; border-bottom: 1px solid var(--bg); cursor: pointer; }
+    .faq-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .faq-q { font-size: 13px; font-weight: 600; color: var(--t1); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .faq-q svg { flex-shrink: 0; color: var(--t3); transition: transform .2s; }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a { font-size: 12px; color: var(--t2); line-height: 1.7; margin-top: 8px; display: none; }
+    .faq-item.open .faq-a { display: block; }
 
     /* TOAST */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--navy);
-      color: #fff;
-      border-radius: 10px;
-      padding: 12px 20px;
-      font-size: 13px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 24px rgba(15, 22, 35, .18);
-      opacity: 0;
-      transition: opacity .25s, transform .25s;
-      pointer-events: none;
-      z-index: 200;
-      white-space: nowrap;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--navy); color: #fff; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(28,37,55,.18); opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; z-index: 200; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
-
 <body>
 
   <!-- SIDEBAR -->
@@ -1211,228 +251,205 @@
     <nav class="sb-nav">
       <div class="sb-section">Main</div>
       <a class="nav-item" href="dashboard-desktop.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Dashboard
       </a>
       <a class="nav-item" href="property-setup.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="2" width="16" height="20" rx="2" />
-          <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01"/></svg>
         Properties
       </a>
       <a class="nav-item" href="tenants.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         Tenants
         <span class="nav-badge">4</span>
       </a>
       <div class="sb-divider"></div>
       <div class="sb-section">Finance</div>
       <a class="nav-item" href="payments.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 8h12M8 3c0 9 8 12 8 12M6 20h8"/></svg>
         Payments
       </a>
       <div class="sb-divider"></div>
       <div class="sb-section">Settings</div>
       <a class="nav-item" href="bank-onboarding.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="5" width="20" height="14" rx="2" />
-          <line x1="2" y1="10" x2="22" y2="10" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         Bank Account
       </a>
       <a class="nav-item active" href="subscription.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         Plan &amp; Billing
       </a>
       <a class="nav-item" href="settings-desktop.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3" />
-          <path
-            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         Settings
       </a>
     </nav>
     <button class="sb-add-btn" onclick="location.href='add-tenant.html'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round">
-        <line x1="12" y1="5" x2="12" y2="19" />
-        <line x1="5" y1="12" x2="19" y2="12" />
-      </svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Add Tenant
     </button>
     <div class="sb-user">
-      <div class="sb-avi">VA</div>
+      <div class="sb-avi">AS</div>
       <div>
-        <div class="sb-name">Adarsh singh</div>
+        <div class="sb-name">Adarsh Singh</div>
         <div class="sb-role">Property Owner</div>
       </div>
       <a href="auth.html" class="sb-logout">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round">
-          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-          <polyline points="16 17 21 12 16 7" />
-          <line x1="21" y1="12" x2="9" y2="12" />
-        </svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </a>
     </div>
   </aside>
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- TOPBAR -->
     <div class="topbar">
       <div class="breadcrumb">
         <a href="settings-desktop.html">Settings</a>
-        <span class="breadcrumb-sep"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></span>
+        <span class="breadcrumb-sep"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         <span class="breadcrumb-current">Plan &amp; Billing</span>
       </div>
       <div class="topbar-right">
         <div class="topbar-date">June 2026</div>
         <div class="icon-btn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         </div>
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
 
-      <!-- CURRENT PLAN HERO -->
-      <div class="current-plan-card">
-        <div class="cpc-bg-shape"></div>
-        <div class="cpc-bg-shape2"></div>
-        <div class="cpc-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        </div>
-        <div class="cpc-body">
-          <div class="cpc-label">Current Plan</div>
-          <div class="cpc-plan-name">
-            Free — Phase 1
-            <span class="cpc-badge">Early Access</span>
+      <!-- ACTIVE PLAN HERO -->
+      <div class="plan-hero">
+        <div class="ph-bg1"></div>
+        <div class="ph-bg2"></div>
+        <div class="ph-top">
+          <div class="ph-left">
+            <div class="ph-label">Active Subscription</div>
+            <div class="ph-plan">
+              Tier 1 — Per Slot
+              <span class="ph-active-badge">Active</span>
+            </div>
+            <div class="ph-desc">28 active slots across 2 properties · automatic monthly billing via UPI AutoPay</div>
           </div>
-          <div class="cpc-desc">You have full access to all Phase 1 features at no cost. Automated WhatsApp reminders,
-            Cashfree payments, live dashboard — everything included while Phase 1 is active.</div>
-          <div class="cpc-restrict">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            Room-based only · 1 tenant per room · max 5 rooms
-          </div>
-          <div class="cpc-features">
-            <div class="cpc-feat">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Automated reminders (FR-17)
-            </div>
-            <div class="cpc-feat">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Cashfree payment links (FR-18)
-            </div>
-            <div class="cpc-feat">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              Live dashboard (FR-28)
-            </div>
-            <div class="cpc-feat">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round">
-                <polyline points="4 12 9 17 20 6" />
-              </svg>
-              WhatsApp receipts (FR-22)
-            </div>
+          <div class="ph-right">
+            <div class="ph-price">₹1,680</div>
+            <div class="ph-price-sub">/ month · auto-debited</div>
+            <div class="ph-next">Next debit <strong>5 July 2026</strong></div>
           </div>
         </div>
-        <div class="cpc-right">
-          <div class="cpc-price">₹0</div>
-          <div class="cpc-price-sub">/ month · Phase 1</div>
-          <div class="cpc-usage">
-            <div class="cpc-usage-row">Tenants <span class="cpc-usage-val">16 active</span></div>
-            <div class="cpc-usage-row">Properties <span class="cpc-usage-val">1</span></div>
-            <div class="cpc-usage-row">Bank <span class="cpc-usage-val">✓ Verified</span></div>
-            <div class="cpc-usage-row">Member since <span class="cpc-usage-val">Jun 2026</span></div>
+
+        <div class="ph-breakdown">
+          <div class="ph-slot-chip">
+            <span>🛏</span>
+            <span><span class="chip-val">20</span> PG beds <span class="chip-rate">× ₹60</span> = ₹1,200</span>
           </div>
+          <div class="ph-slot-chip">
+            <span>🚪</span>
+            <span><span class="chip-val">8</span> flat rooms <span class="chip-rate">× ₹60</span> = ₹480</span>
+          </div>
+          <div class="ph-slot-chip" style="opacity:.45">
+            <span>🏪</span>
+            <span><span class="chip-val">0</span> shops <span class="chip-rate">× ₹80</span> = ₹0</span>
+          </div>
+        </div>
+
+        <div class="ph-actions">
+          <div class="ph-autopay-row">
+            <div class="ph-autopay-dot"></div>
+            <div class="ph-autopay-text">UPI AutoPay via <strong>GPay ···1234</strong> — Active</div>
+          </div>
+          <button class="btn-ph-ghost" onclick="showToast('Auto-pay management coming shortly')">Manage Auto-Pay</button>
+          <button class="btn-ph-saffron" onclick="document.getElementById('modify-section').scrollIntoView({behavior:'smooth'})">Modify Plan</button>
         </div>
       </div>
 
-      <!-- EARLY ADOPTER BANNER -->
-      <div class="ea-banner">
-        <div class="ea-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-          </svg>
+      <!-- MODIFY PLAN -->
+      <div class="modify-card" id="modify-section">
+        <div class="modify-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Modify Your Plan
         </div>
-        <div class="ea-body">
-          <div class="ea-title">Early Adopter Benefit — Locked-In Pricing</div>
-          <div class="ea-desc">As a Phase 1 user you'll receive a <strong>40% lifetime discount</strong> on any paid plan when billing launches — Starter at <strong>₹719/month</strong> instead of ₹1,199. Your usage data and tenant history carries over automatically. We'll notify you at <strong>Adarshsingh@gmail.com</strong> before any plan changes take effect.</div>
+        <div class="modify-sub">Adjust slot counts — price updates instantly. Changes take effect from next billing cycle.</div>
+        <div class="modify-grid">
+          <div class="modify-slot-group">
+            <div class="msg-label"><span class="msg-icon">🛏</span> PG Beds</div>
+            <div class="msg-rate">₹60 / slot / month</div>
+            <div class="msg-input-row">
+              <div class="msg-stepper">
+                <button class="msg-step-btn" onclick="adjustSlot('beds',-1)">−</button>
+                <div class="msg-step-val" id="mod-beds">20</div>
+                <button class="msg-step-btn" onclick="adjustSlot('beds',1)">+</button>
+              </div>
+            </div>
+            <div class="msg-subtotal" id="mod-beds-sub">20 × ₹60 = <strong>₹1,200</strong></div>
+          </div>
+          <div class="modify-slot-group">
+            <div class="msg-label"><span class="msg-icon">🚪</span> Flat Rooms</div>
+            <div class="msg-rate">₹60 / slot / month</div>
+            <div class="msg-input-row">
+              <div class="msg-stepper">
+                <button class="msg-step-btn" onclick="adjustSlot('rooms',-1)">−</button>
+                <div class="msg-step-val" id="mod-rooms">8</div>
+                <button class="msg-step-btn" onclick="adjustSlot('rooms',1)">+</button>
+              </div>
+            </div>
+            <div class="msg-subtotal" id="mod-rooms-sub">8 × ₹60 = <strong>₹480</strong></div>
+          </div>
+          <div class="modify-slot-group">
+            <div class="msg-label"><span class="msg-icon">🏪</span> Shops / Offices</div>
+            <div class="msg-rate" style="color:var(--saffron)">₹80 / slot / month</div>
+            <div class="msg-input-row">
+              <div class="msg-stepper">
+                <button class="msg-step-btn" onclick="adjustSlot('shops',-1)">−</button>
+                <div class="msg-step-val" id="mod-shops">0</div>
+                <button class="msg-step-btn" onclick="adjustSlot('shops',1)">+</button>
+              </div>
+            </div>
+            <div class="msg-subtotal" id="mod-shops-sub">0 × ₹80 = <strong>₹0</strong></div>
+          </div>
         </div>
-        <button class="btn-ghost" onclick="showToast('You\'re on the early adopter list ✓')">Confirm Spot</button>
-      </div>
-
-      <!-- UPCOMING PLANS -->
-      <div class="section-header">
-        <div class="section-title">Upcoming Plans — Phase 4</div>
-        <div class="section-sub">Automated rent collection — reminders, payments, receipts, all on autopilot. No competitor offers this. Early adopters get 40% off.</div>
+        <div class="modify-result">
+          <div>
+            <div class="mr-breakdown" id="mod-breakdown">Tier 1: 28 × ₹60 = ₹1,680</div>
+            <div class="mr-reauth-note" id="mod-reauth-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              New amount exceeds your mandate limit — you'll re-authorize once (30 sec)
+            </div>
+          </div>
+          <div>
+            <div class="mr-total-label">New monthly total</div>
+            <div class="mr-total-price" id="mod-total">₹1,680</div>
+            <div class="mr-total-sub" id="mod-total-sub">No change</div>
+          </div>
+        </div>
+        <div class="modify-actions">
+          <button class="btn-secondary" onclick="resetModify()">Reset</button>
+          <button class="btn-primary" onclick="showToast('Plan updated — effective next billing cycle ✓')">Apply Changes</button>
+        </div>
       </div>
 
       <!-- SLOT EXPLAINER -->
       <div class="slot-explainer">
         <div class="slot-eq-item">
           <div class="slot-eq-icon bed">🛏</div>
-          <div class="slot-eq-text">1 bed in a PG</div>
+          <div class="slot-eq-text">1 PG bed</div>
         </div>
         <div class="slot-eq-sep">=</div>
-        <div class="slot-eq-chip">1 Slot</div>
-        <div class="slot-eq-sep" style="margin:0 2px">·</div>
+        <div class="slot-eq-chip">1 Slot · ₹60</div>
+        <div class="slot-eq-sep" style="margin:0 4px">·</div>
         <div class="slot-eq-item">
           <div class="slot-eq-icon room">🚪</div>
-          <div class="slot-eq-text">1 room in a flat</div>
+          <div class="slot-eq-text">1 flat room</div>
         </div>
         <div class="slot-eq-sep">=</div>
-        <div class="slot-eq-chip">1 Slot</div>
-        <div class="slot-eq-sep" style="margin:0 2px">·</div>
-        <div class="slot-eq-note">Slots add up across all your properties — PG beds + flat rooms combined</div>
+        <div class="slot-eq-chip">1 Slot · ₹60</div>
+        <div class="slot-eq-sep" style="margin:0 4px">·</div>
+        <div class="slot-eq-item">
+          <div class="slot-eq-icon shop">🏪</div>
+          <div class="slot-eq-text">1 shop / office</div>
+        </div>
+        <div class="slot-eq-sep">=</div>
+        <div class="slot-eq-chip comm">1 Slot · ₹80</div>
       </div>
 
       <!-- BILLING TOGGLE -->
@@ -1443,73 +460,65 @@
       </div>
 
       <!-- TIER CARDS -->
+      <div class="section-header">
+        <div class="section-title">Pricing Tiers</div>
+        <div class="section-sub">Your rate drops automatically as your portfolio grows. You're currently in Tier 1.</div>
+      </div>
       <div class="plan-grid">
 
-        <!-- TIER 1: 1–30 slots -->
-        <div class="plan-card">
-          <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-            Coming Soon
-          </div>
-          <div class="tier-range">1 – 30 Slots</div>
+        <!-- TIER 1 -->
+        <div class="plan-card current-tier">
+          <div class="tier-range">Residential · 1–30 slots</div>
           <div class="plan-price-row">
             <span class="plan-price" data-monthly="₹60" data-yearly="₹50">₹60</span>
             <span class="plan-price-period">&nbsp;/ slot / mo</span>
           </div>
-          <div class="plan-rate-unit" id="t1-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
-          <div class="plan-example">e.g. 9 beds = <strong>₹540/mo</strong> &nbsp;·&nbsp; 20 beds = <strong>₹1,200/mo</strong></div>
+          <div class="plan-rate-unit" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">9 beds = <strong>₹540/mo</strong> &nbsp;·&nbsp; 20 beds = <strong>₹1,200/mo</strong></div>
           <div class="plan-divider"></div>
           <div class="plan-features">
-            <div class="pf-section-head">All Properties</div>
+            <div class="pf-section-head">All Property Types</div>
             <div class="pf-row highlight">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              Unlimited properties &amp; property types
-            </div>
-            <div class="pf-row highlight">
-              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              PG beds + flat rooms — mixed portfolio ok
-              <span class="pf-badge">Mixed ✓</span>
+              PG beds + flat rooms + shops — any mix
             </div>
             <div class="pf-section-head">Automation</div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              WhatsApp reminders — unlimited, no credits
+              WhatsApp reminders — unlimited
             </div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              Cashfree payment link — direct to your bank
+              Cashfree payment links — direct to bank
             </div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              WhatsApp receipts &amp; owner alerts
+              Electricity billing (sub-meter, flat, split)
             </div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              Live dashboard + PDF receipts
+              Tenant UPI AutoPay mandates
+              <span class="pf-badge">New</span>
+            </div>
+            <div class="pf-row">
+              <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
+              Live Supabase Realtime dashboard
             </div>
           </div>
           <div class="plan-cta">
-            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
+            <button class="btn-plan-active">✓ Your Current Tier</button>
           </div>
         </div>
 
-        <!-- TIER 2: 31–100 slots — Most Popular -->
+        <!-- TIER 2 — Most Popular -->
         <div class="plan-card popular">
-          <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-            Coming Soon
-          </div>
-          <div class="tier-range">31 – 100 Slots</div>
+          <div class="tier-range">Residential · 31–100 slots</div>
           <div class="plan-price-row">
             <span class="plan-price" data-monthly="₹50" data-yearly="₹42">₹50</span>
             <span class="plan-price-period">&nbsp;/ slot / mo</span>
           </div>
-          <div class="plan-rate-unit" id="t2-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
-          <div class="plan-example">e.g. 90 beds = <strong>₹4,800/mo</strong> &nbsp;·&nbsp; 50 beds = <strong>₹2,700/mo</strong></div>
+          <div class="plan-rate-unit" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">50 beds = <strong>₹2,700/mo</strong> &nbsp;·&nbsp; 90 beds = <strong>₹4,800/mo</strong></div>
           <div class="plan-divider"></div>
           <div class="plan-features">
             <div class="pf-section-head">Everything in Tier 1, plus</div>
@@ -1520,12 +529,12 @@
             <div class="pf-section-head">Reports</div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              Monthly collection CSV export
+              Monthly CSV export + PDF receipts
             </div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Digital agreements / eSign
-              <span class="lv-soon" style="margin-left:4px">Phase 3</span>
+              <span class="lv-soon">Phase 2</span>
             </div>
             <div class="pf-section-head">Support</div>
             <div class="pf-row">
@@ -1534,37 +543,31 @@
             </div>
           </div>
           <div class="plan-cta">
-            <button class="btn-plan-primary" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
+            <button class="btn-plan-primary" onclick="showToast('Plan switch — contact support to upgrade')">Upgrade to Tier 2</button>
           </div>
         </div>
 
-        <!-- TIER 3: 101+ slots -->
+        <!-- TIER 3 -->
         <div class="plan-card">
-          <div class="plan-coming-badge">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-            Coming Soon
-          </div>
-          <div class="tier-range">101+ Slots</div>
+          <div class="tier-range">Residential · 101+ slots</div>
           <div class="plan-price-row">
             <span class="plan-price" data-monthly="₹40" data-yearly="₹33">₹40</span>
             <span class="plan-price-period">&nbsp;/ slot / mo</span>
           </div>
-          <div class="plan-rate-unit" id="t3-billed" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
-          <div class="plan-example">e.g. 150 beds = <strong>₹7,200/mo</strong> &nbsp;·&nbsp; 200 beds = <strong>₹9,800/mo</strong></div>
+          <div class="plan-rate-unit" data-monthly="Billed monthly" data-yearly="Billed yearly — 2 months free">Billed monthly</div>
+          <div class="plan-example">150 beds = <strong>₹7,200/mo</strong> &nbsp;·&nbsp; 200 beds = <strong>₹9,800/mo</strong></div>
           <div class="plan-divider"></div>
           <div class="plan-features">
             <div class="pf-section-head">Everything in Tier 2, plus</div>
             <div class="pf-row highlight">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
-              Best rate — ₹40/slot vs ₹60 at entry
+              Best rate — ₹40/slot
             </div>
-            <div class="pf-section-head">Analytics & API</div>
+            <div class="pf-section-head">Analytics &amp; API</div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
               Collection analytics dashboard
-              <span class="lv-soon" style="margin-left:4px">Phase 4</span>
+              <span class="lv-soon">Phase 4</span>
             </div>
             <div class="pf-row">
               <svg class="pf-check green" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
@@ -1581,41 +584,56 @@
             </div>
           </div>
           <div class="plan-cta">
-            <button class="btn-plan-cs" onclick="showToast('You\'re on the early adopter waitlist ✓')">Join Waitlist</button>
+            <button class="btn-plan-ghost" onclick="showToast('Contact support for Tier 3 upgrade')">Contact for Tier 3</button>
           </div>
         </div>
 
+      </div>
+
+      <!-- COMMERCIAL RATE NOTE -->
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh)">
+        <div style="width:36px;height:36px;border-radius:9px;background:rgba(200,169,110,.12);color:var(--saffron);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">🏪</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:2px">Commercial Slot Rate — ₹80/slot</div>
+          <div style="font-size:12px;color:var(--t2)">Shops and offices are billed at ₹80/slot (Tier 1), ₹65 (Tier 2), ₹50 (Tier 3) — includes CAM billing, rent escalation tracking, and agreement expiry alerts. Tiered independently from residential slots.</div>
+        </div>
       </div>
 
       <!-- LIVE CALCULATOR -->
       <div class="calc-card">
         <div class="calc-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/>
-          </svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
           Calculate your monthly cost
         </div>
         <div class="calc-row">
           <div class="calc-group">
             <label>PG Beds</label>
+            <div class="rate-hint">₹60/slot</div>
             <input class="calc-input" type="number" id="calc-beds" value="20" min="0" max="999" oninput="calcPrice()">
           </div>
           <span class="calc-op">+</span>
           <div class="calc-group">
-            <label>Flat / Rooms</label>
-            <input class="calc-input" type="number" id="calc-rooms" value="0" min="0" max="999" oninput="calcPrice()">
+            <label>Flat Rooms</label>
+            <div class="rate-hint">₹60/slot</div>
+            <input class="calc-input" type="number" id="calc-rooms" value="8" min="0" max="999" oninput="calcPrice()">
+          </div>
+          <span class="calc-op">+</span>
+          <div class="calc-group">
+            <label>Shops / Offices</label>
+            <div class="rate-hint" style="color:var(--saffron)">₹80/slot</div>
+            <input class="calc-input" type="number" id="calc-shops" value="0" min="0" max="999" oninput="calcPrice()">
           </div>
           <span class="calc-op">=</span>
           <div class="calc-result">
-            <div class="calc-result-slots" id="calc-slots-label">20 slots</div>
-            <div class="calc-result-price" id="calc-price">₹1,200</div>
+            <div class="calc-result-slots" id="calc-slots-label">28 slots</div>
+            <div class="calc-result-price" id="calc-price">₹1,680</div>
             <div class="calc-result-sub" id="calc-period">/month</div>
           </div>
         </div>
-        <div class="calc-breakdown" id="calc-breakdown">Tier 1: 20 × ₹60 = ₹1,200</div>
+        <div class="calc-breakdown" id="calc-breakdown">Residential Tier 1: 28 × ₹60 = ₹1,680</div>
       </div>
 
-      <!-- COMPARISON TABLE -->
+      <!-- FEATURE COMPARISON -->
       <div class="section-header">
         <div class="section-title">Full Feature Comparison</div>
       </div>
@@ -1623,8 +641,8 @@
         <table class="limits-table">
           <thead>
             <tr>
-              <th style="width:38%">Feature</th>
-              <th class="col-header-active">Trial · 14 days</th>
+              <th style="width:36%">Feature</th>
+              <th class="col-header-active">14-day Trial</th>
               <th>Tier 1 · ₹60/slot</th>
               <th>Tier 2 · ₹50/slot</th>
               <th>Tier 3 · ₹40/slot</th>
@@ -1632,196 +650,74 @@
           </thead>
           <tbody>
             <tr>
-              <td>
-                <div class="limits-feat">Properties</div>
-                <div class="limits-feat-sub">PG, hostel, flat — any mix, unlimited count</div>
-              </td>
+              <td><div class="limits-feat">Slots (beds + rooms + shops)</div><div class="limits-feat-sub">All types counted — residential ₹60 · commercial ₹80</div></td>
+              <td class="col-active"><span class="lv-count">Full Tier 1<br>for 14 days</span></td>
+              <td><span class="lv-count">1–30 res · ₹60<br>1–30 comm · ₹80</span></td>
+              <td><span class="lv-count">31–100 res · ₹50<br>31–100 comm · ₹65</span></td>
+              <td><span class="lv-count">101+ res · ₹40<br>101+ comm · ₹50</span></td>
+            </tr>
+            <tr>
+              <td><div class="limits-feat">Properties</div><div class="limits-feat-sub">PG, residential, commercial — unlimited count</div></td>
               <td class="col-active"><span class="lv-count">∞</span></td>
               <td><span class="lv-count">∞</span></td>
               <td><span class="lv-count">∞</span></td>
               <td><span class="lv-count">∞</span></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Slots (beds + rooms)</div>
-                <div class="limits-feat-sub">1 PG bed = 1 slot · 1 flat room = 1 slot · mixed ok</div>
-              </td>
-              <td class="col-active">
-                <span class="lv-count">Trial slots</span>
-                <div style="font-size:10px;color:var(--t3);margin-top:2px;">Full Tier 1 for 14 days</div>
-              </td>
-              <td><span class="lv-count">1–30 slots · ₹60/slot</span></td>
-              <td><span class="lv-count">31–100 slots · ₹50/slot</span></td>
-              <td><span class="lv-count">101+ slots · ₹40/slot</span></td>
+              <td><div class="limits-feat">WhatsApp reminders + receipts</div><div class="limits-feat-sub">FR-17, FR-22 · 3-day, due-date, overdue · unlimited</div></td>
+              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Automated WhatsApp reminders</div>
-                <div class="limits-feat-sub">FR-17 · 3-day, due-date, overdue</div>
-              </td>
-              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><div class="limits-feat">Electricity billing</div><div class="limits-feat-sub">FR-E1 · Sub-meter, flat-rate, or shared split</div></td>
+              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Cashfree payment links</div>
-                <div class="limits-feat-sub">FR-18 · Auto-generated at reminder time</div>
-              </td>
-              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><div class="limits-feat">Commercial properties (shops / offices)</div><div class="limits-feat-sub">FR-C1 · CAM billing, escalation tracker, agreement alerts</div></td>
+              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">WhatsApp receipts &amp; owner alerts</div>
-                <div class="limits-feat-sub">FR-22 · FR-23</div>
-              </td>
-              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><div class="limits-feat">Tenant UPI AutoPay mandates</div><div class="limits-feat-sub">FR-M1 · One-time setup, auto-debit monthly</div></td>
+              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Live Supabase Realtime dashboard</div>
-                <div class="limits-feat-sub">FR-28 · Updates within 1 second</div>
-              </td>
-              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><div class="limits-feat">Live Realtime dashboard</div><div class="limits-feat-sub">FR-28 · Supabase Realtime · updates within 1 sec</div></td>
+              <td class="col-active"><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">PDF receipts &amp; CSV export</div>
-                <div class="limits-feat-sub">Phase 2 feature</div>
-              </td>
+              <td><div class="limits-feat">PDF receipts &amp; CSV export</div><div class="limits-feat-sub">Phase 2</div></td>
               <td class="col-active"><span class="lv-soon">Phase 2</span></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Digital agreements / eSign</div>
-                <div class="limits-feat-sub">Phase 3 feature</div>
-              </td>
-              <td class="col-active"><span class="lv-soon">Phase 3</span></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><div class="limits-feat">Digital agreements / eSign</div><div class="limits-feat-sub">Phase 2</div></td>
+              <td class="col-active"><span class="lv-soon">Phase 2</span></td>
+              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
             <tr>
-              <td>
-                <div class="limits-feat">Analytics &amp; insights</div>
-                <div class="limits-feat-sub">Phase 4 feature</div>
-              </td>
+              <td><div class="limits-feat">Analytics &amp; REST API</div><div class="limits-feat-sub">Phase 4</div></td>
               <td class="col-active"><span class="lv-soon">Phase 4</span></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="limits-feat">REST API access</div>
-                <div class="limits-feat-sub">Phase 4 feature</div>
-              </td>
-              <td class="col-active"><span class="lv-soon">Phase 4</span></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg></td>
-              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg></td>
-              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round">
-                  <polyline points="4 12 9 17 20 6" />
-                </svg></td>
+              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td>
+              <td><svg class="lv-cross" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td>
+              <td><svg class="lv-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg></td>
             </tr>
           </tbody>
         </table>
@@ -1830,19 +726,35 @@
       <!-- BILLING HISTORY -->
       <div class="billing-card">
         <div class="billing-title">Billing History</div>
-        <div class="billing-empty">
-          <div class="billing-empty-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-            </svg>
+        <div class="billing-row">
+          <div class="br-left">
+            <div class="br-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div class="br-desc">RentMaster — 28 slots (20 beds + 8 rooms)</div>
+              <div class="br-date">Auto-debited 5 Jun 2026 · GPay ···1234</div>
+            </div>
           </div>
-          <div class="billing-empty-title">No invoices yet</div>
-          <div class="billing-empty-sub">You're on the Free plan. Invoices will appear here when Phase 4 billing
-            launches.</div>
+          <div style="display:flex;align-items:center">
+            <div class="br-amount">₹1,680</div>
+            <span class="br-badge">Paid</span>
+          </div>
+        </div>
+        <div class="billing-row">
+          <div class="br-left">
+            <div class="br-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div class="br-desc">RentMaster — 28 slots (20 beds + 8 rooms)</div>
+              <div class="br-date">Auto-debited 5 May 2026 · GPay ···1234</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center">
+            <div class="br-amount">₹1,680</div>
+            <span class="br-badge">Paid</span>
+          </div>
         </div>
       </div>
 
@@ -1851,169 +763,163 @@
         <div class="faq-title">Frequently Asked Questions</div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            What counts as a bed vs a room?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">A <strong>room</strong> is a unit with one tenant — typical for residential flats or
-            independent rooms. A <strong>bed</strong> is a sleeping space inside a shared room, where 2–4 tenants split
-            the room — common in PG accommodations. The Free plan supports room-based only (1 tenant per room, max 5
-            rooms). Starter and above unlock bed-based PG so you can assign multiple tenants to a single room.</div>
+          <div class="faq-q">What counts as a slot?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">1 PG bed = 1 slot at ₹60/month. 1 flat room = 1 slot at ₹60/month. 1 shop or office = 1 slot at ₹80/month. Slots are counted across all your properties — PG beds + flat rooms + shops combined for your total bill. Commercial and residential slots are tiered independently.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            When will Phase 4 billing launch and will I be forced to pay?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">Phase 4 is planned after Phase 3 (digital agreements). You'll receive at least 60 days'
-            notice before billing begins, and you'll never be charged without explicitly choosing a plan. Your data is
-            safe regardless.</div>
+          <div class="faq-q">What happens when I add a new property?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">When you add a property or room, the system recalculates your slot count and updates your subscription. If the new amount is within your auto-pay mandate limit, it updates silently — no action needed. If it exceeds the limit (for larger expansions), you'll get a WhatsApp link to re-authorize once. The new amount takes effect from your next billing cycle, not immediately.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            What happens if I exceed a plan's room or bed limit?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">Existing tenants are never removed. If you hit a plan's room or bed ceiling, you'll be
-            prompted to upgrade before adding new rooms or beds. Automated reminders continue uninterrupted for all
-            existing tenants.</div>
+          <div class="faq-q">Does RentMaster take a cut of my rent collection?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">No. Rent flows directly from your tenant to your bank via Cashfree Beneficiary Transfer. RentMaster never holds funds. Cashfree's standard processing fee (~1.5–2%) applies per transaction. Your RentMaster subscription is a flat per-slot monthly fee — completely separate from rent amounts.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            Does RentMaster take a cut of my rent collection?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">No. Rent flows directly from your tenant to your bank account via Cashfree Beneficiary
-            Transfer. RentMaster never holds or intermediates funds (NFR-14 — no RBI PA license required). Cashfree's
-            standard processing fee (typically 1.5–2%) applies on each transaction.</div>
+          <div class="faq-q">How does the UPI AutoPay mandate work for my subscription?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">You authorize once via GPay, PhonePe, or Paytm — takes 30 seconds. On the 5th of each month, Cashfree auto-debits your RentMaster subscription amount. You get a WhatsApp receipt. If the debit fails, you have a 7-day grace period to pay manually before the account is suspended. Cancel anytime from your UPI app or this page.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            Can I cancel at any time with no lock-in?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">Yes. Monthly billing with no lock-in. Cancel anytime from this page and your plan
-            downgrades at the end of the current billing cycle. All your tenant and payment data remains accessible for
-            6 months after cancellation.</div>
+          <div class="faq-q">What is electricity billing and does it cost extra?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">Electricity billing is included in all paid tiers at no extra cost. You choose a billing mode per property: sub-meter (you enter monthly readings, system calculates units × rate), flat-rate (fixed monthly amount per room), or shared split (total EB bill ÷ active tenants). The electricity amount is added to the rent record and included in the same payment link and WhatsApp message.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-q">
-            What is the 40% early adopter discount?
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </div>
-          <div class="faq-a">All owners who joined during Phase 1 (before paid billing launches) get a 40% permanent
-            discount on any plan — for life, as long as the subscription is kept active. For example, the Starter plan at
-            ₹1,199/month would be ₹719/month for early adopters. Pro at ₹1,999 would be ₹1,199/month.</div>
+          <div class="faq-q">Can I cancel at any time with no lock-in?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          <div class="faq-a">Yes. Cancel the UPI AutoPay mandate from your UPI app or contact support. Your account remains active until the end of the current billing cycle. All tenant and payment data remains accessible for 6 months after cancellation.</div>
         </div>
-
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
+    </div>
+  </div>
 
   <!-- TOAST -->
   <div class="toast" id="toast">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-      stroke-linecap="round">
-      <polyline points="4 12 9 17 20 6" />
-    </svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 12 9 17 20 6"/></svg>
     <span id="toast-msg"></span>
   </div>
 
   <script>
-    function toggleFaq(el) {
-      el.classList.toggle('open');
-    }
+    /* ── CURRENT STATE ── */
+    var _currentBeds = 20, _currentRooms = 8, _currentShops = 0;
+    var _modBeds = 20, _modRooms = 8, _modShops = 0;
+    var MAX_AMOUNT = 2520; // 1680 * 1.5
 
-    var _billingYearly = false;
+    function fmtINR(n) { return n.toLocaleString('en-IN'); }
+
+    /* ── BILLING TOGGLE ── */
+    var _yearly = false;
     function toggleBilling() {
-      _billingYearly = !_billingYearly;
-      var sw = document.getElementById('btl-switch');
-      var ml = document.getElementById('btl-monthly');
-      var yl = document.getElementById('btl-yearly');
-      sw.classList.toggle('yearly', _billingYearly);
-      ml.classList.toggle('active', !_billingYearly);
-      yl.classList.toggle('active', _billingYearly);
-      var key = _billingYearly ? 'yearly' : 'monthly';
-      document.querySelectorAll('[data-monthly]').forEach(function (el) {
-        el.textContent = el.dataset[key];
-      });
+      _yearly = !_yearly;
+      document.getElementById('btl-switch').classList.toggle('yearly', _yearly);
+      document.getElementById('btl-monthly').classList.toggle('active', !_yearly);
+      document.getElementById('btl-yearly').classList.toggle('active', _yearly);
+      var key = _yearly ? 'yearly' : 'monthly';
+      document.querySelectorAll('[data-monthly]').forEach(function(el) { el.textContent = el.dataset[key]; });
       calcPrice();
     }
 
-    function fmtINR(n) {
-      return n.toLocaleString('en-IN');
+    /* ── PRICING LOGIC ── */
+    function calcRes(slots, yearly) {
+      var r1 = yearly ? 50 : 60, r2 = yearly ? 42 : 50, r3 = yearly ? 33 : 40;
+      if (slots <= 0) return { cost: 0, parts: [] };
+      var cost = 0, parts = [];
+      var t1 = Math.min(slots, 30); cost += t1 * r1;
+      parts.push('Res Tier 1: ' + t1 + ' × ₹' + r1 + ' = ₹' + fmtINR(t1 * r1));
+      if (slots > 30) { var t2 = Math.min(slots - 30, 70); cost += t2 * r2; parts.push('Res Tier 2: ' + t2 + ' × ₹' + r2 + ' = ₹' + fmtINR(t2 * r2)); }
+      if (slots > 100) { var t3 = slots - 100; cost += t3 * r3; parts.push('Res Tier 3: ' + t3 + ' × ₹' + r3 + ' = ₹' + fmtINR(t3 * r3)); }
+      return { cost: cost, parts: parts };
     }
 
-    function calcSlotCost(slots, yearly) {
-      var r1 = yearly ? 50 : 60;
-      var r2 = yearly ? 42 : 50;
-      var r3 = yearly ? 33 : 40;
-      if (slots <= 0) return { price: 0, breakdown: '0 slots — ₹0' };
-      var price = 0, parts = [];
-      var t1 = Math.min(slots, 30);
-      price += t1 * r1;
-      parts.push('Tier 1: ' + t1 + ' × ₹' + r1 + ' = ₹' + fmtINR(t1 * r1));
-      if (slots > 30) {
-        var t2 = Math.min(slots - 30, 70);
-        price += t2 * r2;
-        parts.push('Tier 2: ' + t2 + ' × ₹' + r2 + ' = ₹' + fmtINR(t2 * r2));
-      }
-      if (slots > 100) {
-        var t3 = slots - 100;
-        price += t3 * r3;
-        parts.push('Tier 3: ' + t3 + ' × ₹' + r3 + ' = ₹' + fmtINR(t3 * r3));
-      }
-      parts.push('→ Total ₹' + fmtINR(price) + '/month');
-      return { price: price, breakdown: parts.join('   +   ') };
+    function calcComm(slots, yearly) {
+      var r1 = yearly ? 67 : 80, r2 = yearly ? 54 : 65, r3 = yearly ? 42 : 50;
+      if (slots <= 0) return { cost: 0, parts: [] };
+      var cost = 0, parts = [];
+      var t1 = Math.min(slots, 30); cost += t1 * r1;
+      parts.push('Comm Tier 1: ' + t1 + ' × ₹' + r1 + ' = ₹' + fmtINR(t1 * r1));
+      if (slots > 30) { var t2 = Math.min(slots - 30, 70); cost += t2 * r2; parts.push('Comm Tier 2: ' + t2 + ' × ₹' + r2 + ' = ₹' + fmtINR(t2 * r2)); }
+      if (slots > 100) { var t3 = slots - 100; cost += t3 * r3; parts.push('Comm Tier 3: ' + t3 + ' × ₹' + r3 + ' = ₹' + fmtINR(t3 * r3)); }
+      return { cost: cost, parts: parts };
     }
 
+    /* ── CALCULATOR ── */
     function calcPrice() {
       var beds  = parseInt(document.getElementById('calc-beds').value)  || 0;
       var rooms = parseInt(document.getElementById('calc-rooms').value) || 0;
-      var slots = beds + rooms;
-      var res   = calcSlotCost(slots, _billingYearly);
-      var slotLabel = slots + ' slot' + (slots !== 1 ? 's' : '');
-      if (beds && rooms) slotLabel += ' (' + beds + ' PG beds + ' + rooms + ' flat rooms)';
+      var shops = parseInt(document.getElementById('calc-shops').value) || 0;
+      var resSlots = beds + rooms;
+      var rRes  = calcRes(resSlots, _yearly);
+      var rComm = calcComm(shops, _yearly);
+      var total = rRes.cost + rComm.cost;
+      var slotLabel = (resSlots + shops) + ' total slots';
+      var parts = [];
+      if (resSlots > 0) parts = parts.concat(rRes.parts);
+      if (shops > 0)    parts = parts.concat(rComm.parts);
+      if (total > 0) parts.push('→ Total ₹' + fmtINR(total) + '/month');
       document.getElementById('calc-slots-label').textContent = slotLabel;
-      document.getElementById('calc-price').textContent = '₹' + fmtINR(res.price);
-      document.getElementById('calc-period').textContent = _billingYearly ? '/month (billed yearly)' : '/month';
-      document.getElementById('calc-breakdown').textContent = res.breakdown;
+      document.getElementById('calc-price').textContent = total > 0 ? '₹' + fmtINR(total) : '₹0';
+      document.getElementById('calc-period').textContent = _yearly ? '/month (billed yearly)' : '/month';
+      document.getElementById('calc-breakdown').textContent = parts.length ? parts.join('   +   ') : 'Enter your slot counts above';
     }
 
+    /* ── MODIFY PLAN ── */
+    function adjustSlot(type, delta) {
+      if (type === 'beds')  { _modBeds  = Math.max(0, _modBeds  + delta); document.getElementById('mod-beds').textContent  = _modBeds; }
+      if (type === 'rooms') { _modRooms = Math.max(0, _modRooms + delta); document.getElementById('mod-rooms').textContent = _modRooms; }
+      if (type === 'shops') { _modShops = Math.max(0, _modShops + delta); document.getElementById('mod-shops').textContent = _modShops; }
+      updateModifyResult();
+    }
+
+    function updateModifyResult() {
+      var resSlots = _modBeds + _modRooms;
+      var rRes  = calcRes(resSlots, false);
+      var rComm = calcComm(_modShops, false);
+      var newTotal = rRes.cost + rComm.cost;
+      var oldTotal = calcRes(_currentBeds + _currentRooms, false).cost + calcComm(_currentShops, false).cost;
+
+      document.getElementById('mod-beds-sub').innerHTML  = _modBeds  + ' × ₹60 = <strong>₹' + fmtINR(_modBeds  * 60)  + '</strong>';
+      document.getElementById('mod-rooms-sub').innerHTML = _modRooms + ' × ₹60 = <strong>₹' + fmtINR(_modRooms * 60) + '</strong>';
+      document.getElementById('mod-shops-sub').innerHTML = _modShops + ' × ₹80 = <strong>₹' + fmtINR(_modShops * 80) + '</strong>';
+
+      var parts = [];
+      if (resSlots > 0)   parts = parts.concat(rRes.parts);
+      if (_modShops > 0)  parts = parts.concat(rComm.parts);
+      document.getElementById('mod-breakdown').textContent = parts.join('   +   ') || 'No slots — ₹0';
+      document.getElementById('mod-total').textContent = '₹' + fmtINR(newTotal);
+
+      var diff = newTotal - oldTotal;
+      var subText = diff === 0 ? 'No change from current plan' : (diff > 0 ? '+₹' + fmtINR(diff) + '/month from current' : '−₹' + fmtINR(Math.abs(diff)) + '/month from current');
+      document.getElementById('mod-total-sub').textContent = subText;
+
+      var reauth = document.getElementById('mod-reauth-note');
+      reauth.style.display = newTotal > MAX_AMOUNT ? 'flex' : 'none';
+    }
+
+    function resetModify() {
+      _modBeds = _currentBeds; _modRooms = _currentRooms; _modShops = _currentShops;
+      document.getElementById('mod-beds').textContent  = _modBeds;
+      document.getElementById('mod-rooms').textContent = _modRooms;
+      document.getElementById('mod-shops').textContent = _modShops;
+      updateModifyResult();
+    }
+
+    /* ── FAQ ── */
+    function toggleFaq(el) { el.classList.toggle('open'); }
+
+    /* ── TOAST ── */
     var _toastTimer = null;
     function showToast(msg) {
       var t = document.getElementById('toast');
       document.getElementById('toast-msg').textContent = msg;
       t.classList.add('show');
       clearTimeout(_toastTimer);
-      _toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3000);
+      _toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3000);
     }
+
+    updateModifyResult();
   </script>
-
 </body>
-
 </html>

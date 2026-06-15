@@ -52,39 +52,55 @@ This is not a ₹299 tool. It is a ₹1,199 tool that pays for itself inside the
 
 ## 3. The Unified "Slot" Billing Unit
 
-**1 bed (PG property) = 1 slot. 1 room (residential property) = 1 slot.**
+**1 bed (PG) = 1 slot. 1 room (residential) = 1 slot. 1 shop/office (commercial) = 1 slot (at a premium rate).**
 
-The billing unit is a slot. It doesn't matter what type of property — beds and rooms are counted together across all properties the owner has.
+The billing unit is a slot. It doesn't matter what type of property — beds, rooms, and shops are all counted as slots. Commercial slots carry a premium rate because the value delivered (higher rent amounts, CAM billing, escalation tracking) is greater.
 
 ### Why "Slot" Works
 
-| Property type | How slots are counted | Example |
+| Property type | How slots are counted | Slot rate |
 |---|---|---|
-| Bed-based PG | Each bed = 1 slot | 10 rooms × 3 beds = **30 slots** |
-| Room-based flat/house | Each room = 1 slot | 5 rooms = **5 slots** |
-| Mixed (owner has both) | Beds + rooms combined | 30 beds + 5 rooms = **35 slots** |
+| Bed-based PG | Each bed = 1 slot | ₹60/slot (Tier 1) |
+| Room-based flat/house | Each room = 1 slot | ₹60/slot (Tier 1) |
+| Commercial shop/office | Each unit = 1 slot | ₹80/slot (Tier 1) |
+| Mixed portfolio | All types combined | Blended — see below |
 
-The WhatsApp cost driver is the same regardless of property type: 1 tenant per slot × 3 messages/month × ₹0.58 = ₹1.74/slot. So charging per slot is fair and consistent.
+The WhatsApp cost driver is the same regardless of property type: 1 tenant per slot × 3 messages/month × ₹0.58 = ₹1.74/slot. Commercial slots are priced at a premium to reflect additional features (CAM billing, escalation alerts, agreement expiry tracking) and higher value delivered.
 
 ### How the System Handles a Mixed-Portfolio Owner at Login
 
 ```
 Owner Account
 ├── Property A: "Sunrise PG"  (type: Bed-based PG)
-│     Room 101 → 3 beds = 3 slots
-│     Room 102 → 3 beds = 3 slots
-│     Room 103 → 3 beds = 3 slots
-│     Subtotal: 9 slots
+│     Room 101 → 3 beds = 3 slots × ₹60 = ₹180
+│     Room 102 → 3 beds = 3 slots × ₹60 = ₹180
+│     Room 103 → 3 beds = 3 slots × ₹60 = ₹180
+│     Subtotal: 9 residential slots = ₹540
 │
-└── Property B: "Andheri 2BHK"  (type: Room-based)
-      Room 1 → 1 slot
-      Room 2 → 1 slot
-      Subtotal: 2 slots
+├── Property B: "Andheri 2BHK"  (type: Room-based)
+│     Room 1 → 1 slot × ₹60 = ₹60
+│     Room 2 → 1 slot × ₹60 = ₹60
+│     Subtotal: 2 residential slots = ₹120
+│
+└── Property C: "Sunshine Complex"  (type: Commercial)
+      Shop 1 → 1 slot × ₹80 = ₹80
+      Shop 2 → 1 slot × ₹80 = ₹80
+      Subtotal: 2 commercial slots = ₹160
 
-Total slots: 11  →  11 × ₹60 = ₹660/month  (Tier 1)
+Total: 11 residential slots (₹660) + 2 commercial slots (₹160) = ₹820/month
 ```
 
-The system queries all properties, checks each property's type (already captured during property setup), counts beds for PG properties and rooms for residential, and sums them. The owner sees one number on their billing page: **"11 active slots — ₹660/month."**
+The owner sees one number on their billing page: **"13 active slots (11 residential + 2 commercial) — ₹820/month."**
+
+### Commercial Slot Rates
+
+| Tier | Residential/PG Rate | Commercial Rate | Notes |
+|---|---|---|---|
+| Tier 1 (1–30 slots) | ₹60/slot | ₹80/slot | +₹20 premium for CAM + escalation features |
+| Tier 2 (31–100 slots) | ₹50/slot | ₹65/slot | Volume discount applies |
+| Tier 3 (101+ slots) | ₹40/slot | ₹50/slot | Large operator rate |
+
+Commercial slots are counted separately from residential slots for tier placement (a 5 residential + 3 commercial owner is in Tier 1 for both, not combined into Tier 2).
 
 ### Property Type is Set Once, at Property Setup
 
@@ -93,6 +109,46 @@ The `property-setup.html` already captures this:
 - **"Room-based"** → rooms are the unit
 
 No separate billing configuration needed. The property type drives the slot count automatically.
+
+---
+
+## 3B. "Build Your Plan" — The Custom Pricing Calculator
+
+The slot model IS a custom pricing calculator. An owner with 5 rooms pays exactly 5 × ₹60 = ₹300/month — not ₹499 for a plan that also covers 40 rooms they don't have. This is the "pay only for what you need" model Adarsh wants, and it's already built into the pricing structure.
+
+**What's missing is the UI** — an interactive calculator on the pricing page and onboarding that makes the math visible.
+
+### Calculator Interaction
+
+```
+Build Your Plan:
+
+Rooms/flats:  [ 5 ]  × ₹60 = ₹300      (Tier 1)
+PG beds:      [ 0 ]  × ₹60 = ₹0
+Shops:        [ 0 ]  × ₹80 = ₹0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Monthly:    ₹300
+Annual:     ₹3,000  (save ₹600 — 2 months free)
+━━━━━━━━━━━━━━━━━━━━━━━━━
+[ Start 14-day trial — no card needed ]
+```
+
+As the owner changes numbers, the price updates live. When they cross 30 slots, the label changes to "You've entered Tier 2 — rate drops to ₹50/slot" and the total automatically recalculates.
+
+**This answers "I never want to pay for more than I need."** — 5 rooms pays ₹300. Not ₹499. Not ₹1,199. Exactly ₹300.
+
+### Cashfree Subscription for Platform Fees
+
+RentMaster collects its own subscription fees using the same Cashfree infrastructure it provides to owners:
+
+1. Owner completes trial → sees "Your plan: 5 slots = ₹300/month"
+2. "Set up auto-pay" button → Cashfree UPI AutoPay mandate
+3. Owner authorizes once (30 seconds) in GPay/PhonePe
+4. Every month on 5th: Cashfree auto-debits ₹300 → owner gets WhatsApp receipt
+5. If slots change: system updates mandate amount and WhatsApps owner
+
+**Product story:** "We automate rent collection for your tenants using the same system we use to collect our own subscription. That's how much we trust it."
 
 ---
 

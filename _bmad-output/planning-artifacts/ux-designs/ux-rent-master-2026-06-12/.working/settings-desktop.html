@@ -17,26 +17,26 @@
 
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #E8EAF0;
-      color: #0F1623;
+      background: #F0EDE8;
+      color: #1C2537;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       display: flex;
     }
 
     :root {
-      --navy: #1B2D4F;
-      --navy2: #243A63;
-      --navy-lt: rgba(27, 45, 79, .07);
-      --saffron: #F97316;
-      --t1: #0F1623;
-      --t2: #5A6473;
-      --t3: #9CA3AE;
-      --card: #FFFFFF;
-      --bg: #E8EAF0;
-      --border: #DDE1EC;
-      --sh: 0 1px 3px rgba(15, 22, 35, .06), 0 2px 8px rgba(15, 22, 35, .05);
-      --sh-md: 0 4px 16px rgba(15, 22, 35, .08), 0 1px 4px rgba(15, 22, 35, .05);
+      --navy: #1C2537;
+      --navy2: #6B5B45;
+      --navy-lt: rgba(28, 37, 55, .07);
+      --saffron: #C8A96E;
+      --t1: #1C2537;
+      --t2: #6B5B45;
+      --t3: #9B8E7E;
+      --card: #FAF8F5;
+      --bg: #F0EDE8;
+      --border: #E2D9CC;
+      --sh: 0 1px 3px rgba(28, 37, 55, .06), 0 2px 8px rgba(28, 37, 55, .05);
+      --sh-md: 0 4px 16px rgba(28, 37, 55, .08), 0 1px 4px rgba(28, 37, 55, .05);
       --paid: #0E9F6E;
       --paid-bg: rgba(14, 159, 110, .09);
       --pend: #D97706;
@@ -230,7 +230,7 @@
       justify-content: space-between;
       height: 60px;
       flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(15, 22, 35, .04);
+      box-shadow: 0 1px 3px rgba(28, 37, 55, .04);
     }
 
     .topbar-left {
@@ -261,7 +261,7 @@
       font-size: 12px;
       color: var(--t2);
       font-weight: 500;
-      background: #F4F5F8;
+      background: #EDE8E0;
       padding: 5px 12px;
       border-radius: 8px;
     }
@@ -270,7 +270,7 @@
       width: 36px;
       height: 36px;
       border-radius: 9px;
-      background: #F4F5F8;
+      background: #EDE8E0;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -444,7 +444,7 @@
       justify-content: center;
       flex-shrink: 0;
       border: 3px solid #fff;
-      box-shadow: 0 4px 12px rgba(27, 45, 79, .2);
+      box-shadow: 0 4px 12px rgba(28, 37, 55, .2);
       position: relative;
       cursor: pointer;
     }
@@ -558,7 +558,7 @@
     }
 
     .finput.readonly {
-      background: #F4F5F8;
+      background: #EDE8E0;
       color: var(--t2);
       cursor: default;
       border-color: transparent;
@@ -580,7 +580,7 @@
 
     .fhint code {
       font-family: 'SF Mono', 'Fira Code', monospace;
-      background: rgba(15, 22, 35, .06);
+      background: rgba(28, 37, 55, .06);
       padding: 1px 5px;
       border-radius: 4px;
       font-size: 11px;
@@ -607,7 +607,7 @@
       font-size: 13px;
       font-weight: 600;
       color: var(--t2);
-      background: #F4F5F8;
+      background: #EDE8E0;
       border-right: 1.5px solid var(--border);
       white-space: nowrap;
     }
@@ -721,7 +721,7 @@
     }
 
     .info-row+.info-row {
-      border-top: 1px solid #F0F2F8;
+      border-top: 1px solid #EDE8E0;
     }
 
     .info-label {
@@ -901,7 +901,7 @@
       height: 20px;
       border-radius: 50%;
       background: #fff;
-      box-shadow: 0 1px 4px rgba(15, 22, 35, .18);
+      box-shadow: 0 1px 4px rgba(28, 37, 55, .18);
       transition: transform .2s;
     }
 
@@ -916,7 +916,7 @@
       align-items: flex-start;
       padding: 13px 16px;
       border-radius: 10px;
-      background: rgba(27, 45, 79, .04);
+      background: rgba(28, 37, 55, .04);
       border: 1px solid var(--border);
     }
 
@@ -942,7 +942,7 @@
       position: fixed;
       inset: 0;
       z-index: 1000;
-      background: rgba(15, 22, 35, .45);
+      background: rgba(28, 37, 55, .45);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -961,7 +961,7 @@
       background: var(--card);
       border-radius: 18px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 60px rgba(15, 22, 35, .18), 0 4px 16px rgba(15, 22, 35, .08);
+      box-shadow: 0 20px 60px rgba(28, 37, 55, .18), 0 4px 16px rgba(28, 37, 55, .08);
       padding: 32px 36px;
       width: 460px;
       max-width: calc(100vw - 40px);
@@ -981,7 +981,7 @@
       width: 28px;
       height: 28px;
       border-radius: 7px;
-      background: #F4F5F8;
+      background: #EDE8E0;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -1060,12 +1060,12 @@
 
     .otp-box:focus {
       border-color: var(--navy);
-      box-shadow: 0 0 0 3px rgba(27, 45, 79, .08);
+      box-shadow: 0 0 0 3px rgba(28, 37, 55, .08);
     }
 
     .otp-box.filled {
       border-color: var(--navy);
-      background: rgba(27, 45, 79, .03);
+      background: rgba(28, 37, 55, .03);
     }
 
     .otp-box.otp-err-box {
